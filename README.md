@@ -38,8 +38,8 @@
 
     Add the following line to the .env file:
      ```bash
-       MONGO_URI="Your MongoDB URI"
+     MONGO_URI="Your MongoDB URI"
 
 8. **Run the application from the root directory:**
    ```bash
-       npm start
+   npm start
