@@ -1,8 +1,44 @@
-# React + Vite
+# Ceylon Odyssey - Tour Package Management System
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Installation
 
-Currently, two official plugins are available:
+1. **Clone the repository:**
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+   ```bash
+   git clone https://github.com/DinithaFdo/Ceylon-Odyssey.git
+
+2. **Navigate to the project directory:**
+
+   ```bash
+   cd Ceylon-Odyssey
+
+3. **Install root dependencies::**
+
+   ```bash
+   npm i
+
+4. **Navigate to the frontend directory and install dependencies:**
+
+   ```bash
+   cd frontend
+   npm I
+
+5. **Go back to the root directory:**
+
+   ```bash
+   cd ..
+
+6. **Navigate to the backend directory and install dependencies:**
+
+   ```bash
+   cd ..
+
+7. **Create a .env file in the backend folder:**
+
+    Add the following line to the .env file:
+     ```bash
+       MONGO_URI="Your MongoDB URI"
+
+8. **Run the application from the root directory:**
+   ```bash
+       npm start
