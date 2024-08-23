@@ -21,7 +21,7 @@
 
    ```bash
    cd frontend
-   npm I
+   npm i
 
 5. **Go back to the root directory:**
 
@@ -32,6 +32,7 @@
 
    ```bash
    cd ..
+   npm i
 
 7. **Create a .env file in the backend folder:**
 
