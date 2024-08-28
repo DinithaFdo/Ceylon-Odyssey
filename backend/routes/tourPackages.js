@@ -41,9 +41,9 @@ router.route('/').get((req, res) => {
 
 });
 
-router.route("/update/:packageId").post(async(req, res) => {
+router.route("/update/:id").put(async(req, res) => {
 
-    let fetchPackageID = req.params.packageId;
+    let fetchPackageID = req.params.id;
     const {packageId, package_Title, createDate, packageDescription, category, image, price, destination} = req.body;
 
     const updatePackage = {
@@ -57,9 +57,9 @@ router.route("/update/:packageId").post(async(req, res) => {
         destination
     };
 
-    const update = await TourPackage.findOneAndUpdate(fetchPackageID, updatePackage)
+    const update = await TourPackage.findByIdAndUpdate(fetchPackageID, updatePackage)
     .then(() => {
-        res.status(200).send({status: "Package updated!", user: update})
+        res.status(200).send({status: "Package updated!"})
     }).catch(err => {
         console.log(err);
         res.status(500).send({status: "Error with updating data", error: err.message});
@@ -67,11 +67,11 @@ router.route("/update/:packageId").post(async(req, res) => {
 
 });
 
-router.route("/delete/:packageId").delete(async(req, res) => {
+router.route("/delete/:id").delete(async(req, res) => {
     
-    let fetchPackageID = req.params.packageId;
+    let fetchPackageID = req.params.id;
     
-    await TourPackage.findOneAndDelete(fetchPackageID)
+    await TourPackage.findByIdAndDelete(fetchPackageID)
         .then(() => {
             res.status(200).send({status: "Package deleted!"});
     }).catch(err => {
@@ -92,5 +92,4 @@ router.route("/get/:category").get(async(req, res) => {
         });
 });
 
-
-    module.exports = router;
+module.exports = router;

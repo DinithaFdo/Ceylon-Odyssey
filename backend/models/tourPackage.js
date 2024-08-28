@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const Schema = new mongoose.Schema;
+const Schema = mongoose.Schema;
 
 const tourPackageSchema = new Schema({
     
@@ -15,7 +15,7 @@ const tourPackageSchema = new Schema({
     },
 
     createDate : {
-        type : Date,
+        type : String,
         required : true
     },
 

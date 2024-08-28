@@ -16,7 +16,7 @@ const PORT = process.env.PORT || 5000;
 
 const tourPackageRouter = require('./routes/tourPackages.js');
 
-express.use('/tourPackage', tourPackageRouter);
+app.use('/tourPackage', tourPackageRouter);
 
 
 app.listen(PORT, () => {
