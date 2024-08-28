@@ -84,8 +84,8 @@ router.route("/delete/:id").delete(async(req, res) => {
 router.route("/get/:category").get(async(req, res) => {
     let fetchCategory = req.params.category;
     const category = await TourPackage.find({category: fetchCategory})
-        .then(() => {
-            res.status(200).send({status: "Package fetched!", package: category})
+        .then((package) => {
+            res.status(200).send({status: "Package fetched!", package})
         }).catch(err => {
             console.log(err.message);
             res.status(500).send({status: "Error with fetching package", error: err.message});
