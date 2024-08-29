@@ -44,6 +44,11 @@ const tourPackageSchema = new Schema({
         required : true
     },
 
+    days : {
+        type : Number,
+        required : true
+    }
+
 
 });
 

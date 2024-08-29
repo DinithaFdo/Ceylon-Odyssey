@@ -1,4 +1,3 @@
-
 import './App.css'
 import AppRoutes from './routes/Approutes'
 
@@ -11,4 +10,4 @@ function App() {
   )
 }
 
-export default App
+export default App;
