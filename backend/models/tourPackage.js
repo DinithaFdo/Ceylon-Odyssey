@@ -14,37 +14,37 @@ const tourPackageSchema = new Schema({
         required : true
     },
 
-    createDate : {
+    pCreateDate : {
         type : String,
         required : true
     },
 
-    packageDescription : {
+    packageDes : {
         type : String,
         required : true
     },
 
-    category : {
+    pCategory : {
         type : String,
         required : true
     },
 
-    image : {
+    pImage : {
         type : String,
         required : true
     },
 
-    price : {
+    packagePrice : {
         type : Number,
         required : true
     },
 
-    destination : {
+    pDestination : {
         type : String,
         required : true
     },
 
-    days : {
+    pDays : {
         type : Number,
         required : true
     }

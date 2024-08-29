@@ -5,24 +5,24 @@ router.route('/add').post((req, res) => {
 
     const packageId = req.body.packageId;
     const package_Title = req.body.package_Title;
-    const createDate = req.body.createDate;
-    const packageDescription = req.body.packageDescription;
-    const category = req.body.category;
-    const image = req.body.image;
-    const price = Number(req.body.price);
-    const destination = req.body.destination;
-    const days = Number(req.body.days);
+    const pCreateDate = req.body.pCreateDate;
+    const packageDes = req.body.packageDes;
+    const pCategory = req.body.pCategory;
+    const pImage = req.body.pImage;
+    const packagePrice = Number(req.body.packagePrice);
+    const pDestination = req.body.pDestination;
+    const pDays = Number(req.body.pDays);
 
     const newTourPackage = new TourPackage({
         packageId,
         package_Title,
-        createDate,
-        packageDescription,
-        category,
-        image,
-        price,
-        destination,
-        days
+        pCreateDate,
+        packageDes,
+        pCategory,
+        pImage,
+        packagePrice,
+        pDestination,
+        pDays
     });
 
     newTourPackage.save().then(() => {
@@ -46,18 +46,18 @@ router.route('/').get((req, res) => {
 router.route("/update/:id").put(async(req, res) => {
 
     let fetchPackageID = req.params.id;
-    const {packageId, package_Title, createDate, packageDescription, category, image, price, destination, days} = req.body;
+    const {packageId, package_Title, pCreateDate, packageDes, pCategory, pImage, packagePrice, pDestination, pDays} = req.body;
 
     const updatePackage = {
         packageId,
         package_Title,
-        createDate,
-        packageDescription,
-        category,
-        image,
-        price,
-        destination,
-        days
+        pCreateDate,
+        packageDes,
+        pCategory,
+        pImage,
+        packagePrice,
+        pDestination,
+        pDays
     };
 
     const update = await TourPackage.findByIdAndUpdate(fetchPackageID, updatePackage)
