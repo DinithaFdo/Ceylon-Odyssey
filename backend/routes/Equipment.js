@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const equipment = require('../models/Equipment');
 let Equipment = require('../models/Equipment.js');
-const multer = require('multer');
+
 
 
 router.route('/add').post((req, res) => {
