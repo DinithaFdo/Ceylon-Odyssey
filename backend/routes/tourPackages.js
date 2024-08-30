@@ -1,5 +1,21 @@
 const router = require('express').Router();
+const tourPackage = require('../models/tourPackage');
 let TourPackage = require('../models/tourPackage.js');
+const multer = require('multer');
+
+const storage = multer.diskStorage({
+    destination : function(req, file, cb){
+        cb(null, './TourPackageImages');
+    },
+    filename : function(req, file, cb){
+        cb(null, file.fieldname+"_"+Date.now()+"_"+file.originalname);
+    },
+});
+
+const upload = multer({
+    storage : storage,
+}).single('tPackage_Image');
+
 
 router.route('/add').post((req, res) => {
 
@@ -8,7 +24,7 @@ router.route('/add').post((req, res) => {
     const pCreateDate = req.body.pCreateDate;
     const packageDes = req.body.packageDes;
     const pCategory = req.body.pCategory;
-    const pImage = req.body.pImage;
+    const pImage = req.file.filename;
     const packagePrice = Number(req.body.packagePrice);
     const pDestination = req.body.pDestination;
     const pDays = Number(req.body.pDays);
