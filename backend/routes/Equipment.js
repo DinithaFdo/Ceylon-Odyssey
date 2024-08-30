@@ -72,13 +72,13 @@ router.route("/delete/:id").delete(async(req, res) =>{
     });
 });
 
-router.route("/get/:type").get(async(req, res) =>{
+router.route("/get/:equipmentType").get(async(req, res) =>{
 
-    let fetchequipmentType = req.params.type;
+    let fetchequipmentType = req.params.equipmentType;
 
     const type = await Equipment.find({equipmentType: fetchequipmentType})
-    .then(() => {
-        res.status(200).send({status: "Equipment fetched", equipment: equipment})
+    .then((equipment) => {
+        res.status(200).send({status: "Equipment fetched", equipment})
     }).catch((err) => {
         console.log(err.message);
         res.status(500).send({status: "Error with fetching Equipment", error: err.message});
