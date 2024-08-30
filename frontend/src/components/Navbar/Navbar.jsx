@@ -13,7 +13,7 @@ const Navbar = () => {
         <div className="flex-1 flex justify-center space-x-8">
           <Link to="/about" className="text-gray-700 hover:text-blue-600 transition duration-300">About</Link>
           <Link to="/contact" className="text-gray-700 hover:text-blue-600 transition duration-300">Contact</Link>
-          <Link to="/counter" className="text-gray-700 hover:text-blue-600 transition duration-300">counter</Link>
+          <Link to="/TourPackageAdmin" className="text-gray-700 hover:text-blue-600 transition duration-300">TourPackage</Link>
         </div>
 
 
