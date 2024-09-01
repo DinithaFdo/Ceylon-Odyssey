@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import axios from 'axios';
+
+
 function AddTourPackage() {
 
     const [packageId, setPackageId] = useState("");
@@ -26,12 +29,20 @@ function AddTourPackage() {
             pDestination,
             pDays
         }
+        
+        axios.post("http://localhost:5000/tourPackage/AddTPackage", newPackage).then(() => {
+            alert("Package Added Successfully!!");
+        }).catch((err) => {
+            alert(err);
+        });
+
         console.log(newPackage);
+
     }
 
 
     return (
-        <form onSubmit={addPackage} className="max-w-lg mx-auto border border-gray-300 p-4 rounded-lg">
+        <form onSubmit={addPackage} encType="multipart/form-data" className="max-w-lg mx-auto border border-gray-300 p-4 rounded-lg">
             <h1 className="text-3xl font-bold mb-7 text-gray-800">Add New Tour Package</h1>
 
             <div className="mb-8">
@@ -80,7 +91,7 @@ function AddTourPackage() {
 
             <div className="mb-8">
                 <label className="block mb-2 text-l font-medium text-gray-900 dark:text-white" htmlFor="pImage">Upload Image</label>
-                <input className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" aria-describedby="user_avatar_help" id="pImage" type="file" 
+                <input name="tourImage" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" aria-describedby="user_avatar_help" id="pImage" type="file" 
                 onChange={(e) => {
                     setPImage(e.target.files[0]);
                 }} required/>

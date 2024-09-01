@@ -1,52 +1,40 @@
 const router = require('express').Router();
-const tourPackage = require('../models/tourPackage');
 let TourPackage = require('../models/tourPackage.js');
 const multer = require('multer');
 
 const storage = multer.diskStorage({
-    destination : function(req, file, cb){
+    destination: function(req, file, cb){
         cb(null, './TourPackageImages');
     },
-    filename : function(req, file, cb){
-        cb(null, file.fieldname+"_"+Date.now()+"_"+file.originalname);
-    },
+    filename: function(req, file, cb){
+        cb(null, file.fieldname + '_' + Date.now() + "_" + file.originalname);
+    } 
 });
 
-const upload = multer({
-    storage : storage,
-}).single('tPackage_Image');
+var upload = multer({
+    storage: storage
+}).single("tourImage");
 
-
-router.route('/add').post((req, res) => {
-
-    const packageId = req.body.packageId;
-    const package_Title = req.body.package_Title;
-    const pCreateDate = req.body.pCreateDate;
-    const packageDes = req.body.packageDes;
-    const pCategory = req.body.pCategory;
-    const pImage = req.file.filename;
-    const packagePrice = Number(req.body.packagePrice);
-    const pDestination = req.body.pDestination;
-    const pDays = Number(req.body.pDays);
-
-    const newTourPackage = new TourPackage({
-        packageId,
-        package_Title,
-        pCreateDate,
-        packageDes,
-        pCategory,
-        pImage,
-        packagePrice,
-        pDestination,
-        pDays
+router.post('/AddTPackage', upload, (req, res) => {
+    const newPackage = new TourPackage({
+        packageId: req.body.packageId,
+        package_Title: req.body.package_Title,
+        pCreateDate: req.body.pCreateDate,
+        packageDes: req.body.packageDes,
+        pCategory: req.body.pCategory,
+        pImage: req.file.filename,
+        packagePrice: Number(req.body.packagePrice),
+        pDestination: req.body.pDestination,
+        pDays: Number(req.body.pDays)
     });
-
-    newTourPackage.save().then(() => {
-        res.json('Tour Package added!')
-    }).catch(err => {
-        console.log(err);
-    });
-
+    newPackage.save(err => {
+        if(err){
+            res.status(500).json({error: err.message});
+            return;
+        }
+        res.status(200).json(newPackage);
+    }
+    )
 });
 
 router.route('/').get((req, res) => {
