@@ -50,7 +50,7 @@ router.route("/update/:id").put(async (req,res) => {
     }
 
     const update = await Destination.findByIdAndUpdate(destinationID, updateDestination).then(() => {
-        res.status(200).send({status: "Destination updated", destination: update});
+        res.status(200).send({status: "Destination updated"});
     }
     ).catch((err) => {
         console.log(err);
@@ -76,8 +76,8 @@ router.route("/delete/:id").delete(async (req,res) => {
 router.route("/get/:id").get(async (req,res) => {
     let destinationID = req.params.id;
 
-    const destination = await Destination.findById(destinationID).then(() => {
-        res.status(200).send({status: "Destination fetched", destination: destination});
+    const destination = await Destination.findById(destinationID).then((destination) => {
+        res.status(200).send({status: "Destination fetched", destination});
     }
     ).catch((err) => {
         console.log(err);

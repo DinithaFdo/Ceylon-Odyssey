@@ -1,12 +1,16 @@
 
 import './App.css'
 import AppRoutes from './routes/Approutes'
+import AddDestination from './components/destination/addDestination';
+import AllDestination from './components/destination/allDestination';
 
 function App() {
 
   return (
-    <> 
-    <AppRoutes />
+    <>
+      <AppRoutes />
+      <AddDestination />
+      <AllDestination />
     </>
   )
 }
