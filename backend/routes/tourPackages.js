@@ -1,10 +1,16 @@
 const router = require('express').Router();
 let TourPackage = require('../models/tourPackage.js');
 const multer = require('multer');
+const express = require('express');
+const app = express();
+const cors = require('cors');
+
+app.use(cors());
+app.use(express.json());
 
 const storage = multer.diskStorage({
     destination: function(req, file, cb){
-        cb(null, './TourPackageImages');
+        cb(null, "./TourPackageImages");
     },
     filename: function(req, file, cb){
         cb(null, file.fieldname + '_' + Date.now() + "_" + file.originalname);
@@ -13,29 +19,31 @@ const storage = multer.diskStorage({
 
 var upload = multer({
     storage: storage
-}).single("tourImage");
+}).single("pImage");
 
-router.post('/AddTPackage', upload, (req, res) => {
-    const newPackage = new TourPackage({
-        packageId: req.body.packageId,
-        package_Title: req.body.package_Title,
-        pCreateDate: req.body.pCreateDate,
-        packageDes: req.body.packageDes,
-        pCategory: req.body.pCategory,
-        pImage: req.file.filename,
-        packagePrice: Number(req.body.packagePrice),
-        pDestination: req.body.pDestination,
-        pDays: Number(req.body.pDays)
-    });
-    newPackage.save(err => {
-        if(err){
-            res.status(500).json({error: err.message});
-            return;
-        }
+
+router.post('/AddTPackage', upload, async (req, res) => {
+    try {
+        const newPackage = new TourPackage({
+            packageId: req.body.packageId,
+            package_Title: req.body.package_Title,
+            pCreateDate: req.body.pCreateDate,
+            packageDes: req.body.packageDes,
+            pCategory: req.body.pCategory,
+            pImage: req.file.filename,
+            packagePrice: Number(req.body.packagePrice),
+            pDestination: req.body.pDestination,
+            pDays: Number(req.body.pDays)
+        });
+
+        await newPackage.save();
+
         res.status(200).json(newPackage);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
     }
-    )
 });
+
 
 router.route('/').get((req, res) => {
 

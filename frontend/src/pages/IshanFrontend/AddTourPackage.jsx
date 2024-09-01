@@ -9,37 +9,32 @@ function AddTourPackage() {
     const [pCreateDate, setPCreateDate] = useState("");
     const [packageDes, setPackageDes] = useState("");
     const [pCategory, setPCategory] = useState("");
-    const [pImage, setPImage] = useState("null");
+    const [pImage, setPImage] = useState(null);
     const [packagePrice, setPackagePrice] = useState("");
     const [pDestination, setPDestination] = useState("");
     const [pDays, setPDays] = useState("");
 
     function addPackage(e){
         e.preventDefault();
-        alert("Package Added Successfully");
 
-        const newPackage = {
-            packageId,
-            package_Title,
-            pCreateDate,
-            packageDes,
-            pCategory,
-            pImage,
-            packagePrice,
-            pDestination,
-            pDays
-        }
+        const formData = new FormData();
+        formData.append("packageId", packageId);
+        formData.append("package_Title", package_Title);
+        formData.append("pCreateDate", pCreateDate);
+        formData.append("packageDes", packageDes);
+        formData.append("pCategory", pCategory);
+        formData.append("pImage", pImage);
+        formData.append("packagePrice", packagePrice);
+        formData.append("pDestination", pDestination);
+        formData.append("pDays", pDays);
         
-        axios.post("http://localhost:5000/tourPackage/AddTPackage", newPackage).then(() => {
+        axios.post("http://localhost:5000/tourPackage/AddTPackage", formData).then(() => {
             alert("Package Added Successfully!!");
         }).catch((err) => {
             alert(err);
         });
 
-        console.log(newPackage);
-
     }
-
 
     return (
         <form onSubmit={addPackage} encType="multipart/form-data" className="max-w-lg mx-auto border border-gray-300 p-4 rounded-lg">
@@ -91,7 +86,7 @@ function AddTourPackage() {
 
             <div className="mb-8">
                 <label className="block mb-2 text-l font-medium text-gray-900 dark:text-white" htmlFor="pImage">Upload Image</label>
-                <input name="tourImage" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" aria-describedby="user_avatar_help" id="pImage" type="file" 
+                <input name="pImage" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" aria-describedby="user_avatar_help" id="pImage" type="file" 
                 onChange={(e) => {
                     setPImage(e.target.files[0]);
                 }} required/>
