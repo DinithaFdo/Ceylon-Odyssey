@@ -13,6 +13,7 @@ const Navbar = () => {
           <Link to="/contact" className="text-gray-700 hover:text-blue-600 transition duration-300">Contact</Link>
           <Link to="/view-destinations" className="text-gray-700 hover:text-blue-600 transition duration-300">Destinations</Link>
           <Link to="/add-destination" className="text-gray-700 hover:text-blue-600 transition duration-300">Add Destination</Link>
+          <Link to="/destinations" className="text-gray-700 hover:text-blue-600 transition duration-300">View Destinations</Link>
         </div>
 
         <div className="flex items-center">

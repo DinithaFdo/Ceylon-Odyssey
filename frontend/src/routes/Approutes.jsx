@@ -6,8 +6,7 @@ import Login from "../pages/login/Login";
 import Signup from "../pages/signup/Signup";
 import AddDestination from "../pages/destination/addDestination";
 import AllDestination from "../pages/destination/allDestination";
-import Navbar from '../components/Navbar/Navbar';
-import Footer from '../components/Footer/Footer';
+import DestinationList from "../pages/destination/DestinationList";
 
 function AppRoutes() {
     return (
@@ -20,6 +19,7 @@ function AppRoutes() {
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/add-destination" element={<AddDestination />} />
                 <Route path="/view-destinations" element={<AllDestination />} />
+                <Route path="/destinations" element={<DestinationList />} />
             </Routes>
         </Router>
     );

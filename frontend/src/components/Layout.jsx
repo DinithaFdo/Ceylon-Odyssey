@@ -1,7 +1,10 @@
+import React from 'react';
+import Navbar from './Navbar/Navbar';
+import Footer from './Footer/Footer';
+
 const Layout = () => {
   return (
     <div className="flex flex-col min-h-screen">
-      <Navbar /> {/* Add Navbar at the top */}
 
       <main className="flex-grow p-8 bg-gray-50">
         <section className="text-center mb-16 mt-24">
@@ -48,10 +51,8 @@ const Layout = () => {
         </section>
       </main>
 
-      <Footer /> {/* Add Footer at the bottom */}
     </div>
   );
 };
 
 export default Layout;
-
