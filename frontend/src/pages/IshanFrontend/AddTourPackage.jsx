@@ -1,8 +1,13 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import TpackageValidation from './TpackageValidation';
 
 
 function AddTourPackage() {
+
+    const [errors, setErros] = useState({});
+    const [isChecked, setIsChecked] = useState(false);
+
 
     const [packageId, setPackageId] = useState("");
     const [package_Title, setPackage_Title] = useState("");
@@ -14,9 +19,10 @@ function AddTourPackage() {
     const [pDestination, setPDestination] = useState("");
     const [pDays, setPDays] = useState("");
 
-    function addPackage(e){
+    const addPackage = (e) => {
         e.preventDefault();
 
+        if(handleValidation()){
         const formData = new FormData();
         formData.append("packageId", packageId);
         formData.append("package_Title", package_Title);
@@ -34,7 +40,25 @@ function AddTourPackage() {
             alert(err);
         });
 
+        }
+
     }
+
+    const handleValidation = () => {
+        const validationErrors = TpackageValidation(
+            packageId,
+            package_Title,
+            pCreateDate,
+            packageDes,
+            packagePrice,
+            pDestination,
+            pDays,
+            isChecked
+        );
+        setErros(validationErrors);
+        return Object.keys(validationErrors).length === 0;
+    }
+
 
     return (
         <form onSubmit={addPackage} encType="multipart/form-data" className="max-w-lg mx-auto border border-gray-300 p-4 rounded-lg">
@@ -46,6 +70,7 @@ function AddTourPackage() {
                 onChange={(e) => {
                     setPackageId(e.target.value);
                 }} required />
+                {errors.packageId && <p className="text-red-500 text-xs mt-1">{errors.packageId}</p>}
             </div>
 
             <div className="mb-8">
@@ -54,6 +79,7 @@ function AddTourPackage() {
                 onChange={(e) => {
                     setPackage_Title(e.target.value);
                 }} required />
+                {errors.package_Title && <p className="text-red-500 text-xs mt-1">{errors.package_Title}</p>}
             </div>
 
             <div className="mb-8">
@@ -62,6 +88,7 @@ function AddTourPackage() {
                 onChange={(e) => {
                     setPCreateDate(e.target.value);
                 }} required />
+                {errors.pCreateDate && <p className="text-red-500 text-xs mt-1">{errors.pCreateDate}</p>}
             </div> 
 
             <div className="mb-8">
@@ -70,6 +97,7 @@ function AddTourPackage() {
                 onChange={(e) => {
                     setPackageDes(e.target.value);
                 }} required></textarea>
+                {errors.packageDes && <p className="text-red-500 text-xs mt-1">{errors.packageDes}</p>}
             </div>
 
             <div className="mb-8">
@@ -98,6 +126,7 @@ function AddTourPackage() {
                 onChange={(e) => {
                     setPackagePrice(parseFloat(e.target.value));
                 }} required />
+                {errors.packagePrice && <p className="text-red-500 text-xs mt-1">{errors.packagePrice}</p>}
             </div>
 
             <div className="mb-8">
@@ -106,6 +135,7 @@ function AddTourPackage() {
                 onChange={(e) => {
                     setPDestination(e.target.value);
                 }} required />
+                {errors.pDestination && <p className="text-red-500 text-xs mt-1">{errors.pDestination}</p>}
             </div>
             
             <div className="mb-8">
@@ -114,13 +144,18 @@ function AddTourPackage() {
                 onChange={(e) => {
                     setPDays(parseFloat(e.target.value));
                 }} required />
+                {errors.pDays && <p className="text-red-500 text-xs mt-1">{errors.pDays}</p>}
             </div>
 
             <div className="flex items-start mb-8">
                 <div className="flex items-center h-5">
-                <input id="remember" type="checkbox" value="" className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800" required />
+                <input id="remember" type="checkbox" value="" className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800"  
+                onChange={(e) =>
+                    setIsChecked(e.target.checked)
+                }/>
                 </div>
                 <label htmlFor="remember" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300 ml-2">I confirm that the tour package details are accurate</label>
+                {errors.isChecked && <p className="text-red-500 text-xs mt-1">{errors.isChecked}</p>}
             </div>
 
             <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import '../../index.css';
 
 export default function AllTourPackages() { 
     const [tourPackages, setTourPackages] = useState([]);
@@ -38,7 +39,7 @@ export default function AllTourPackages() {
                         <th scope="col" className="px-6 py-3">
                             Package Title
                         </th>
-                        <th scope="col" className="px-6 py-3">
+                        <th scope="col" className="px-6 py-3" >
                             Description
                         </th>
                         <th scope="col" className="px-6 py-3">
