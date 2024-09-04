@@ -1,89 +1,94 @@
 const router = require('express').Router();
-let Destination = require('../models/destination');
+const Destination = require('../models/destination');
 
-router.route("/add").post((req,res) => {
-    const destinationID = Number(req.body.destinationID);
-    const dTitle = req.body.dTitle;
-    const dDescription = req.body.dDescription;
-    const dThumbnail = req.body.dThumbnail;
-    const dExtImage = req.body.dExtImage;
-    const dDistrict = req.body.dDistrict;
-    const dProvince = req.body.dProvince;
+// Add a new destination
+router.post("/add", async (req, res) => {
+    try {
+        const { destinationID, dTitle, dDescription, dThumbnail, dExtImage, dDistrict, dProvince } = req.body;
 
-    const newDestination = new Destination({
-        destinationID,
-        dTitle,
-        dDescription,
-        dThumbnail,
-        dExtImage,
-        dDistrict,
-        dProvince
-    });
+        const newDestination = new Destination({
+            destinationID,
+            dTitle,
+            dDescription,
+            dThumbnail,
+            dExtImage,
+            dDistrict,
+            dProvince
+        });
 
-    newDestination.save().then(() => {
-        res.json("Destination added");
-    }).catch((err) => {
-        console.log(err);
-    });
-})
-
-router.route("/").get((req,res) => {
-
-    Destination.find().then((destinations) => {
-        res.json(destinations);
-    }).catch((err) => {
-        console.log(err);
-    })
+        await newDestination.save();
+        res.status(201).json("Destination added");
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Error adding destination" });
+    }
 });
 
-router.route("/update/:id").put(async (req,res) => {
-    let destinationID = req.params.id;
-    const {dTitle, dDescription, dThumbnail, dExtImage, dDistrict, dProvince} = req.body;
-
-    const updateDestination = {
-        dTitle,
-        dDescription,
-        dThumbnail,
-        dExtImage,
-        dDistrict,
-        dProvince
+// Get all destinations
+router.get("/", async (req, res) => {
+    try {
+        const destinations = await Destination.find();
+        res.status(200).json(destinations);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Error fetching destinations" });
     }
-
-    const update = await Destination.findByIdAndUpdate(destinationID, updateDestination).then(() => {
-        res.status(200).send({status: "Destination updated"});
-    }
-    ).catch((err) => {
-        console.log(err);
-        res.status(500).send({status: "Error with updating data"});
-    }
-    )
-
 });
 
-router.route("/delete/:id").delete(async (req,res) => {
-    let destinationID = req.params.id;
+// Update an existing destination
+router.put("/update/:id", async (req, res) => {
+    try {
+        const destinationID = req.params.id;
+        const { dTitle, dDescription, dThumbnail, dExtImage, dDistrict, dProvince } = req.body;
 
-    await Destination.findByIdAndDelete(destinationID).then(() => {
-        res.status(200).send({status: "Destination deleted"});
+        const updatedDestination = {
+            dTitle,
+            dDescription,
+            dThumbnail,
+            dExtImage,
+            dDistrict,
+            dProvince
+        };
+
+        const result = await Destination.findByIdAndUpdate(destinationID, updatedDestination, { new: true });
+        if (!result) {
+            return res.status(404).json({ error: "Destination not found" });
+        }
+        res.status(200).json({ status: "Destination updated", destination: result });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Error updating destination" });
     }
-    ).catch((err) => {
-        console.log(err);
-        res.status(500).send({status: "Error with deleting data"});
-    }
-    )
 });
 
-router.route("/get/:id").get(async (req,res) => {
-    let destinationID = req.params.id;
+// Delete a destination
+router.delete("/delete/:id", async (req, res) => {
+    try {
+        const destinationID = req.params.id;
+        const result = await Destination.findByIdAndDelete(destinationID);
+        if (!result) {
+            return res.status(404).json({ error: "Destination not found" });
+        }
+        res.status(200).json({ status: "Destination deleted" });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Error deleting destination" });
+    }
+});
 
-    const destination = await Destination.findById(destinationID).then((destination) => {
-        res.status(200).send({status: "Destination fetched", destination});
+// Get a specific destination
+router.get("/get/:id", async (req, res) => {
+    try {
+        const destinationID = req.params.id;
+        const destination = await Destination.findById(destinationID);
+        if (!destination) {
+            return res.status(404).json({ error: "Destination not found" });
+        }
+        res.status(200).json({ status: "Destination fetched", destination });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Error fetching destination" });
     }
-    ).catch((err) => {
-        console.log(err);
-        res.status(500).send({status: "Error with fetching data"});
-    }
-    )
 });
 
 module.exports = router;
