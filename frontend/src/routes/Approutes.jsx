@@ -7,6 +7,7 @@ import Signup from "../pages/signup/Signup";
 import AddDestination from "../pages/destination/addDestination";
 import AllDestination from "../pages/destination/allDestination";
 import DestinationList from "../pages/destination/DestinationList";
+import DestinationDetail from "../pages/destination/DestinationDetail";
 
 function AppRoutes() {
     return (
@@ -20,6 +21,7 @@ function AppRoutes() {
                 <Route path="/add-destination" element={<AddDestination />} />
                 <Route path="/view-destinations" element={<AllDestination />} />
                 <Route path="/destinations" element={<DestinationList />} />
+                <Route path="/destination/:id" element={<DestinationDetail />} />
             </Routes>
         </Router>
     );

@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 const destinationSchema = new Schema({
 
     destinationID : {
-        type : Number,
+        type : String,
         required: true
     },
 

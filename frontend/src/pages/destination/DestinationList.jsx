@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Navbar from '../../components/Navbar/Navbar';
 import Footer from '../../components/Footer/Footer';
 
-export default function AllDestinations() { 
+export default function DestinationList() {
     const [destinations, setDestinations] = useState([]);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [selectedDistrict, setSelectedDistrict] = useState("All");
+    const [selectedProvince, setSelectedProvince] = useState("All");
+    const navigate = useNavigate(); // Hook for navigation
 
     const fetchDestinations = async () => {
         try {
@@ -25,6 +30,33 @@ export default function AllDestinations() {
         return () => clearInterval(interval);
     }, []);
 
+    const handleThumbnailClick = (destinationId) => {
+        navigate(`/destination/${destinationId}`); // Redirect to detail view
+    };
+
+    const handleSearchChange = (e) => {
+        setSearchTerm(e.target.value);
+    };
+
+    const handleDistrictChange = (e) => {
+        setSelectedDistrict(e.target.value);
+    };
+
+    const handleProvinceChange = (e) => {
+        setSelectedProvince(e.target.value);
+    };
+
+    // Filter destinations based on searchTerm, selectedDistrict, and selectedProvince
+    const filteredDestinations = destinations.filter(destination =>
+        (destination.dTitle.toLowerCase().includes(searchTerm.toLowerCase()) || searchTerm === "") &&
+        (selectedDistrict === "All" || destination.dDistrict === selectedDistrict) &&
+        (selectedProvince === "All" || destination.dProvince === selectedProvince)
+    );
+
+    // Extract unique districts and provinces for filter options
+    const districts = Array.from(new Set(destinations.map(d => d.dDistrict)));
+    const provinces = Array.from(new Set(destinations.map(d => d.dProvince)));
+
     return (
         <div className="flex flex-col min-h-screen">
             <Navbar /> {/* Navbar is fixed at the top */}
@@ -32,15 +64,50 @@ export default function AllDestinations() {
             <main className="flex-grow pt-16 px-4 md:px-8 lg:px-16"> {/* Add padding-top to avoid overlap */}
                 <h1 className="text-2xl font-bold mb-4">Destinations List</h1>
 
+                <div className="mb-4">
+                    <input 
+                        type="text" 
+                        placeholder="Search by title..." 
+                        className="w-full p-2 border border-gray-300 rounded-lg"
+                        value={searchTerm}
+                        onChange={handleSearchChange}
+                    />
+                </div>
+
+                <div className="mb-4 flex flex-wrap gap-4">
+                    <select 
+                        value={selectedDistrict}
+                        onChange={handleDistrictChange}
+                        className="p-2 border border-gray-300 rounded-lg"
+                    >
+                        <option value="All">All Districts</option>
+                        {districts.map((district, index) => (
+                            <option key={index} value={district}>{district}</option>
+                        ))}
+                    </select>
+
+                    <select 
+                        value={selectedProvince}
+                        onChange={handleProvinceChange}
+                        className="p-2 border border-gray-300 rounded-lg"
+                    >
+                        <option value="All">All Provinces</option>
+                        {provinces.map((province, index) => (
+                            <option key={index} value={province}>{province}</option>
+                        ))}
+                    </select>
+                </div>
+
                 <div className="space-y-4">
-                    {destinations.length > 0 ? (
-                        destinations.map(destination => (
+                    {filteredDestinations.length > 0 ? (
+                        filteredDestinations.map(destination => (
                             <div key={destination._id} className="border rounded-lg p-4 bg-white shadow-md dark:bg-gray-800 dark:border-gray-700">
                                 <div className="flex items-center mb-4">
                                     <img 
                                         src={"http://localhost:5001/DestinationImages/" + destination.dThumbnail} 
                                         alt="Destination Thumbnail" 
-                                        className="w-16 h-16 object-cover rounded-md mr-4"
+                                        className="w-16 h-16 object-cover rounded-md mr-4 cursor-pointer"
+                                        onClick={() => handleThumbnailClick(destination._id)} // Handle click
                                     />
                                     <div>
                                         <h2 className="text-xl font-semibold text-gray-900 dark:text-white">{destination.dTitle}</h2>
