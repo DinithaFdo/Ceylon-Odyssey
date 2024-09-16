@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import '../../index.css';
 
 export default function AllTourPackages() { 
@@ -23,6 +24,20 @@ export default function AllTourPackages() {
 
         return () => clearInterval(interval);
     }, []);
+
+    const deleteTourPackage = async (id) => {
+        const confirmed = window.confirm("Are you sure you want to delete this Tour Package?");
+        if(confirmed) {
+            try {
+                await axios.delete(`http://localhost:5000/tourPackage/delete/${id}`);
+                fetchTourPackages();
+            } catch (error) {
+                console.error('Error deleting tour package:', error);
+                alert('Failed to delete the package.');
+            }
+        }
+        
+    };
 
     return (
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg px-4 md:px-8 lg:px-16">
@@ -68,15 +83,15 @@ export default function AllTourPackages() {
                             return(
                                 <tr key={index} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                                     <td className="p-4">
-                                    <img src={"http://localhost:5000/TourPackageImages/" + tPackage.pImage} alt="Tour image" className="w-16 md:w-32 max-w-full max-h-full" />
+                                    <img src={`http://localhost:5000/TourPackageImages/${tPackage.pImage}`} alt="Tour image" className="w-16 md:w-32 max-w-full max-h-full" />
                                     </td>
                                     <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
                                         {tPackage.packageId}
                                     </td>
-                                    <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
+                                    <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white table-cell-wrap">
                                         {tPackage.package_Title}
                                     </td>
-                                    <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
+                                    <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white table-cell-wrap">
                                         {tPackage.packageDes}
                                     </td>
                                     <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
@@ -94,9 +109,11 @@ export default function AllTourPackages() {
                                     <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
                                         {tPackage.pDays}
                                     </td>
-                                    <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white text-center">
-                                        <button className="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition duration-300 mr-2">Edit</button>
-                                        <button className="bg-red-600 text-white px-4 py-2 rounded-full hover:bg-red-700 transition duration-300">Delete</button>
+                                    <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white text-center space-y-1">
+                                        <Link className="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition duration-300 ease-in-out flex items-center justify-center w-28 h-10" 
+                                            to={`/manageTourPackages/${tPackage._id}`} state={{ packageToEdit : tPackage }}>Update</Link>
+                                        <button className="bg-red-600 text-white px-4 py-2 rounded-full hover:bg-red-700 transition duration-300 ease-in-out flex items-center justify-center w-28 h-10"
+                                        onClick={() => deleteTourPackage(tPackage._id)}> Delete </button>
                                     </td>
                                 </tr>
                             )
@@ -106,8 +123,6 @@ export default function AllTourPackages() {
                 </tbody>
             </table>
         </div>
-
-        
 
     )
 }

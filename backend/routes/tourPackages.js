@@ -4,6 +4,16 @@ const multer = require('multer');
 const express = require('express');
 const app = express();
 const cors = require('cors');
+const fs = require('fs');
+const path = require('path');
+
+function deleteImage(filePath) {
+    fs.unlink(path.join(__dirname, '..', 'TourPackageImages', filePath), (err) => {
+        if (err) {
+            console.error('Failed to delete the file:', err);
+        }
+    });
+}
 
 app.use(cors());
 app.use(express.json());
@@ -24,6 +34,12 @@ var upload = multer({
 
 router.post('/AddTPackage', upload, async (req, res) => {
     try {
+        const existingPackage = await TourPackage.findOne({ packageId: req.body.packageId });
+        if (existingPackage) {
+            deleteImage(req.file.filename);
+            return res.status(400).json({ error: 'Package ID already exists.' });
+        }
+
         const newPackage = new TourPackage({
             packageId: req.body.packageId,
             package_Title: req.body.package_Title,
@@ -37,7 +53,6 @@ router.post('/AddTPackage', upload, async (req, res) => {
         });
 
         await newPackage.save();
-
         res.status(200).json(newPackage);
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -55,10 +70,11 @@ router.route('/').get((req, res) => {
 
 });
 
-router.route("/update/:id").put(async(req, res) => {
+router.put("/update/:id", upload, async(req, res) => {
 
     let fetchPackageID = req.params.id;
-    const {packageId, package_Title, pCreateDate, packageDes, pCategory, pImage, packagePrice, pDestination, pDays} = req.body;
+    const {packageId, package_Title, pCreateDate, packageDes, pCategory, packagePrice, pDestination, pDays} = req.body;
+    const pImage = req.file ? req.file.filename : req.body.pImage;
 
     const updatePackage = {
         packageId,
@@ -71,14 +87,14 @@ router.route("/update/:id").put(async(req, res) => {
         pDestination,
         pDays
     };
-
-    const update = await TourPackage.findByIdAndUpdate(fetchPackageID, updatePackage)
-    .then(() => {
-        res.status(200).send({status: "Package updated!"})
-    }).catch(err => {
+    
+    try {
+        const updatedPackage = await TourPackage.findByIdAndUpdate(fetchPackageID, updatePackage, { new: true });
+        res.status(200).send({status: "Package updated!", package: updatedPackage});
+    }catch(err) {
         console.log(err);
         res.status(500).send({status: "Error with updating data", error: err.message});
-    });
+    };
 
 });
 
@@ -86,6 +102,18 @@ router.route("/delete/:id").delete(async(req, res) => {
     
     let fetchPackageID = req.params.id;
     
+    if (fetchPackageID.pImage) {
+        const imagePath = path.join(__dirname, '..', 'TourPackageImages', fetchPackageID.pImage);
+        
+        fs.access(imagePath, fs.constants.F_OK, (err) => {
+            if (!err) {
+                fs.unlink(imagePath, (unlinkErr) => {
+                    if (unlinkErr) console.error('Error deleting image:', unlinkErr);
+                });
+            }
+        });
+    }
+
     await TourPackage.findByIdAndDelete(fetchPackageID)
         .then(() => {
             res.status(200).send({status: "Package deleted!"});
@@ -96,8 +124,26 @@ router.route("/delete/:id").delete(async(req, res) => {
     
 });
 
+router.route("/get/:id").get(async(req, res) => {
+    let fetchPackageID = req.params.id;
+
+    try {
+        const fetchPackage = await TourPackage.findById(fetchPackageID);
+
+        if (fetchPackage) {
+            res.status(200).send({ status: "Package fetched!", package: fetchPackage });
+        } else {
+            res.status(404).send({ status: "Package not found" });
+        }
+    } catch (err) {
+        res.status(500).send({ status: "Error fetching package", error: err.message });
+    }
+});
+
+
 router.route("/get/:category").get(async(req, res) => {
     let fetchCategory = req.params.category;
+    
     const category = await TourPackage.find({category: fetchCategory})
         .then((package) => {
             res.status(200).send({status: "Package fetched!", package})

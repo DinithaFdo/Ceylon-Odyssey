@@ -19,7 +19,6 @@ app.use('/TourPackageImages', express.static(path.join(__dirname, 'TourPackageIm
 const PORT = process.env.PORT || 5000;
 
 const tourPackageRouter = require('./routes/tourPackages.js');
-
 app.use('/tourPackage', tourPackageRouter);
 
 
