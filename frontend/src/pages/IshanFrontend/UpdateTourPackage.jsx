@@ -69,6 +69,7 @@ export default function UpdateTourPackage() {
                     'Content-Type': 'multipart/form-data'
                 }
             }).then((response) => {
+                alert("Package Updated Successfully");
                 navigate('/manageTourPackages');
             }).catch((err) => {
                 console.error('Error:', err);
@@ -106,8 +107,7 @@ export default function UpdateTourPackage() {
                     value={values.pCreateDate}
                     onChange={(e) => {
                         setValues({...values, pCreateDate: e.target.value});
-                    }} required />
-                    {errors.pCreateDate && <p className="text-red-500 text-xs mt-1">{errors.pCreateDate}</p>}
+                    }} required disabled/>
                 </div> 
 
                 <div className="mb-8">
@@ -138,7 +138,7 @@ export default function UpdateTourPackage() {
                     <input name="pImage" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" aria-describedby="user_avatar_help" id="pImage" type="file" 
                     onChange={(e) => {
                         setValues({...values, pImage: e.target.files[0]});
-                    }} required/>
+                    }} />
                 </div>
 
                 <div className="mb-8">

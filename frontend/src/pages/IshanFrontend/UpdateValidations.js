@@ -2,7 +2,6 @@ const UpdateValidations = (values) => {
     const errors = {};
 
     const tPackageTitlepattern = /^[A-Za-z\s]{10,}$/;
-    const tPackageCreateDatepattern = new Date().toISOString().split('T')[0];
     const tPackageDescriptionpattern = /^[A-Za-z\s]{70,}$/;
     const tPackagePricepattern = parseFloat(values.packagePrice);
     const tPackageDestinationpattern = /^(?:[A-Za-z]+(?:\s[A-Za-z]+){1,})$/;
@@ -10,10 +9,6 @@ const UpdateValidations = (values) => {
 
     if (!tPackageTitlepattern.test(values.package_Title)) {
         errors.package_Title = "Package Title must be at least 10 letters.";
-    }
-
-    if (tPackageCreateDatepattern !== values.pCreateDate) {
-        errors.pCreateDate = "Package Create Date must be today's date";
     }
 
     if (!tPackageDescriptionpattern.test(values.packageDes)) {
