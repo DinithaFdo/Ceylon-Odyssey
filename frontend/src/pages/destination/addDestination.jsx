@@ -3,6 +3,7 @@ import axios from 'axios';
 import Navbar from '../../components/Navbar/Navbar';
 import Footer from '../../components/Footer/Footer';
 import AddDestinationValidation from './AddDestinationValidation'; // Import validation logic
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 function AddDestination() {
     const [destinationID, setDestinationID] = useState("");
@@ -12,7 +13,34 @@ function AddDestination() {
     const [dExtImage, setDExtImage] = useState("");
     const [dDistrict, setDDistrict] = useState("");
     const [dProvince, setDProvince] = useState("");
+    const [longitude, setLongitude] = useState("");
+    const [latitude, setLatitude] = useState("");
     const [errors, setErrors] = useState({});
+    const navigate = useNavigate(); // Initialize useNavigate
+
+    // Sri Lankan provinces and districts
+    const provinces = [
+        "Western", "Central", "Southern", "Northern", "Eastern",
+        "North Western", "North Central", "Uva", "Sabaragamuwa"
+    ];
+
+    const districts = {
+        Western: ["Colombo", "Gampaha", "Kalutara"],
+        Central: ["Kandy", "Matale", "Nuwara Eliya"],
+        Southern: ["Galle", "Matara", "Hambantota"],
+        Northern: ["Jaffna", "Kilinochchi", "Mannar", "Mullaitivu", "Vavuniya"],
+        Eastern: ["Ampara", "Batticaloa", "Trincomalee"],
+        "North Western": ["Kurunegala", "Puttalam"],
+        "North Central": ["Anuradhapura", "Polonnaruwa"],
+        Uva: ["Badulla", "Monaragala"],
+        Sabaragamuwa: ["Ratnapura", "Kegalle"]
+    };
+
+    // Handle province selection and update district options
+    function handleProvinceChange(e) {
+        setDProvince(e.target.value);
+        setDDistrict(""); // Reset district when province changes
+    }
 
     function addDestination(e) {
         e.preventDefault();
@@ -25,6 +53,8 @@ function AddDestination() {
             dExtImage,
             dDistrict,
             dProvince,
+            longitude,
+            latitude
         };
 
         // Perform validation before submitting
@@ -35,7 +65,9 @@ function AddDestination() {
             dThumbnail,
             dExtImage,
             dDistrict,
-            dProvince
+            dProvince,
+            longitude,
+            latitude
         );
 
         if (Object.keys(validationErrors).length > 0) {
@@ -46,6 +78,7 @@ function AddDestination() {
         axios.post("http://localhost:5001/destination/add", newDestination)
             .then(() => {
                 alert("Destination Added Successfully");
+                navigate("/view-destinations"); // Redirect to the view destinations page
             })
             .catch((err) => {
                 alert(err);
@@ -57,8 +90,9 @@ function AddDestination() {
     return (
         <div className="flex flex-col min-h-screen">
             <Navbar />
+            
+            <br></br><br></br>
 
-            <br /><br />
             <main className="flex-grow pt-16 px-4 md:px-8 lg:px-16">
                 <form onSubmit={addDestination} className="max-w-lg mx-auto border border-gray-300 p-4 rounded-lg bg-white">
                     <h1 className="text-3xl font-bold mb-7 text-gray-800">Add New Destination</h1>
@@ -123,38 +157,83 @@ function AddDestination() {
                         {errors.dExtImage && <p className="text-red-500 text-sm">{errors.dExtImage}</p>}
                     </div>
 
+                    {/* Province Dropdown */}
+                    <div className="mb-8">
+                        <label htmlFor="dProvince" className="block mb-2 text-l font-medium text-gray-900">Province</label>
+                        <select
+                            id="dProvince"
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                            value={dProvince}
+                            onChange={handleProvinceChange}
+                            required
+                        >
+                            <option value="">Select Province</option>
+                            {provinces.map((province) => (
+                                <option key={province} value={province}>
+                                    {province}
+                                </option>
+                            ))}
+                        </select>
+                        {errors.dProvince && <p className="text-red-500 text-sm">{errors.dProvince}</p>}
+                    </div>
+
+                    {/* District Dropdown */}
                     <div className="mb-8">
                         <label htmlFor="dDistrict" className="block mb-2 text-l font-medium text-gray-900">District</label>
-                        <input
-                            type="text"
+                        <select
                             id="dDistrict"
                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                            value={dDistrict}
                             onChange={(e) => setDDistrict(e.target.value)}
                             required
-                        />
+                            disabled={!dProvince} // Disable district selection until province is selected
+                        >
+                            <option value="">Select District</option>
+                            {dProvince && districts[dProvince].map((district) => (
+                                <option key={district} value={district}>
+                                    {district}
+                                </option>
+                            ))}
+                        </select>
                         {errors.dDistrict && <p className="text-red-500 text-sm">{errors.dDistrict}</p>}
                     </div>
 
+                    {/* Longitude Field */}
                     <div className="mb-8">
-                        <label htmlFor="dProvince" className="block mb-2 text-l font-medium text-gray-900">Province</label>
+                        <label htmlFor="longitude" className="block mb-2 text-l font-medium text-gray-900">Longitude</label>
                         <input
                             type="text"
-                            id="dProvince"
+                            id="longitude"
                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                            onChange={(e) => setDProvince(e.target.value)}
+                            onChange={(e) => setLongitude(e.target.value)}
                             required
                         />
-                        {errors.dProvince && <p className="text-red-500 text-sm">{errors.dProvince}</p>}
+                        {errors.longitude && <p className="text-red-500 text-sm">{errors.longitude}</p>}
+                    </div>
+
+                    {/* Latitude Field */}
+                    <div className="mb-8">
+                        <label htmlFor="latitude" className="block mb-2 text-l font-medium text-gray-900">Latitude</label>
+                        <input
+                            type="text"
+                            id="latitude"
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                            onChange={(e) => setLatitude(e.target.value)}
+                            required
+                        />
+                        {errors.latitude && <p className="text-red-500 text-sm">{errors.latitude}</p>}
                     </div>
 
                     <button
                         type="submit"
-                        className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
+                        className="text-white bg-blue-500 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                     >
-                        Submit
+                        Add Destination
                     </button>
                 </form>
             </main>
+
+            <br></br><br></br>
 
             <Footer />
         </div>
@@ -162,4 +241,3 @@ function AddDestination() {
 }
 
 export default AddDestination;
-

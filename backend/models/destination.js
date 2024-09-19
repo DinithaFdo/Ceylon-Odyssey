@@ -39,6 +39,24 @@ const destinationSchema = new Schema({
         required: true
     },
 
+    longitude: { 
+        type: Number, 
+        required: true },
+
+    latitude: { 
+        type: Number, 
+        required: true },
+
+    clickCount : {
+        type : Number,
+        default: 0,
+    },
+
+    creationDate : {
+        type : Date,
+        default: Date.now
+    },
+
 });
 
 const Destination = mongoose.model("Destination",destinationSchema);

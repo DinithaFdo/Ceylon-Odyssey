@@ -19,7 +19,27 @@ export default function EditDestinationPage() {
         dThumbnail: '',
         dExtImage: '',
         dDistrict: '',
-        dProvince: ''
+        dProvince: '',
+        longitude: '',
+        latitude: ''
+    });
+
+    // State to manage province and district options
+    const [provinces, setProvinces] = useState([
+        "Western", "Central", "Southern", "Northern", "Eastern",
+        "North Western", "North Central", "Uva", "Sabaragamuwa"
+    ]);
+
+    const [districts, setDistricts] = useState({
+        Western: ["Colombo", "Gampaha", "Kalutara"],
+        Central: ["Kandy", "Matale", "Nuwara Eliya"],
+        Southern: ["Galle", "Matara", "Hambantota"],
+        Northern: ["Jaffna", "Kilinochchi", "Mannar", "Mullaitivu", "Vavuniya"],
+        Eastern: ["Ampara", "Batticaloa", "Trincomalee"],
+        "North Western": ["Kurunegala", "Puttalam"],
+        "North Central": ["Anuradhapura", "Polonnaruwa"],
+        Uva: ["Badulla", "Monaragala"],
+        Sabaragamuwa: ["Ratnapura", "Kegalle"]
     });
 
     useEffect(() => {
@@ -36,7 +56,9 @@ export default function EditDestinationPage() {
                         dThumbnail: destinationData.dThumbnail,
                         dExtImage: destinationData.dExtImage,
                         dDistrict: destinationData.dDistrict,
-                        dProvince: destinationData.dProvince
+                        dProvince: destinationData.dProvince,
+                        longitude: destinationData.longitude || '',
+                        latitude: destinationData.latitude || ''
                     });
                 }
             } catch (error) {
@@ -55,6 +77,15 @@ export default function EditDestinationPage() {
         }));
     };
 
+    const handleProvinceChange = (e) => {
+        const selectedProvince = e.target.value;
+        setFormData(prevData => ({
+            ...prevData,
+            dProvince: selectedProvince,
+            dDistrict: "" // Reset district when province changes
+        }));
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         const validationErrors = AddDestinationValidation(
@@ -64,7 +95,9 @@ export default function EditDestinationPage() {
             formData.dThumbnail,
             formData.dExtImage,
             formData.dDistrict,
-            formData.dProvince
+            formData.dProvince,
+            formData.longitude,
+            formData.latitude
         );
 
         if (Object.keys(validationErrors).length > 0) {
@@ -87,6 +120,8 @@ export default function EditDestinationPage() {
     return (
         <div className="flex flex-col min-h-screen">
             <Navbar />
+
+            <br></br><br></br>
 
             <main className="flex-grow pt-16 px-4 md:px-8 lg:px-16">
                 <div className="max-w-lg mx-auto border border-gray-300 p-4 rounded-lg mt-8">
@@ -167,26 +202,58 @@ export default function EditDestinationPage() {
 
                         <div className="mb-4">
                             <label htmlFor="dDistrict" className="block mb-2 text-sm font-medium text-gray-900">District</label>
-                            <input 
-                                type="text" 
-                                id="dDistrict" 
+                            <select
+                                id="dDistrict"
                                 value={formData.dDistrict}
                                 onChange={handleChange}
                                 className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ${errors.dDistrict ? 'border-red-500' : ''}`}
-                            />
+                            >
+                                <option value="">Select District</option>
+                                {formData.dProvince && districts[formData.dProvince] && districts[formData.dProvince].map(district => (
+                                    <option key={district} value={district}>{district}</option>
+                                ))}
+                            </select>
                             {errors.dDistrict && <p className="text-red-500 text-sm">{errors.dDistrict}</p>}
                         </div>
 
                         <div className="mb-4">
                             <label htmlFor="dProvince" className="block mb-2 text-sm font-medium text-gray-900">Province</label>
-                            <input 
-                                type="text" 
-                                id="dProvince" 
+                            <select
+                                id="dProvince"
                                 value={formData.dProvince}
-                                onChange={handleChange}
+                                onChange={handleProvinceChange}
                                 className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ${errors.dProvince ? 'border-red-500' : ''}`}
-                            />
+                            >
+                                <option value="">Select Province</option>
+                                {provinces.map(province => (
+                                    <option key={province} value={province}>{province}</option>
+                                ))}
+                            </select>
                             {errors.dProvince && <p className="text-red-500 text-sm">{errors.dProvince}</p>}
+                        </div>
+
+                        <div className="mb-4">
+                            <label htmlFor="longitude" className="block mb-2 text-sm font-medium text-gray-900">Longitude</label>
+                            <input
+                                type="text"
+                                id="longitude"
+                                value={formData.longitude}
+                                onChange={handleChange}
+                                className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ${errors.longitude ? 'border-red-500' : ''}`}
+                            />
+                            {errors.longitude && <p className="text-red-500 text-sm">{errors.longitude}</p>}
+                        </div>
+
+                        <div className="mb-4">
+                            <label htmlFor="latitude" className="block mb-2 text-sm font-medium text-gray-900">Latitude</label>
+                            <input
+                                type="text"
+                                id="latitude"
+                                value={formData.latitude}
+                                onChange={handleChange}
+                                className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ${errors.latitude ? 'border-red-500' : ''}`}
+                            />
+                            {errors.latitude && <p className="text-red-500 text-sm">{errors.latitude}</p>}
                         </div>
 
                         <button 
@@ -198,6 +265,8 @@ export default function EditDestinationPage() {
                     </form>
                 </div>
             </main>
+
+            <br></br><br></br>
 
             <Footer />
         </div>

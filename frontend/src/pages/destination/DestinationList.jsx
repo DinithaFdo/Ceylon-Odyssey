@@ -30,8 +30,13 @@ export default function DestinationList() {
         return () => clearInterval(interval);
     }, []);
 
-    const handleThumbnailClick = (destinationId) => {
-        navigate(`/destination/${destinationId}`); // Redirect to detail view
+    const handleThumbnailClick = async (destinationId) => {
+        try {
+            await axios.put(`http://localhost:5001/destination/${destinationId}/click`);
+            navigate(`/destination/${destinationId}`); // Redirect to detail view
+        } catch (error) {
+            console.error('Error updating click count:', error);
+        }
     };
 
     const handleSearchChange = (e) => {
@@ -61,42 +66,48 @@ export default function DestinationList() {
         <div className="flex flex-col min-h-screen">
             <Navbar /> {/* Navbar is fixed at the top */}
 
+            <br></br><br></br>
+
             <main className="flex-grow pt-16 px-4 md:px-8 lg:px-16"> {/* Add padding-top to avoid overlap */}
                 <h1 className="text-2xl font-bold mb-4">Destinations List</h1>
 
-                <div className="mb-4">
-                    <input 
-                        type="text" 
-                        placeholder="Search by title..." 
-                        className="w-full p-2 border border-gray-300 rounded-lg"
-                        value={searchTerm}
-                        onChange={handleSearchChange}
-                    />
+                <div className="flex flex-wrap gap-4 mb-4">
+                    <div className="flex-1">
+                        <input 
+                            type="text" 
+                            placeholder="Search by title..." 
+                            className="w-full p-2 border border-gray-300 rounded-lg"
+                            value={searchTerm}
+                            onChange={handleSearchChange}
+                        />
+                    </div>
+
+                    <div className="flex-1 flex gap-4">
+                        <select 
+                            value={selectedDistrict}
+                            onChange={handleDistrictChange}
+                            className="p-2 border border-gray-300 rounded-lg flex-grow"
+                        >
+                            <option value="All">All Districts</option>
+                            {districts.map((district, index) => (
+                                <option key={index} value={district}>{district}</option>
+                            ))}
+                        </select>
+
+                        <select 
+                            value={selectedProvince}
+                            onChange={handleProvinceChange}
+                            className="p-2 border border-gray-300 rounded-lg flex-grow"
+                        >
+                            <option value="All">All Provinces</option>
+                            {provinces.map((province, index) => (
+                                <option key={index} value={province}>{province}</option>
+                            ))}
+                        </select>
+                    </div>
                 </div>
 
-                <div className="mb-4 flex flex-wrap gap-4">
-                    <select 
-                        value={selectedDistrict}
-                        onChange={handleDistrictChange}
-                        className="p-2 border border-gray-300 rounded-lg"
-                    >
-                        <option value="All">All Districts</option>
-                        {districts.map((district, index) => (
-                            <option key={index} value={district}>{district}</option>
-                        ))}
-                    </select>
-
-                    <select 
-                        value={selectedProvince}
-                        onChange={handleProvinceChange}
-                        className="p-2 border border-gray-300 rounded-lg"
-                    >
-                        <option value="All">All Provinces</option>
-                        {provinces.map((province, index) => (
-                            <option key={index} value={province}>{province}</option>
-                        ))}
-                    </select>
-                </div>
+                <br></br>
 
                 <div className="space-y-4">
                     {filteredDestinations.length > 0 ? (
@@ -121,6 +132,8 @@ export default function DestinationList() {
                     )}
                 </div>
             </main>
+
+            <br></br><br></br>
 
             <Footer /> {/* Footer is fixed at the bottom */}
         </div>

@@ -34,6 +34,14 @@ router.post("/add", [
   body('dProvince')
     .notEmpty()
     .withMessage('Province is required.'),
+
+  body('longitude')
+    .isNumeric()
+    .withMessage('Longitude must be a valid number.'),
+
+  body('latitude')
+    .isNumeric()
+    .withMessage('Latitude must be a valid number.'),
 ], async (req, res) => {
   // Check for validation errors
   const errors = validationResult(req);
@@ -42,7 +50,7 @@ router.post("/add", [
   }
 
   try {
-    const { destinationID, dTitle, dDescription, dThumbnail, dExtImage, dDistrict, dProvince } = req.body;
+    const { destinationID, dTitle, dDescription, dThumbnail, dExtImage, dDistrict, dProvince, longitude, latitude } = req.body;
 
     const newDestination = new Destination({
       destinationID,
@@ -51,7 +59,10 @@ router.post("/add", [
       dThumbnail,
       dExtImage,
       dDistrict,
-      dProvince
+      dProvince,
+      longitude,
+      latitude,
+      clickCount: 0 // Initialize click count to 0
     });
 
     await newDestination.save();
@@ -65,7 +76,7 @@ router.post("/add", [
 // Get all destinations
 router.get("/", async (req, res) => {
   try {
-    const destinations = await Destination.find();
+    const destinations = await Destination.find().select('destinationID dTitle dDescription dThumbnail dExtImage dDistrict dProvince longitude latitude creationDate clickCount');
     res.status(200).json(destinations);
   } catch (err) {
     console.error(err);
@@ -107,6 +118,16 @@ router.put("/update/:id", [
     .optional()
     .notEmpty()
     .withMessage('Province is required.'),
+
+  body('longitude')
+    .optional()
+    .isNumeric()
+    .withMessage('Longitude must be a valid number.'),
+
+  body('latitude')
+    .optional()
+    .isNumeric()
+    .withMessage('Latitude must be a valid number.'),
 ], async (req, res) => {
   // Check for validation errors
   const errors = validationResult(req);
@@ -116,7 +137,7 @@ router.put("/update/:id", [
 
   try {
     const destinationID = req.params.id;
-    const { dTitle, dDescription, dThumbnail, dExtImage, dDistrict, dProvince } = req.body;
+    const { dTitle, dDescription, dThumbnail, dExtImage, dDistrict, dProvince, longitude, latitude } = req.body;
 
     const updatedDestination = {
       dTitle,
@@ -124,7 +145,10 @@ router.put("/update/:id", [
       dThumbnail,
       dExtImage,
       dDistrict,
-      dProvince
+      dProvince,
+      longitude,
+      latitude
+      // creationDate should not be updated
     };
 
     const result = await Destination.findByIdAndUpdate(destinationID, updatedDestination, { new: true });
@@ -165,6 +189,26 @@ router.get("/get/:id", async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Error fetching destination" });
+  }
+});
+
+// Route to handle incrementing the click count
+router.put('/:id/click', async (req, res) => {
+  try {
+      const { id } = req.params;
+      const destination = await Destination.findById(id);
+
+      if (!destination) {
+          return res.status(404).json({ message: 'Destination not found' });
+      }
+
+      // Increment the click count
+      destination.clickCount = (destination.clickCount || 0) + 1;
+      await destination.save();
+
+      res.json({ message: 'Click count updated', clickCount: destination.clickCount });
+  } catch (error) {
+      res.status(500).json({ message: 'Error updating click count', error });
   }
 });
 

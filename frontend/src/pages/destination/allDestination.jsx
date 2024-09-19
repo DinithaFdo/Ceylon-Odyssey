@@ -3,8 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../../components/Navbar/Navbar';
 import Footer from '../../components/Footer/Footer';
-import { PDFDocument, rgb } from 'pdf-lib';
-import { saveAs } from 'file-saver';
+import * as XLSX from 'xlsx';
 
 export default function AllDestinations() {
     const [destinations, setDestinations] = useState([]);
@@ -34,34 +33,18 @@ export default function AllDestinations() {
         navigate(`/edit-destination/${destinationID}`);
     };
 
-    const generateEditablePDF = async () => {
-        const doc = await PDFDocument.create();
-        const page = doc.addPage([600, 400]);
-        const { width, height } = page.getSize();
+    const generateReport = () => {
+        // Create a workbook and a worksheet
+        const wb = XLSX.utils.book_new();
+        const wsData = destinations.map(destination => ({
+            Title: destination.dTitle,
+            Clicks: destination.clickCount,
+        }));
+        const ws = XLSX.utils.json_to_sheet(wsData);
+        XLSX.utils.book_append_sheet(wb, ws, 'Destinations');
 
-        // Title
-        page.drawText('Destinations Report', { x: 50, y: height - 50, size: 24, color: rgb(0, 0, 0) });
-
-        // Table Header
-        page.drawText('Thumbnail', { x: 50, y: height - 100, size: 14, color: rgb(0, 0, 0) });
-        page.drawText('Title', { x: 150, y: height - 100, size: 14, color: rgb(0, 0, 0) });
-        page.drawText('Description', { x: 250, y: height - 100, size: 14, color: rgb(0, 0, 0) });
-
-        let yPosition = height - 130;
-
-        destinations.forEach((destination) => {
-            // Thumbnail
-            page.drawText(destination.dThumbnail, { x: 50, y: yPosition, size: 12, color: rgb(0, 0, 0) });
-            // Title
-            page.drawText(destination.dTitle, { x: 150, y: yPosition, size: 12, color: rgb(0, 0, 0) });
-            // Description
-            page.drawText(destination.dDescription, { x: 250, y: yPosition, size: 12, color: rgb(0, 0, 0) });
-
-            yPosition -= 20;
-        });
-
-        const pdfBytes = await doc.save();
-        saveAs(new Blob([pdfBytes], { type: 'application/pdf' }), 'Destinations_Report.pdf');
+        // Generate a file download
+        XLSX.writeFile(wb, 'destinations_report.xlsx');
     };
 
     useEffect(() => {
@@ -78,12 +61,14 @@ export default function AllDestinations() {
         <div className="flex flex-col min-h-screen">
             <Navbar /> {/* Navbar fixed at the top */}
 
+            <br></br><br></br>
+
             <main className="flex-grow pt-16 px-4 md:px-8 lg:px-16"> {/* Add padding-top to avoid overlap with Navbar */}
                 <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-                    <h1 className="text-2xl font-bold mb-4">All Listed Destinations</h1>
+                    <center><h1 className="text-2xl font-bold mb-4">All Listed Destinations</h1></center>
 
                     <button 
-                        onClick={generateEditablePDF}
+                        onClick={generateReport}
                         className="bg-green-600 text-white px-4 py-2 rounded-full hover:bg-green-700 transition duration-300 mb-4"
                     >
                         Generate Report
@@ -95,6 +80,8 @@ export default function AllDestinations() {
                                 <th scope="col" className="px-6 py-3">Thumbnail</th>
                                 <th scope="col" className="px-6 py-3">Title</th>
                                 <th scope="col" className="px-6 py-3">Description</th>
+                                <th scope="col" className="px-6 py-3">Creation Date</th>
+                                <th scope="col" className="px-6 py-3">Clicks</th> {/* Column for clicks */}
                                 <th scope="col" className="px-6 py-3">Actions</th>
                             </tr>
                         </thead>
@@ -109,6 +96,12 @@ export default function AllDestinations() {
                                     </td>
                                     <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
                                         {destination.dDescription}
+                                    </td>
+                                    <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
+                                        {new Date(destination.creationDate).toLocaleDateString()} {/* Display formatted creation date */}
+                                    </td>
+                                    <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white text-center">
+                                        {destination.clickCount} {/* Display the click count */}
                                     </td>
                                     <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white text-center">
                                         <button 
@@ -130,6 +123,8 @@ export default function AllDestinations() {
                     </table>
                 </div>
             </main>
+
+            <br></br><br></br>
 
             <Footer /> {/* Footer fixed at the bottom */}
         </div>
