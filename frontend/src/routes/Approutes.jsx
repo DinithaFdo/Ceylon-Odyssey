@@ -6,6 +6,7 @@ import Login from "../pages/login/Login";
 import Signup from "../pages/signup/Signup";
 import AddDestination from "../pages/destination/addDestination";
 import AllDestination from "../pages/destination/allDestination";
+import EditDestinationPage from "../pages/destination/EditDestinationPage";
 import DestinationList from "../pages/destination/DestinationList";
 import DestinationDetail from "../pages/destination/DestinationDetail";
 
@@ -20,6 +21,7 @@ function AppRoutes() {
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/add-destination" element={<AddDestination />} />
                 <Route path="/view-destinations" element={<AllDestination />} />
+                <Route path="/edit-destination/:id" element={<EditDestinationPage />} />
                 <Route path="/destinations" element={<DestinationList />} />
                 <Route path="/destination/:id" element={<DestinationDetail />} />
             </Routes>

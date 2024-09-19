@@ -74,7 +74,46 @@ router.get("/", async (req, res) => {
 });
 
 // Update an existing destination
-router.put("/update/:id", async (req, res) => {
+router.put("/update/:id", [
+  // Validation rules
+  body('dTitle')
+    .optional()
+    .isString()
+    .isLength({ min: 3, max: 100 })
+    .withMessage('Title must be between 3 and 100 characters.'),
+
+  body('dDescription')
+    .optional()
+    .isString()
+    .isLength({ min: 20, max: 500 })
+    .withMessage('Description must be between 20 and 500 characters.'),
+
+  body('dThumbnail')
+    .optional()
+    .isString()
+    .withMessage('Thumbnail must be a valid string.'),
+
+  body('dExtImage')
+    .optional()
+    .isString()
+    .withMessage('Extra Images must be a valid string.'),
+
+  body('dDistrict')
+    .optional()
+    .notEmpty()
+    .withMessage('District is required.'),
+
+  body('dProvince')
+    .optional()
+    .notEmpty()
+    .withMessage('Province is required.'),
+], async (req, res) => {
+  // Check for validation errors
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
   try {
     const destinationID = req.params.id;
     const { dTitle, dDescription, dThumbnail, dExtImage, dDistrict, dProvince } = req.body;
