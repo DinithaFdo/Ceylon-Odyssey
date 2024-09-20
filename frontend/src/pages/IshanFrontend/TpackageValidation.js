@@ -11,9 +11,9 @@ const TpackageValidation = (
     const errors = {};
 
     const tPackageIDpattern = /^CO\d{4}$/;
-    const tPackageTitlepattern = /^[A-Za-z\s]{10,}$/;
+    const tPackageTitlepattern = /^.{10,}$/;
     const tPackageCreateDatepattern = new Date().toISOString().split('T')[0];
-    const tPackageDescriptionpattern = /^[A-Za-z\s]{70,}$/;
+    const tPackageDescriptionpattern = /^.{75,}$/;
     const tPackagePricepattern = parseFloat(packagePrice);
     const tPackageDestinationpattern = /^(?:[A-Za-z]+(?:\s[A-Za-z]+){1,})$/;
     const tPackageDayspattern = parseFloat(pDays);

@@ -16,6 +16,7 @@ const tourPackageSchema = new Schema({
 
     pCreateDate : {
         type : String,
+        default : Date.now,
         required : true
     },
 
@@ -26,6 +27,7 @@ const tourPackageSchema = new Schema({
 
     pCategory : {
         type : String,
+        enum:['Adventure Tours', 'Cultural Tours', 'Wildlife and Nature Tours'],
         required : true
     },
 
