@@ -70,80 +70,83 @@ export default function QuotationForm() {
                 <form className="bg-white shadow-md rounded-lg p-8">
                     <h2 className="text-2xl font-semibold mb-6">Get a Quotation</h2>
                     
-                    <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-                    
-                        <div>
-                            <label htmlFor="packageId" className="block text-gray-700 font-medium mb-2 text-center">Package Name</label>
-                            <select
-                                name="packageId"
-                                id={`packageId-${index}`}
-                                value={field.packageId}
-                                onChange={(event) => handePackageChange(index, event)}
-                                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                                <option value="">Select a Package</option>
-                                {packages.map((pkg) => (
-                                    <option key={pkg._id} value={pkg._id}>
-                                        {pkg.name}
-                                    </option>
-                                ))}
-                            </select>
+                    {packageField.map((field, index) => (
+                        <div key={index} className="grid grid-cols-1 gap-6 md:grid-cols-3">
+                        
+                            <div>
+                                <label htmlFor="packageId" className="block text-gray-700 font-medium mb-2 text-center">Package Name</label>
+                                <select
+                                    name="packageId"
+                                    id={`packageId-${index}`}
+                                    value={field.packageId}
+                                    onChange={(event) => handePackageChange(index, event)}
+                                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                    <option value="">Select a Package</option>
+                                    {packages.map((pkg) => (
+                                        <option key={pkg._id} value={pkg._id}>
+                                            {pkg.name}
+                                        </option>
+                                    ))}
+                                </select>
 
-                        </div>
+                            </div>
 
-                        <div>
-                            <label htmlFor="numPeople" className="block text-gray-700 font-medium mb-2 text-center">Number of People</label>
-                            <input
-                                type="number"
-                                name="numPeople"
-                                id={`numPeople-${index}`}
-                                value={field.numPeople}
-                                placeholder="Enter Number of People"
-                                min="1"
-                                onChange={(event) => handePackageChange(index, event)}
-                                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                            />
-                        </div>
+                            <div>
+                                <label htmlFor="numPeople" className="block text-gray-700 font-medium mb-2 text-center">Number of People</label>
+                                <input
+                                    type="number"
+                                    name="numPeople"
+                                    id={`numPeople-${index}`}
+                                    value={field.numPeople}
+                                    placeholder="Enter Number of People"
+                                    min="1"
+                                    onChange={(event) => handePackageChange(index, event)}
+                                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                />
+                            </div>
 
-                        <div>
-                            <label htmlFor="price" className="block text-gray-700 font-medium mb-2 text-center">Price</label>
-                            <input
+                            <div>
+                                <label htmlFor="price" className="block text-gray-700 font-medium mb-2 text-center">Price</label>
+                                <input
+                                    type="text"
+                                    id={`totalPrice-${index}`}
+                                    value={field.totalPrice || 0}
+                                    readOnly
+                                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" disabled/>
+                            </div>
+
+                            <div className="mt-4">
+                                <button
+                                    type="button"
+                                    onClick={addPackageField}
+                                    className="px-6 py-3 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+                                >
+                                    Add Another Package
+                                </button>
+                            </div>
+
+                            <div>
+                                <label htmlFor="equipmenetID" className="block text-gray-700 font-medium mb-2 text-center">Equipment</label>
+                                <input
                                 type="text"
-                                id={`totalPrice-${index}`}
-                                value={field.totalPrice || 0}
-                                readOnly
-                                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" disabled/>
-                        </div>
+                                id="equipmenetID"
+                                placeholder="Enter Equipment Name"
+                                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
+                            </div>
 
-                        <div className="mt-4">
-                            <button
-                                type="button"
-                                onClick={addPackageField}
-                                className="px-6 py-3 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
-                            >
-                                Add Another Package
-                            </button>
-                        </div>
+                            <div>
+                                <label htmlFor="numEquipment" className="block text-gray-700 font-medium mb-2 text-center">Number of items</label>
+                                <input
+                                type="number"
+                                id="numItems"
+                                min="1"
+                                placeholder="Enter Number of items"
+                                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"/>
+                            </div>
+                            
 
-                        <div>
-                            <label htmlFor="equipmenetID" className="block text-gray-700 font-medium mb-2 text-center">Equipment</label>
-                            <input
-                            type="text"
-                            id="equipmenetID"
-                            placeholder="Enter Equipment Name"
-                            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
                         </div>
-
-                        <div>
-                            <label htmlFor="numEquipment" className="block text-gray-700 font-medium mb-2 text-center">Number of items</label>
-                            <input
-                            type="number"
-                            id="numItems"
-                            min="1"
-                            placeholder="Enter Number of items"
-                            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"/>
-                        </div>
-
-                    </div>
+                    ))}
 
                     <div className="mt-6">
                         <button
