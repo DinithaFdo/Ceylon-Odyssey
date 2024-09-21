@@ -63,7 +63,6 @@ export default function QuotationForm() {
     }
 
 
-
     return (
         <div className="">
             <div className="container mx-auto p-20">
@@ -82,7 +81,7 @@ export default function QuotationForm() {
                                     onChange={(event) => handePackageChange(index, event)}
                                     className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                                     <option value="">Select a Package</option>
-                                    {packages.map((pkg) => (
+                                    {tourPackages.map((pkg) => (
                                         <option key={pkg._id} value={pkg._id}>
                                             {pkg.name}
                                         </option>
