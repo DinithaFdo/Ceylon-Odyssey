@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const { body, validationResult } = require('express-validator');
-const Ticket = require('../models/ticket'); // Adjust the path if needed
+const mongoose = require('mongoose'); // Add mongoose for ObjectID validation
+const Ticket = require('../models/Ticket'); // Adjust the path if needed
 
 // Add a new ticket
 router.post("/add", [
@@ -9,25 +10,25 @@ router.post("/add", [
     .isString()
     .isLength({ min: 3, max: 100 })
     .withMessage('Subject must be between 3 and 100 characters.'),
-
+    
   body('description')
     .isString()
     .isLength({ min: 20, max: 500 })
     .withMessage('Description must be between 20 and 500 characters.'),
-
+    
   body('priority')
     .isIn(['Low', 'Medium', 'High'])
     .withMessage('Priority must be either Low, Medium, or High.'),
-
-  body('date')
-    .isISO8601()
-    .withMessage('Date must be a valid ISO8601 date string.'),
-
+    
+  body('email')
+    .isEmail()
+    .withMessage('Email must be a valid email address.'),
+    
   body('solution')
     .optional()
     .isString()
     .withMessage('Solution must be a valid string if provided.'),
-
+    
   body('isComplete')
     .optional()
     .isBoolean()
@@ -40,19 +41,26 @@ router.post("/add", [
   }
 
   try {
-    const { subject, description, priority, date, solution, isComplete } = req.body;
+    const { subject, description, priority, email, solution, isComplete } = req.body;
 
     const newTicket = new Ticket({
       subject,
       description,
       priority,
-      date,
+      email, // Include email field
+      date: new Date(), // Automatically set to current date
       solution,
       isComplete
     });
 
+    // Save ticket with auto-incremented and formatted ticketID
     await newTicket.save();
-    res.status(201).json("Ticket added successfully");
+    
+    // Respond with success and the created ticket details
+    res.status(201).json({
+      message: "Ticket added successfully",
+      ticket: newTicket
+    });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Error adding ticket" });
@@ -70,17 +78,46 @@ router.get("/", async (req, res) => {
   }
 });
 
-// Update an existing ticket
+// Get a specific ticket
+router.get("/get/:id", async (req, res) => {
+  try {
+    const ticketID = req.params.id;
+
+    // Validate if the provided ID is a valid MongoDB ObjectID
+    if (!mongoose.Types.ObjectId.isValid(ticketID)) {
+      return res.status(400).json({ error: "Invalid ticket ID format" });
+    }
+
+    const ticket = await Ticket.findById(ticketID);
+    if (!ticket) {
+      return res.status(404).json({ error: "Ticket not found" });
+    }
+    res.status(200).json({ status: "Ticket fetched successfully", ticket });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Error fetching ticket" });
+  }
+});
+
+// Update an existing ticket (support agent can update the solution field)
 router.put("/update/:id", async (req, res) => {
   try {
     const ticketID = req.params.id;
-    const { subject, description, priority, date, solution, isComplete } = req.body;
 
+    // Validate if the provided ID is a valid MongoDB ObjectID
+    if (!mongoose.Types.ObjectId.isValid(ticketID)) {
+      return res.status(400).json({ error: "Invalid ticket ID format" });
+    }
+
+    const { subject, description, priority, email, solution, isComplete } = req.body;
+
+    // Prepare the update object, allowing support agent to update solution
     const updatedTicket = {
       subject,
       description,
       priority,
-      date,
+      email, // Include email update
+      date: new Date(), // Update date if necessary
       solution,
       isComplete
     };
@@ -100,6 +137,12 @@ router.put("/update/:id", async (req, res) => {
 router.delete("/delete/:id", async (req, res) => {
   try {
     const ticketID = req.params.id;
+
+    // Validate if the provided ID is a valid MongoDB ObjectID
+    if (!mongoose.Types.ObjectId.isValid(ticketID)) {
+      return res.status(400).json({ error: "Invalid ticket ID format" });
+    }
+
     const result = await Ticket.findByIdAndDelete(ticketID);
     if (!result) {
       return res.status(404).json({ error: "Ticket not found" });
@@ -108,21 +151,6 @@ router.delete("/delete/:id", async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Error deleting ticket" });
-  }
-});
-
-// Get a specific ticket
-router.get("/get/:id", async (req, res) => {
-  try {
-    const ticketID = req.params.id;
-    const ticket = await Ticket.findById(ticketID);
-    if (!ticket) {
-      return res.status(404).json({ error: "Ticket not found" });
-    }
-    res.status(200).json({ status: "Ticket fetched successfully", ticket });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Error fetching ticket" });
   }
 });
 
