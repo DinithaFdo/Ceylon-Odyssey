@@ -1,18 +1,36 @@
 import React, { useState,useEffect } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 function AllEquipment() {
   const [equipment, setEquipment] = useState([]);
 
   useEffect(() => {
-    axios.get("http://localhost:5000/equipment/")
-      .then((res) => {
-        setEquipment(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    fetchEquipment();
   }, []);
+
+  const fetchEquipment = async () => {
+    try {
+      const res = await axios.get("http://localhost:5000/equipment/");
+      setEquipment(res.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const deleteEquipment = async (id) => {
+    const confirmed = window.confirm("Are you sure you want to delete this Equipment?");
+    if (confirmed) {
+      try {
+        await axios.delete(`http://localhost:5000/equipment/delete/${id}`);
+        alert("Equipment deleted successfully!");
+        fetchEquipment(); // Call fetchEquipment to refresh the list
+      } catch (error) {
+        console.error('Error deleting Equipment:', error);
+        alert('Equipment deletion failed.');
+      }
+    }
+  };
 
 return (
     <>
@@ -35,8 +53,8 @@ return (
                             <p className="text-gray-600 dark:text-gray-300 mt-2">Qty  {equip.equipmentQuantity}</p>
                         </div>
                         <div className="flex justify-end mb-1">
-                            <button class="bg-transparent hover:bg-red-500 text-red-700 font-semibold hover:text-white py-2 px-4 border border-red-500 hover:border-transparent rounded mr-3">Delete</button>
-                            <button class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded mr-1">Update</button>
+                            <button class="bg-transparent hover:bg-red-500 text-red-700 font-semibold hover:text-white py-2 px-4 border border-red-500 hover:border-transparent rounded mr-3"  onClick={() => deleteEquipment(equip._id)}>Delete</button>
+                            <button class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded mr-1"><Link to={`/updateequipment/${equip._id}`} state={{ equipmentToEdit : equip }}>Update</Link></button>
                         </div>
                     </div>
                 ))}

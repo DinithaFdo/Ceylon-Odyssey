@@ -52,29 +52,37 @@ router.route('/').get((req, res) => {
 });
 
 
-router.route("/update/:id").put(async(req, res) =>{
-
+router.route("/update/:id").put(upload, async (req, res) => {
     let fetchequipmentID = req.params.id;
-    const {equipmentId, equipmentName, equipmentType, equipmentDescription, equipmentImage, equipmentPrice, equipmentQuantity} = req.body;
+    const { equipmentName, equipmentType, equipmentDescription, equipmentPrice, equipmentQuantity } = req.body;
 
-    const updateEquipment = {
-        equipmentId,
-        equipmentName,
-        equipmentType,
-        equipmentDescription,
-        equipmentImage,
-        equipmentPrice,
-        equipmentQuantity
-    }
+    try {
+        // Fetch existing equipment data
+        const existingEquipment = await Equipment.findById(fetchequipmentID);
 
-    const update = await Equipment.findByIdAndUpdate(fetchequipmentID, updateEquipment)
-    .then(() => {
-        res.status(200).send({status: "Equipment updated"})
-    }).catch((err) => {
+        // Check if a new image was uploaded, otherwise keep the existing image
+        const equipmentImage = req.file ? req.file.filename : existingEquipment.equipmentImage;
+
+        // Update fields, excluding equipmentId
+        const updateEquipment = {
+            equipmentName,
+            equipmentType,
+            equipmentDescription,
+            equipmentImage,
+            equipmentPrice,
+            equipmentQuantity
+        };
+
+        // Perform the update
+        await Equipment.findByIdAndUpdate(fetchequipmentID, updateEquipment);
+
+        res.status(200).send({ status: "Equipment updated" });
+    } catch (err) {
         console.log(err);
-        res.status(500).send({status: "Error with updating data", error: err.message});
-    })
+        res.status(500).send({ status: "Error with updating data", error: err.message });
+    }
 });
+
 
 router.route("/delete/:id").delete(async(req, res) =>{
 
@@ -89,17 +97,21 @@ router.route("/delete/:id").delete(async(req, res) =>{
     });
 });
 
-router.route("/get/:equipmentType").get(async(req, res) =>{
+router.route("/get/:id").get(async(req, res) => {
+    let fetchEquipmentID = req.params.id;
 
-    let fetchequipmentType = req.params.equipmentType;
+    try {
+        const fetchEquipment = await Equipment.findById(fetchEquipmentID);
+        console.log(fetchEquipment); 
 
-    const type = await Equipment.find({equipmentType: fetchequipmentType})
-    .then((equipment) => {
-        res.status(200).send({status: "Equipment fetched", equipment})
-    }).catch((err) => {
-        console.log(err.message);
-        res.status(500).send({status: "Error with fetching Equipment", error: err.message});
-    });
+        if (fetchEquipment) {
+            res.status(200).send({ status: "Equipment fetched!", equipment: fetchEquipment });
+        } else {
+            res.status(404).send({ status: "Equipment not found" });
+        }
+    } catch (err) {
+        res.status(500).send({ status: "Error fetching equipment", error: err.message });
+    }
 });
 
 
