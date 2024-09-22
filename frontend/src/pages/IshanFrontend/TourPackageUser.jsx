@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import axios from 'axios'
 import { Link } from 'react-router-dom';
-import { set } from "mongoose";
+import Navbar from "../../components/Navbar/Navbar";
 
 export default function TourPackageUser() {
 
@@ -43,21 +43,25 @@ export default function TourPackageUser() {
 
 
     return(
+        
+        <div className="container mx-auto pl-10 pr-10 pb-8">
+            <div className="pb-10">
+                <Navbar />
+            </div>
 
-        <div className="container mx-auto px-8">
-
-            <div className="search-bar mt-8">
+            <div className="search-bar pt-10 mt-10 flex justify-center">
                 <input
                     type="text"
                     placeholder="Search for Tour packages"
-                    className="w-full p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                    className="w-1/2 p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent text-base"
+                    style={{ height: '3.5rem' }}
                     onChange={(e) => setSearchQuery(e.target.value)}
                 />
             </div>
 
             {/*Adventure Packages list*/}
-            <h1 className="text-2xl font-semibold text-gray-700 mt-8">Adventure Tours</h1>
-            <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-10">
+            <h1 className="text-3xl font-semibold text-black-700 mt-10 pb-5 flex justify-center">Adventure Tours</h1>
+            <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-14">
             {filteredPackages.filter(p => p.pCategory === "Adventure Tours").length > 0 ? (
                 filteredPackages.filter(p => p.pCategory === "Adventure Tours").map((advenPackage, index) => (
                     <Link to={`/tourPackage/${advenPackage._id}`} key={advenPackage._id}>
@@ -82,7 +86,7 @@ export default function TourPackageUser() {
                         </p>
 
                         <p className="text-blue-600 font-bold text-lg">
-                            LKR {advenPackage.packagePrice} Per person
+                            LKR {(advenPackage.packagePrice).toFixed(2)} Per person
                         </p>
                         </div>
                     </Link>
@@ -94,8 +98,8 @@ export default function TourPackageUser() {
             </div>
 
             {/*Cultural Packages list*/}
-            <h1 className="text-2xl font-semibold text-gray-700 mt-8">Cultural Tours</h1>
-            <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-10">
+            <h1 className="text-3xl font-semibold text-black-700 mt-10 pt-10 pb-5 flex justify-center">Cultural Tours</h1>
+            <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-14">
             {filteredPackages.filter(p => p.pCategory === "Cultural Tours").length > 0 ? (
                 filteredPackages.filter(p => p.pCategory === "Cultural Tours").map((culturalPackage, index) => (
                     <Link to={`/tourPackage/${culturalPackage._id}`} key={culturalPackage._id}>
@@ -120,7 +124,7 @@ export default function TourPackageUser() {
                             </p>
 
                             <p className="text-blue-600 font-bold text-lg">
-                                LKR {culturalPackage.packagePrice} Per person
+                                LKR {(culturalPackage.packagePrice).toFixed(2)} Per person
                             </p>
                         </div>
                     </Link>
@@ -131,8 +135,8 @@ export default function TourPackageUser() {
             </div>
 
             {/*wildlifePackages list*/}
-            <h1 className="text-2xl font-semibold text-gray-700 mt-8">Wildlife and Nature Tours</h1>
-            <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-10">
+            <h1 className="text-3xl font-semibold text-black-700 mt-10 pt-10 pb-5 flex justify-center">Wildlife and Nature Tours</h1>
+            <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-14">
             {filteredPackages.filter(p => p.pCategory === "Wildlife and Nature Tours").length > 0 ? (
                 filteredPackages.filter(p => p.pCategory === "Wildlife and Nature Tours").map((wildLifePackage, index) => (
                     <Link to={`/tourPackage/${wildLifePackage._id}`} key={wildLifePackage._id}>
@@ -157,7 +161,7 @@ export default function TourPackageUser() {
                             </p>
 
                             <p className="text-blue-600 font-bold text-lg">
-                                LKR {wildLifePackage.packagePrice} Per person
+                                LKR {(wildLifePackage.packagePrice).toFixed(2)} Per person
                             </p>
                         </div>
                     </Link>

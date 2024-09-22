@@ -21,6 +21,9 @@ const PORT = process.env.PORT || 5000;
 const tourPackageRouter = require('./routes/tourPackages.js');
 app.use('/tourPackage', tourPackageRouter);
 
+const EquipmentRouter = require('./routes/Equipment.js');
+app.use('/equipment', EquipmentRouter);
+
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);

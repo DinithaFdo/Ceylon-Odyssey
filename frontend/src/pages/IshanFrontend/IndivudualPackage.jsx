@@ -35,7 +35,7 @@ export default function IndivudualPackage() {
                     <p className="text-lg mb-4 break-words whitespace-normal"><strong>Description:</strong> {tourPackage.packageDes}</p>
                     <p className="text-lg mb-4"><strong>Included Destinations :</strong> {tourPackage.pDestination} days</p>
                     <p className="text-lg mb-4"><strong>Duration:</strong> {tourPackage.pDays} days</p>
-                    <p className="text-lg mb-4"><strong>Price:</strong> LKR {tourPackage.packagePrice} Per Person</p>
+                    <p className="text-lg mb-4"><strong>Price:</strong> LKR {(tourPackage.packagePrice.toFixed(2))} Per Person</p>
                     <button className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg mt-4">
                         Book Now
                     </button>

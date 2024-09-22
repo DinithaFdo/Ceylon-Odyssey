@@ -85,30 +85,39 @@ export default function AllTourPackages() {
                                     <td className="p-4">
                                     <img src={`http://localhost:5000/TourPackageImages/${tPackage.pImage}`} alt="Tour image" className="w-16 md:w-32 max-w-full max-h-full" />
                                     </td>
+
                                     <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
                                         {tPackage.packageId}
                                     </td>
+
                                     <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white table-cell-wrap">
                                         {tPackage.package_Title}
                                     </td>
+
                                     <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white table-cell-wrap">
                                         {tPackage.packageDes}
                                     </td>
+
                                     <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
                                         {tPackage.pCreateDate}
                                     </td>
+
                                     <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
                                         {tPackage.pCategory}
                                     </td>
+
                                     <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
-                                        {tPackage.packagePrice}
+                                        {(tPackage.packagePrice).toFixed(2)}
                                     </td>
+
                                     <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
                                         {tPackage.pDestination}
                                     </td>
+
                                     <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
                                         {tPackage.pDays}
                                     </td>
+
                                     <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white text-center space-y-1">
                                         <Link className="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition duration-300 ease-in-out flex items-center justify-center w-28 h-10" 
                                             to={`/manageTourPackages/${tPackage._id}`} state={{ packageToEdit : tPackage }}>Update</Link>
