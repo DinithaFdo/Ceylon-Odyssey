@@ -1,20 +1,18 @@
 const router = require('express').Router();
-const equipment = require('../models/Equipment');
-let Equipment = require('../models/Equipment.js');
+const Equipment = require('../models/Equipment');
+const PDFDocument = require('pdfkit');
 const multer = require('multer');
 const express = require('express');
-const app = express();
 const cors = require('cors');
 
+const app = express();
 app.use(cors());
 app.use(express.json());
 
 const storage = multer.diskStorage({
-
-    destination: function(req, file, cb){
+    destination: function(req, file, cb) {
         cb(null, "./EquipmentImages");
     },
-   
     filename: function(req, file, cb) {
         cb(null, file.fieldname + "_" + Date.now() + "_" + file.originalname);
     }
@@ -57,13 +55,13 @@ router.route("/update/:id").put(upload, async (req, res) => {
     const { equipmentName, equipmentType, equipmentDescription, equipmentPrice, equipmentQuantity } = req.body;
 
     try {
-        // Fetch existing equipment data
+        
         const existingEquipment = await Equipment.findById(fetchequipmentID);
 
-        // Check if a new image was uploaded, otherwise keep the existing image
+        
         const equipmentImage = req.file ? req.file.filename : existingEquipment.equipmentImage;
 
-        // Update fields, excluding equipmentId
+        
         const updateEquipment = {
             equipmentName,
             equipmentType,
@@ -73,7 +71,7 @@ router.route("/update/:id").put(upload, async (req, res) => {
             equipmentQuantity
         };
 
-        // Perform the update
+        
         await Equipment.findByIdAndUpdate(fetchequipmentID, updateEquipment);
 
         res.status(200).send({ status: "Equipment updated" });
@@ -111,6 +109,29 @@ router.route("/get/:id").get(async(req, res) => {
         }
     } catch (err) {
         res.status(500).send({ status: "Error fetching equipment", error: err.message });
+    }
+});
+
+
+
+router.get('/report', async (req, res) => {
+    try {
+        const lowStockEquipment = await Equipment.find({ equipmentQuantity: { $lt: 5 } });
+        const pdfDoc = new PDFDocument();
+        let filename = 'low_stock_equipment_report.pdf';
+        res.setHeader('Content-Disposition', 'attachment; filename="' + filename + '"');
+        res.setHeader('Content-Type', 'application/pdf');
+
+        pdfDoc.pipe(res);
+        pdfDoc.text('Low Stock Equipment Report', { align: 'center' });
+        pdfDoc.moveDown();
+        lowStockEquipment.forEach(item => {
+            pdfDoc.text(`Name: ${item.equipmentName}, Quantity: ${item.equipmentQuantity}`);
+        });
+        pdfDoc.end();
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
     }
 });
 
