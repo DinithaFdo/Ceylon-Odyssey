@@ -61,7 +61,7 @@ const AllTourPackages = () => {
 
     return (
     
-        <div className="relative overflow-x-auto shadow-md sm:rounded-lg px-10 bg-gray-100">
+        <div className="relative overflow-x-auto shadow-md sm:rounded-lg px-10 bg-gray-100 min-h-screen">
             <div className="flex justify-center mt-24 relative">
                 <div className="flex items-center w-1/2">
                     <input

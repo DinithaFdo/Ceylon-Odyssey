@@ -21,7 +21,7 @@ const IndivudualPackage = () => {
 
 
     return (
-        <div className="container mx-auto pl-10 pr-10">
+        <div className="container mx-auto pl-10 pr-10 bg-gray-100 min-h-screen">
 
             <div className="pb-5">
                 <Navbar />
@@ -29,7 +29,7 @@ const IndivudualPackage = () => {
 
             <h1 className="text-4xl font-bold text-left mb-10 mt-24">{tourPackage.package_Title}</h1>
             
-            <div className="flex flex-col md:flex-row items-start justify-between mb-8">
+            <div className="flex flex-col md:flex-row items-start justify-between pb-8">
                 <img 
                     src={`http://localhost:5000/TourPackageImages/${tourPackage.pImage}`} 
                     alt={tourPackage.title} 
@@ -38,7 +38,7 @@ const IndivudualPackage = () => {
                 
                 <div className="mt-6 md:mt-0 md:ml-8">
                     <p className="text-xl mb-8"><strong>Package Category:</strong> {tourPackage.pCategory}</p>
-                    <p className="text-xl mb-8 break-words whitespace-normal"><strong>Description:<br/><br/></strong> {tourPackage.packageDes}</p>
+                    <p className="text-xl mb-8 break-words whitespace-normal"><strong>Description:<br/></strong> {tourPackage.packageDes}</p>
                     <p className="text-xl mb-8"><strong>Included Destinations :</strong> {tourPackage.pDestination} days</p>
                     <p className="text-xl mb-8"><strong>Duration:</strong> {tourPackage.pDays} days</p>
                     <p className="text-xl mb-8"><strong>Price:</strong> LKR {parseFloat(tourPackage.packagePrice).toFixed(2)} Per Person</p>

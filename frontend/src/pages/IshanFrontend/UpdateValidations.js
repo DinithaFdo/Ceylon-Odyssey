@@ -2,7 +2,7 @@ const UpdateValidations = (values) => {
     const errors = {};
 
     const tPackageTitlepattern = /^.{10,}$/;
-    const tPackageDescriptionpattern = /^.{75,}$/;
+    const tPackageDescriptionpattern = /^.{100,}$/;
     const tPackagePricepattern = parseFloat(values.packagePrice);
     const tPackageDestinationpattern = /^[A-Za-z]+(?:[\s,]+[A-Za-z]+)*$/;
     const tPackageDayspattern = parseFloat(values.pDays);
