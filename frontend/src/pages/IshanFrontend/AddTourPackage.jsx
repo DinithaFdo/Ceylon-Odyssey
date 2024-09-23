@@ -1,14 +1,11 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import TpackageValidation from './TpackageValidation';
-import AdminNavbar from '../../components/Navbar/AdminNavbar';
-
 
 const AddTourPackage = () =>{
 
     const [errors, setErros] = useState({});
     const [isChecked, setIsChecked] = useState(false);
-
 
     const [packageId, setPackageId] = useState("");
     const [package_Title, setPackage_Title] = useState("");

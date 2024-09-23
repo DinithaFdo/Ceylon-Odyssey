@@ -42,7 +42,6 @@ const TourPackageUser = () => {
     }, [searchQuery, tourPackages]);
 
 
-
     return(
         
         <div className="container mx-auto pl-10 pr-10 bg-gray-100 min-h-screen">
@@ -67,7 +66,7 @@ const TourPackageUser = () => {
                             alt="quotation icon"
                             className="w-16 h-16 cursor-pointer"
                         />
-                        <h3 className="ml-2 text-xl text-black">Get Your Quotation</h3>
+                        <h3 className="ml-2 text-xl text-black hover:text-blue-600 transition duration-300">Get Your Quotation</h3>
                         </Link>
                     </div>
                     
@@ -76,17 +75,19 @@ const TourPackageUser = () => {
 
             {/*Adventure Packages list*/}
             <h1 className="text-3xl font-semibold text-black-700 mt-10 pb-5 flex justify-center">Adventure Tours</h1>
-            <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-14">
+            <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-14">
             {filteredPackages.filter(p => p.pCategory === "Adventure Tours").length > 0 ? (
                 filteredPackages.filter(p => p.pCategory === "Adventure Tours").map((advenPackage, index) => (
-                    <Link to={`/tour-packages/${advenPackage._id}`} key={advenPackage._id}>
+                    <Link to={`/tour-packages/${advenPackage._id}`} key={advenPackage._id} 
+                    className="transform transition duration-300 ease-in-out hover:-translate-y-2">
+                        
                         <div key={index} className="bg-white shadow-lg rounded-2xl p-4 flex flex-col items-center">
 
-                        <h2 className="text-lg font-semibold mb-4">{advenPackage.package_Title}</h2>
+                        <h1 className="text-xl font-semibold mb-4">{advenPackage.package_Title}</h1>
 
-                        <div className="relative w-full h-50 mb-4">
+                        <div className="relative w-full h-50 mb-4 overflow-hidden rounded-2xl">
                             <img 
-                                className="w-full h-full object-contain rounded-2xl" 
+                                className="w-full h-full object-cover" 
                                 src={`http://localhost:5000/TourPackageImages/${advenPackage.pImage}`} 
                                 alt="Tour package image"
                             />
@@ -106,7 +107,14 @@ const TourPackageUser = () => {
                         </div>
                     </Link>
                     
-                ))):(<h1><p className="text-center col-span-full">No current packages available</p></h1>)
+                ))):(<h1 className="text-center col-span-full">
+                        <p>No current packages available</p>
+                        <img 
+                            src="path_to_your_image" 
+                            alt="No packages available" 
+                            className="mx-auto mt-4 w-32 h-32"
+                        />
+                    </h1>)
                     
                 }
 
@@ -114,17 +122,18 @@ const TourPackageUser = () => {
 
             {/*Cultural Packages list*/}
             <h1 className="text-3xl font-semibold text-black-700 mt-10 pt-10 pb-5 flex justify-center">Cultural Tours</h1>
-            <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-14 ">
+            <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-14 ">
             {filteredPackages.filter(p => p.pCategory === "Cultural Tours").length > 0 ? (
                 filteredPackages.filter(p => p.pCategory === "Cultural Tours").map((culturalPackage, index) => (
-                    <Link to={`/tour-packages/${culturalPackage._id}`} key={culturalPackage._id}>
+                    <Link to={`/tour-packages/${culturalPackage._id}`} key={culturalPackage._id}
+                    className="transform transition duration-300 ease-in-out hover:-translate-y-2">
                         <div key={index} className="bg-white shadow-lg rounded-2xl p-4 flex flex-col items-center">
 
-                            <h2 className="text-lg font-semibold mb-4">{culturalPackage.package_Title}</h2>
+                            <h1 className="text-xl font-semibold mb-4">{culturalPackage.package_Title}</h1>
                             
-                            <div className="relative w-full h-50 mb-4">
+                            <div className="relative w-full h-50 mb-4 overflow-hidden rounded-2xl">
                                 <img 
-                                    className="w-full h-full object-contain rounded-2xl" 
+                                    className="w-full h-full object-cover" 
                                     src={`http://localhost:5000/TourPackageImages/${culturalPackage.pImage}`} 
                                     alt="Tour package image"
                                 />
@@ -143,7 +152,14 @@ const TourPackageUser = () => {
                             </p>
                         </div>
                     </Link>
-                ))):(<h1><p className="text-center col-span-full">No current packages available</p></h1>)
+                ))):(<h1 className="text-center col-span-full">
+                        <p>No current packages available</p>
+                        <img 
+                            src="path_to_your_image" 
+                            alt="No packages available" 
+                            className="mx-auto mt-4 w-32 h-32"
+                        />
+                    </h1>)
                 
                 }
 
@@ -151,17 +167,18 @@ const TourPackageUser = () => {
 
             {/*wildlifePackages list*/}
             <h1 className="text-3xl font-semibold text-black-700 mt-10 pt-10 pb-5 flex justify-center">Wildlife and Nature Tours</h1>
-            <div className="mt-8 pb-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-14">
+            <div className="mt-8 pb-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-14">
             {filteredPackages.filter(p => p.pCategory === "Wildlife and Nature Tours").length > 0 ? (
                 filteredPackages.filter(p => p.pCategory === "Wildlife and Nature Tours").map((wildLifePackage, index) => (
-                    <Link to={`/tour-packages/${wildLifePackage._id}`} key={wildLifePackage._id}>
+                    <Link to={`/tour-packages/${wildLifePackage._id}`} key={wildLifePackage._id}
+                    className="transform transition duration-300 ease-in-out hover:-translate-y-2">
                         <div key={index} className="bg-white shadow-lg rounded-2xl p-4 flex flex-col items-center">
 
-                            <h2 className="text-lg font-semibold mb-4">{wildLifePackage.package_Title}</h2>
+                            <h1 className="text-xl font-semibold mb-4">{wildLifePackage.package_Title}</h1>
                             
-                            <div className="relative w-full h-50 mb-4">
+                            <div className="relative w-full h-50 mb-4 overflow-hidden rounded-2xl">
                                 <img 
-                                    className="w-full h-full object-contain rounded-2xl" 
+                                    className="w-full h-full object-cover" 
                                     src={`http://localhost:5000/TourPackageImages/${wildLifePackage.pImage}`} 
                                     alt="Tour package image"
                                 />
@@ -180,7 +197,14 @@ const TourPackageUser = () => {
                             </p>
                         </div>
                     </Link>
-                ))):(<h1><p className="text-center col-span-full">No current packages available</p></h1>)
+                ))):(<h1 className="text-center col-span-full">
+                        <p>No current packages available</p>
+                        <img 
+                            src="path_to_your_image" 
+                            alt="No packages available" 
+                            className="mx-auto mt-4 w-32 h-32"
+                        />
+                    </h1>)
                 
                 }
 

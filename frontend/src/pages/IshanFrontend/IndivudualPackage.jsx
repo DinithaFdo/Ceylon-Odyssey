@@ -29,20 +29,20 @@ const IndivudualPackage = () => {
 
             <h1 className="text-4xl font-bold text-left mb-10 mt-24">{tourPackage.package_Title}</h1>
             
-            <div className="flex flex-col md:flex-row items-start justify-between pb-8">
+            <div className="flex flex-col md:flex-row items-start justify-between pb-10 relative">
                 <img 
                     src={`http://localhost:5000/TourPackageImages/${tourPackage.pImage}`} 
                     alt={tourPackage.title} 
-                    className="w-full md:w-1/2 rounded-lg shadow-lg"
+                    className="w-full md:w-1/2 h-auto rounded-lg shadow-lg"
                 />
                 
-                <div className="mt-6 md:mt-0 md:ml-8">
-                    <p className="text-xl mb-8"><strong>Package Category:</strong> {tourPackage.pCategory}</p>
-                    <p className="text-xl mb-8 break-words whitespace-normal"><strong>Description:<br/></strong> {tourPackage.packageDes}</p>
-                    <p className="text-xl mb-8"><strong>Included Destinations :</strong> {tourPackage.pDestination} days</p>
-                    <p className="text-xl mb-8"><strong>Duration:</strong> {tourPackage.pDays} days</p>
-                    <p className="text-xl mb-8"><strong>Price:</strong> LKR {parseFloat(tourPackage.packagePrice).toFixed(2)} Per Person</p>
-                    <button className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg mt-4">
+                <div className="mt-6 md:mt-0 md:ml-8 pr-10 text-justify">
+                    <p className="text-lg mb-8"><strong>Package Category:</strong> {tourPackage.pCategory}</p>
+                    <p className="text-lg mb-8 break-words whitespace-normal"><strong>Description:<br/></strong> {tourPackage.packageDes}</p>
+                    <p className="text-lg mb-8"><strong>Included Destinations :</strong> {tourPackage.pDestination} days</p>
+                    <p className="text-lg mb-8"><strong>Duration:</strong> {tourPackage.pDays} days</p>
+                    <p className="text-lg "><strong>Price:</strong> LKR {parseFloat(tourPackage.packagePrice).toFixed(2)} Per Person</p>
+                    <button className="bg-blue-600 hover:bg-red-400 text-white font-bold py-3 px-6 rounded-lg shadow-lg mt-4 float-right transition duration-300 ease-in-out">
                         Book Now
                     </button>
                 </div>
