@@ -77,7 +77,7 @@ export default function EditTicketPage() {
         <div className="flex flex-col min-h-screen">
             <Navbar />
 
-            <main className="flex-grow pt-16 px-4 md:px-8 lg:px-16">
+            <main className="flex-grow pt-24 px-4 md:px-8 lg:px-16">
                 <center><h1 className="text-2xl font-bold mb-4">Edit Ticket</h1></center>
                 <div className="max-w-2xl mx-auto bg-white p-8 shadow-lg rounded-lg">
                     <form onSubmit={handleSubmit}>

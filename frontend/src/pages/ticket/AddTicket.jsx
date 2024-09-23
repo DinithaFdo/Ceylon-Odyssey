@@ -42,8 +42,8 @@ export default function AddTicket() {
         <div className="flex flex-col min-h-screen">
             <Navbar />
 
-            <main className="flex-grow pt-16 px-4 md:px-8 lg:px-16">
-                <h1 className="text-2xl font-bold mb-4">Add New Ticket</h1>
+            <main className="flex-grow pt-24 px-4 md:px-8 lg:px-16">
+            <center><h1 className="text-2xl font-bold mb-4">Create Ticket</h1></center>
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
                         <label className="block text-gray-700">Subject</label>
