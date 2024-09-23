@@ -15,7 +15,7 @@ function AppRoutes() {
                 <Route path="/AddTPackage" element={<AddTPackage />} />
                 <Route path="/manageTourPackages/:id" element={<UpdateTourPackage />} />
                 <Route path="/tour-packages" element={<TourPackageUser />} />
-                <Route path="/tourPackage/:id" element={<IndivudualPackage />} />
+                <Route path="/tour-packages/:id" element={<IndivudualPackage />} />
                 <Route path="/quotationForm" element={<QuotationForm />} />
 
             </Routes>

@@ -15,7 +15,7 @@ const TpackageValidation = (
     const tPackageCreateDatepattern = new Date().toISOString().split('T')[0];
     const tPackageDescriptionpattern = /^.{75,}$/;
     const tPackagePricepattern = parseFloat(packagePrice);
-    const tPackageDestinationpattern = /^(?:[A-Za-z]+(?:\s[A-Za-z]+){1,})$/;
+    const tPackageDestinationpattern = /^[A-Za-z]+(?:[\s,]+[A-Za-z]+)*$/;
     const tPackageDayspattern = parseFloat(pDays);
     
     if (!tPackageIDpattern.test(packageId)) {

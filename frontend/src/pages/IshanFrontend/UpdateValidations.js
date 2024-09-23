@@ -4,7 +4,7 @@ const UpdateValidations = (values) => {
     const tPackageTitlepattern = /^.{10,}$/;
     const tPackageDescriptionpattern = /^.{75,}$/;
     const tPackagePricepattern = parseFloat(values.packagePrice);
-    const tPackageDestinationpattern = /^(?:[A-Za-z]+(?:\s[A-Za-z]+){1,})$/;
+    const tPackageDestinationpattern = /^[A-Za-z]+(?:[\s,]+[A-Za-z]+)*$/;
     const tPackageDayspattern = parseFloat(values.pDays);
 
     if (!tPackageTitlepattern.test(values.package_Title)) {

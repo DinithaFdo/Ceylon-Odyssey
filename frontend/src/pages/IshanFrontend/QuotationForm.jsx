@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import jsPDF from 'jspdf';
+import Navbar from '../../components/Navbar/Navbar';
 
-export default function QuotationForm() {
+const QuotationForm = () => {
 
     const [tourPackages, setTourPackages] = useState([]);
     const [selectedPackage, setSelectedPackage] = useState("");
@@ -152,8 +153,13 @@ export default function QuotationForm() {
     }
 
     return (
-        <div className="p-10">
-            <div className="container mx-auto p-20">
+        <div className="container mx-auto pl-10 pr-10 bg-gray-100 min-h-screen">
+
+            <div className="pb-5">
+                <Navbar />
+            </div>
+
+            <div className="container mx-auto p-24 pb-20">
                 <form className="bg-white shadow-md rounded-lg p-8"
                 onSubmit={(e) =>
                     {
@@ -294,3 +300,4 @@ export default function QuotationForm() {
     )
 
 }
+export default QuotationForm;
