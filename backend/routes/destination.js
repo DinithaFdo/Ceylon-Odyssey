@@ -1,9 +1,38 @@
 const router = require('express').Router();
 const Destination = require('../models/destination');
 const { body, validationResult } = require('express-validator');
+const multer = require('multer');
+const fs = require('fs');
+const path = require('path');
+const express = require('express');
+const cors = require('cors');
+const app = express();
+
+// Set up multer for file uploads
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'DestinationImages');
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.fieldname + "_" + Date.now() + "_" + file.originalname);
+  }
+});
+
+const upload = multer({ storage: storage }).single('dThumbnail');
+
+function deleteImage(imagePath) { 
+  fs.unlink(path.join(__dirname, '..', 'DestinationImages', imagePath), (err) => {
+    if (err) {
+      console.error(err);
+    }
+  });
+}
+
+app.use(cors());
+app.use(express.json());
 
 // Add a new destination
-router.post("/add", [
+router.post("/add", upload, [
   // Validation rules
   body('destinationID')
     .matches(/^D\d{3}$/)
@@ -18,14 +47,6 @@ router.post("/add", [
     .isString()
     .isLength({ min: 20, max: 500 })
     .withMessage('Description must be between 20 and 500 characters.'),
-
-  body('dThumbnail')
-    .isString()
-    .withMessage('Thumbnail must be a valid string.'),
-
-  body('dExtImage')
-    .isString()
-    .withMessage('Extra Images must be a valid string.'),
 
   body('dDistrict')
     .notEmpty()
@@ -50,13 +71,13 @@ router.post("/add", [
   }
 
   try {
-    const { destinationID, dTitle, dDescription, dThumbnail, dExtImage, dDistrict, dProvince, longitude, latitude } = req.body;
+    const { destinationID, dTitle, dDescription, dExtImage, dDistrict, dProvince, longitude, latitude } = req.body;
 
     const newDestination = new Destination({
       destinationID,
       dTitle,
       dDescription,
-      dThumbnail,
+      dThumbnail: req.file ? req.file.filename : '', // Handle dThumbnail
       dExtImage,
       dDistrict,
       dProvince,
@@ -85,7 +106,7 @@ router.get("/", async (req, res) => {
 });
 
 // Update an existing destination
-router.put("/update/:id", [
+router.put("/update/:id", upload, [
   // Validation rules
   body('dTitle')
     .optional()
@@ -98,16 +119,6 @@ router.put("/update/:id", [
     .isString()
     .isLength({ min: 20, max: 500 })
     .withMessage('Description must be between 20 and 500 characters.'),
-
-  body('dThumbnail')
-    .optional()
-    .isString()
-    .withMessage('Thumbnail must be a valid string.'),
-
-  body('dExtImage')
-    .optional()
-    .isString()
-    .withMessage('Extra Images must be a valid string.'),
 
   body('dDistrict')
     .optional()
@@ -137,18 +148,17 @@ router.put("/update/:id", [
 
   try {
     const destinationID = req.params.id;
-    const { dTitle, dDescription, dThumbnail, dExtImage, dDistrict, dProvince, longitude, latitude } = req.body;
+    const { dTitle, dDescription, dExtImage, dDistrict, dProvince, longitude, latitude } = req.body;
 
     const updatedDestination = {
       dTitle,
       dDescription,
-      dThumbnail,
+      dThumbnail: req.file ? req.file.filename : req.body.dThumbnail, // Handle dThumbnail
       dExtImage,
       dDistrict,
       dProvince,
       longitude,
       latitude
-      // creationDate should not be updated
     };
 
     const result = await Destination.findByIdAndUpdate(destinationID, updatedDestination, { new: true });
@@ -166,10 +176,17 @@ router.put("/update/:id", [
 router.delete("/delete/:id", async (req, res) => {
   try {
     const destinationID = req.params.id;
-    const result = await Destination.findByIdAndDelete(destinationID);
-    if (!result) {
+    const destination = await Destination.findById(destinationID);
+    if (!destination) {
       return res.status(404).json({ error: "Destination not found" });
     }
+
+    // Delete the image associated with the destination if it exists
+    if (destination.dThumbnail) {
+      deleteImage(destination.dThumbnail);
+    }
+
+    await Destination.findByIdAndDelete(destinationID);
     res.status(200).json({ status: "Destination deleted" });
   } catch (err) {
     console.error(err);
@@ -195,20 +212,20 @@ router.get("/get/:id", async (req, res) => {
 // Route to handle incrementing the click count
 router.put('/:id/click', async (req, res) => {
   try {
-      const { id } = req.params;
-      const destination = await Destination.findById(id);
+    const { id } = req.params;
+    const destination = await Destination.findById(id);
 
-      if (!destination) {
-          return res.status(404).json({ message: 'Destination not found' });
-      }
+    if (!destination) {
+      return res.status(404).json({ message: 'Destination not found' });
+    }
 
-      // Increment the click count
-      destination.clickCount = (destination.clickCount || 0) + 1;
-      await destination.save();
+    // Increment the click count
+    destination.clickCount = (destination.clickCount || 0) + 1;
+    await destination.save();
 
-      res.json({ message: 'Click count updated', clickCount: destination.clickCount });
+    res.json({ message: 'Click count updated', clickCount: destination.clickCount });
   } catch (error) {
-      res.status(500).json({ message: 'Error updating click count', error });
+    res.status(500).json({ message: 'Error updating click count', error });
   }
 });
 

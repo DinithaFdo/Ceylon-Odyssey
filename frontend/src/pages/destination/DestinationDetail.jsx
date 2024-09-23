@@ -62,12 +62,12 @@ export default function DestinationDetail() {
 
             <main className="flex-grow p-4 md:p-8 lg:p-16">
                 {destination ? (
-                    <div id="destination-detail" className="w-full max-w-4xl mx-auto bg-white dark:bg-gray-800 shadow-lg rounded-lg overflow-hidden">
+                    <div id="destination-detail" className="w-full max-w-5xl mx-auto bg-white dark:bg-gray-800 shadow-lg rounded-lg overflow-hidden">
                         {/* Destination Image */}
                         <img
                             src={"http://localhost:5001/DestinationImages/" + destination.dThumbnail}
                             alt="Destination Thumbnail"
-                            className="w-full h-72 object-cover"
+                            className="w-full h-80 object-cover"
                         />
                         <div className="p-6">
                             {/* Destination Title */}
@@ -80,9 +80,20 @@ export default function DestinationDetail() {
                                 {destination.dDescription}
                             </p>
 
+                            {/* Things to Do Section */}
+                            {destination.dExtImage && (
+                                <div className="mb-6">
+                                    <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Things to Do:</h2>
+                                    <p className="text-gray-600 dark:text-gray-400">
+                                        {destination.dExtImage}
+                                    </p>
+                                </div>
+                            )}
+
                             {/* Destination Info */}
                             <div className="mb-6 grid grid-cols-1 sm:grid-cols-2 gap-6">
                                 <div className="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg">
+                                <h2 className="text-2xl font-semibold mb-4 text-gray-900 dark:text-white">Geographical Details</h2>
                                     <p className="text-gray-700 dark:text-gray-300"><strong>District:</strong> {destination.dDistrict}</p>
                                     <p className="text-gray-700 dark:text-gray-300"><strong>Province:</strong> {destination.dProvince}</p>
                                     <p className="text-gray-700 dark:text-gray-300"><strong>Longitude:</strong> {destination.longitude}</p>
@@ -118,8 +129,6 @@ export default function DestinationDetail() {
                     <p>No details available.</p>
                 )}
             </main>
-
-            <br></br>
 
             <Footer />
         </div>

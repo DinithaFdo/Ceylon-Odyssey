@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 require('dotenv').config();
+const imagePath = require('path');
 
 import('./config/db.js');
 
@@ -10,6 +11,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json());
+
+app.use('/DestinationImages', express.static(imagePath.join(__dirname, 'DestinationImages')));
 
 const PORT = process.env.PORT || 5001;
 

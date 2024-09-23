@@ -74,6 +74,8 @@ export default function AllDestinations() {
                         Generate Report
                     </button>
 
+                    <br></br>
+
                     <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                         <thead className="text-xs text-center text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                             <tr>

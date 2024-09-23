@@ -1,3 +1,4 @@
+// Other imports remain the same
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -16,15 +17,15 @@ export default function EditDestinationPage() {
         destinationID: '',
         dTitle: '',
         dDescription: '',
-        dThumbnail: '',
+        dThumbnail: '', // Keep the original thumbnail
         dExtImage: '',
         dDistrict: '',
         dProvince: '',
         longitude: '',
-        latitude: ''
+        latitude: '',
+        thumbnailFile: null // State for the uploaded file
     });
 
-    // State to manage province and district options
     const [provinces, setProvinces] = useState([
         "Western", "Central", "Southern", "Northern", "Eastern",
         "North Western", "North Central", "Uva", "Sabaragamuwa"
@@ -53,12 +54,13 @@ export default function EditDestinationPage() {
                         destinationID: destinationData.destinationID,
                         dTitle: destinationData.dTitle,
                         dDescription: destinationData.dDescription,
-                        dThumbnail: destinationData.dThumbnail,
+                        dThumbnail: destinationData.dThumbnail, // Set the existing thumbnail
                         dExtImage: destinationData.dExtImage,
                         dDistrict: destinationData.dDistrict,
                         dProvince: destinationData.dProvince,
                         longitude: destinationData.longitude || '',
-                        latitude: destinationData.latitude || ''
+                        latitude: destinationData.latitude || '',
+                        thumbnailFile: null // Reset the file on load
                     });
                 }
             } catch (error) {
@@ -77,12 +79,20 @@ export default function EditDestinationPage() {
         }));
     };
 
+    const handleFileChange = (e) => {
+        setFormData(prevData => ({
+            ...prevData,
+            thumbnailFile: e.target.files[0], // Store the selected file
+            dThumbnail: e.target.files[0] ? e.target.files[0].name : prevData.dThumbnail // Update the thumbnail name
+        }));
+    };
+
     const handleProvinceChange = (e) => {
         const selectedProvince = e.target.value;
         setFormData(prevData => ({
             ...prevData,
             dProvince: selectedProvince,
-            dDistrict: "" // Reset district when province changes
+            dDistrict: "" 
         }));
     };
 
@@ -105,10 +115,30 @@ export default function EditDestinationPage() {
             return;
         }
 
+        const formDataToSubmit = new FormData();
+        formDataToSubmit.append('destinationID', formData.destinationID);
+        formDataToSubmit.append('dTitle', formData.dTitle);
+        formDataToSubmit.append('dDescription', formData.dDescription);
+        // Only append the thumbnail file if a new file was uploaded
+        if (formData.thumbnailFile) {
+            formDataToSubmit.append('dThumbnail', formData.thumbnailFile);
+        } else {
+            formDataToSubmit.append('dThumbnail', formData.dThumbnail); // Keep the existing thumbnail if no new file
+        }
+        formDataToSubmit.append('dExtImage', formData.dExtImage);
+        formDataToSubmit.append('dDistrict', formData.dDistrict);
+        formDataToSubmit.append('dProvince', formData.dProvince);
+        formDataToSubmit.append('longitude', formData.longitude);
+        formDataToSubmit.append('latitude', formData.latitude);
+
         try {
-            await axios.put(`http://localhost:5001/destination/update/${id}`, formData);
+            await axios.put(`http://localhost:5001/destination/update/${id}`, formDataToSubmit, {
+                headers: {
+                    'Content-Type': 'multipart/form-data' // Set content type for file upload
+                }
+            });
             setSuccessMessage('Destination updated successfully!');
-            setTimeout(() => navigate('/view-destinations'), 2000); // Redirect after 2 seconds
+            setTimeout(() => navigate('/view-destinations'), 2000); 
         } catch (error) {
             console.error('Error updating destination:', error);
             setErrors({ update: 'Error updating destination. Please try again later.' });
@@ -121,7 +151,7 @@ export default function EditDestinationPage() {
         <div className="flex flex-col min-h-screen">
             <Navbar />
 
-            <br></br><br></br>
+            <br></br>
 
             <main className="flex-grow pt-16 px-4 md:px-8 lg:px-16">
                 <div className="max-w-lg mx-auto border border-gray-300 p-4 rounded-lg mt-8">
@@ -179,17 +209,18 @@ export default function EditDestinationPage() {
                         <div className="mb-4">
                             <label htmlFor="dThumbnail" className="block mb-2 text-sm font-medium text-gray-900">Thumbnail Image</label>
                             <input 
-                                type="text" 
+                                type="file" 
                                 id="dThumbnail" 
-                                value={formData.dThumbnail}
-                                onChange={handleChange}
+                                accept="image/*"
+                                onChange={handleFileChange}
                                 className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ${errors.dThumbnail ? 'border-red-500' : ''}`}
                             />
                             {errors.dThumbnail && <p className="text-red-500 text-sm">{errors.dThumbnail}</p>}
+                            {formData.dThumbnail && <p className="mt-2 text-sm">Current thumbnail: {formData.dThumbnail}</p>}
                         </div>
 
                         <div className="mb-4">
-                            <label htmlFor="dExtImage" className="block mb-2 text-sm font-medium text-gray-900">Extra Images</label>
+                            <label htmlFor="dExtImage" className="block mb-2 text-sm font-medium text-gray-900">Things to do</label>
                             <input 
                                 type="text" 
                                 id="dExtImage" 
@@ -209,7 +240,7 @@ export default function EditDestinationPage() {
                                 className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ${errors.dDistrict ? 'border-red-500' : ''}`}
                             >
                                 <option value="">Select District</option>
-                                {formData.dProvince && districts[formData.dProvince] && districts[formData.dProvince].map(district => (
+                                {districts[formData.dProvince]?.map((district) => (
                                     <option key={district} value={district}>{district}</option>
                                 ))}
                             </select>
@@ -225,7 +256,7 @@ export default function EditDestinationPage() {
                                 className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ${errors.dProvince ? 'border-red-500' : ''}`}
                             >
                                 <option value="">Select Province</option>
-                                {provinces.map(province => (
+                                {provinces.map((province) => (
                                     <option key={province} value={province}>{province}</option>
                                 ))}
                             </select>
@@ -234,9 +265,9 @@ export default function EditDestinationPage() {
 
                         <div className="mb-4">
                             <label htmlFor="longitude" className="block mb-2 text-sm font-medium text-gray-900">Longitude</label>
-                            <input
-                                type="text"
-                                id="longitude"
+                            <input 
+                                type="text" 
+                                id="longitude" 
                                 value={formData.longitude}
                                 onChange={handleChange}
                                 className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ${errors.longitude ? 'border-red-500' : ''}`}
@@ -246,9 +277,9 @@ export default function EditDestinationPage() {
 
                         <div className="mb-4">
                             <label htmlFor="latitude" className="block mb-2 text-sm font-medium text-gray-900">Latitude</label>
-                            <input
-                                type="text"
-                                id="latitude"
+                            <input 
+                                type="text" 
+                                id="latitude" 
                                 value={formData.latitude}
                                 onChange={handleChange}
                                 className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ${errors.latitude ? 'border-red-500' : ''}`}
@@ -256,11 +287,8 @@ export default function EditDestinationPage() {
                             {errors.latitude && <p className="text-red-500 text-sm">{errors.latitude}</p>}
                         </div>
 
-                        <button 
-                            type="submit" 
-                            className="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
-                        >
-                            Save Changes
+                        <button type="submit" className="w-full text-white bg-blue-500 hover:bg-blue-600 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                            Update Destination
                         </button>
                     </form>
                 </div>

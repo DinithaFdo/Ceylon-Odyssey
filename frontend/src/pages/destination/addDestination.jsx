@@ -9,7 +9,7 @@ function AddDestination() {
     const [destinationID, setDestinationID] = useState("");
     const [dTitle, setDTitle] = useState("");
     const [dDescription, setDDescription] = useState("");
-    const [dThumbnail, setDThumbnail] = useState("");
+    const [dThumbnail, setDThumbnail] = useState(null); // Set initial value as null for file upload
     const [dExtImage, setDExtImage] = useState("");
     const [dDistrict, setDDistrict] = useState("");
     const [dProvince, setDProvince] = useState("");
@@ -42,20 +42,23 @@ function AddDestination() {
         setDDistrict(""); // Reset district when province changes
     }
 
+    function handleThumbnailChange(e) {
+        setDThumbnail(e.target.files[0]); // Handle file selection for thumbnail
+    }
+
     function addDestination(e) {
         e.preventDefault();
 
-        const newDestination = {
-            destinationID,
-            dTitle,
-            dDescription,
-            dThumbnail,
-            dExtImage,
-            dDistrict,
-            dProvince,
-            longitude,
-            latitude
-        };
+        const formData = new FormData(); // Create a new FormData object to send the file and text fields
+        formData.append("destinationID", destinationID);
+        formData.append("dTitle", dTitle);
+        formData.append("dDescription", dDescription);
+        formData.append("dThumbnail", dThumbnail); // Append the selected file
+        formData.append("dExtImage", dExtImage);
+        formData.append("dDistrict", dDistrict);
+        formData.append("dProvince", dProvince);
+        formData.append("longitude", longitude);
+        formData.append("latitude", latitude);
 
         // Perform validation before submitting
         const validationErrors = AddDestinationValidation(
@@ -75,7 +78,11 @@ function AddDestination() {
             return;
         }
 
-        axios.post("http://localhost:5001/destination/add", newDestination)
+        axios.post("http://localhost:5001/destination/add", formData, {
+            headers: {
+                "Content-Type": "multipart/form-data", // Set headers for file upload
+            },
+        })
             .then(() => {
                 alert("Destination Added Successfully");
                 navigate("/view-destinations"); // Redirect to the view destinations page
@@ -84,7 +91,7 @@ function AddDestination() {
                 alert(err);
             });
 
-        console.log(newDestination);
+        console.log(formData);
     }
 
     return (
@@ -133,20 +140,21 @@ function AddDestination() {
                         {errors.dDescription && <p className="text-red-500 text-sm">{errors.dDescription}</p>}
                     </div>
 
+                    {/* Updated Thumbnail Field for Image Upload */}
                     <div className="mb-8">
                         <label htmlFor="dThumbnail" className="block mb-2 text-l font-medium text-gray-900">Thumbnail Image</label>
                         <input
-                            type="text"
+                            type="file"
                             id="dThumbnail"
                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                            onChange={(e) => setDThumbnail(e.target.value)}
+                            onChange={handleThumbnailChange}
                             required
                         />
                         {errors.dThumbnail && <p className="text-red-500 text-sm">{errors.dThumbnail}</p>}
                     </div>
 
                     <div className="mb-8">
-                        <label htmlFor="dExtImage" className="block mb-2 text-l font-medium text-gray-900">External Image</label>
+                        <label htmlFor="dExtImage" className="block mb-2 text-l font-medium text-gray-900">Things to do</label>
                         <input
                             type="text"
                             id="dExtImage"
@@ -186,10 +194,10 @@ function AddDestination() {
                             value={dDistrict}
                             onChange={(e) => setDDistrict(e.target.value)}
                             required
-                            disabled={!dProvince} // Disable district selection until province is selected
+                            disabled={!dProvince}
                         >
                             <option value="">Select District</option>
-                            {dProvince && districts[dProvince].map((district) => (
+                            {dProvince && districts[dProvince]?.map((district) => (
                                 <option key={district} value={district}>
                                     {district}
                                 </option>
@@ -198,7 +206,7 @@ function AddDestination() {
                         {errors.dDistrict && <p className="text-red-500 text-sm">{errors.dDistrict}</p>}
                     </div>
 
-                    {/* Longitude Field */}
+                    {/* Longitude and Latitude Fields */}
                     <div className="mb-8">
                         <label htmlFor="longitude" className="block mb-2 text-l font-medium text-gray-900">Longitude</label>
                         <input
@@ -211,7 +219,6 @@ function AddDestination() {
                         {errors.longitude && <p className="text-red-500 text-sm">{errors.longitude}</p>}
                     </div>
 
-                    {/* Latitude Field */}
                     <div className="mb-8">
                         <label htmlFor="latitude" className="block mb-2 text-l font-medium text-gray-900">Latitude</label>
                         <input
@@ -224,16 +231,11 @@ function AddDestination() {
                         {errors.latitude && <p className="text-red-500 text-sm">{errors.latitude}</p>}
                     </div>
 
-                    <button
-                        type="submit"
-                        className="text-white bg-blue-500 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-                    >
-                        Add Destination
-                    </button>
+                    <button type="submit" className="w-full text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Add Destination</button>
                 </form>
             </main>
 
-            <br></br><br></br>
+            <br></br>
 
             <Footer />
         </div>
