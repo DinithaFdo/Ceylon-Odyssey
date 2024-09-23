@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import ValidateAddEquipment from './validateAddEquipment';
 
+
 function AddEquipment() {
   const [equipmentId, setEquipmentId] = useState("");
   const [equipmentName, setEquipmentName] = useState("");
@@ -15,7 +16,7 @@ function AddEquipment() {
   function addEquipment(e) {
     e.preventDefault();
 
-    // Create object for validation
+    
     const equipment = {
       equipmentId,
       equipmentName,
@@ -26,7 +27,8 @@ function AddEquipment() {
       equipmentQuantity
     };
 
-    // Validate form fields
+    
+    
     const validationErrors = ValidateAddEquipment(equipment);
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
@@ -45,6 +47,7 @@ function AddEquipment() {
     axios.post("http://localhost:5000/equipment/add", formData)
       .then(() => {
         alert("Equipment Successfully Added!!");
+        
       })
       .catch((err) => {
         alert(err);
