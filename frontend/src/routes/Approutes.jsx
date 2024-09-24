@@ -10,6 +10,9 @@ import AllEquipment from "../pages/sakindu/Inventory"
 import UpdateEquipment from "../pages/sakindu/UpdateEquipment"
 import EquipmentUserView from "../pages/sakindu/EquipmentList"
 import IndividualEquipment from "../pages/sakindu/IndividualEquipment"; 
+import AdminCreateEquipment from "../pages/dashboard/Sakindu Dashbaord/CreateEquipment";
+import AdminManageEquipment from "../pages/dashboard/Sakindu Dashbaord/ManageEquipment";
+import AdminUpdateEquipment from "../pages/dashboard/Sakindu Dashbaord/UpdateEquipment";
 
 
 
@@ -27,6 +30,10 @@ function AppRoutes() {
                 <Route path="/updateequipment/:id" element={<UpdateEquipment />} />
                 <Route path="/userequipment" element={<EquipmentUserView />} />
                 <Route path="/equipment/:id" element={<IndividualEquipment />} />
+
+                <Route path="/Equipment-dashboard/AddEquipment" element={<AdminCreateEquipment />} />
+                <Route path="/Equipment-dashboard" element={<AdminManageEquipment />} />
+                <Route path="/Equipment-dashboard/updateequipment/:id" element={<AdminUpdateEquipment />} />
               
                 
             </Routes>

@@ -56,7 +56,7 @@ function AddEquipment() {
 
   return (
     <>
-      <section className="max-w-4xl p-6 mx-auto bg-indigo-600 rounded-md shadow-md dark:bg-gray-800 mt-20">
+      <section className="max-w-4xl p-6 mx-auto bg-gray-700 rounded-md shadow-md dark:bg-gray-800 mt-20">
         <h1 className="text-xl font-bold text-white capitalize dark:text-white">Add Equipment</h1>
         <form onSubmit={addEquipment}>
           <div className="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2">
@@ -136,7 +136,7 @@ function AddEquipment() {
 
             
             <div className="mb-8">
-              <label className="block mb-2 text-l font-medium text-gray-900 dark:text-white" htmlFor="equipmentImage">Upload Image</label>
+              <label className="block mb-2 text-l font-medium text-white dark:text-white" htmlFor="equipmentImage">Upload Image</label>
               <input
                 name="equipmentImage"
                 className="block w-full p-2.5"
@@ -151,7 +151,7 @@ function AddEquipment() {
           </div>
 
           <div className="flex justify-end mt-6">
-            <button type="submit" className="px-6 py-2 leading-5 text-white bg-pink-500 rounded-md hover:bg-pink-700">
+            <button type="submit" className="px-6 py-2 leading-5 text-white bg-gray-500 rounded-md hover:bg-green-900">
               Submit
             </button>
           </div>
