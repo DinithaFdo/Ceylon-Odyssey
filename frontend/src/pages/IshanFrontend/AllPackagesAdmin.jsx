@@ -81,64 +81,64 @@ const AllTourPackages = () => {
 
                 {/* tour package list */}
                 <div className="mt-8 grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 gap-x-10 gap-y-14">
-                {filteredPackages.length > 0 ? (
-                filteredPackages.map((tPackage, index) => (
-                    <div key={index} className="bg-white shadow-lg rounded-2xl p-4 flex flex-col items-center">
-                        
-                        <h2 className="text-lg font-semibold mb-4">{tPackage.packageId}</h2>
-                        <h2 className="text-lg font-semibold mb-4">{tPackage.package_Title}</h2>
+                    {filteredPackages.length > 0 ? (
+                    filteredPackages.map((tPackage, index) => (
+                        <div key={index} className="bg-white shadow-lg rounded-2xl p-4 flex flex-col items-center">
+                            
+                            <h2 className="text-lg font-semibold mb-4">{tPackage.packageId}</h2>
+                            <h2 className="text-lg font-semibold mb-4">{tPackage.package_Title}</h2>
 
-                        <div className="relative w-full h-40 mb-4 overflow-hidden rounded-2xl">
-                            <img 
-                                className="w-full h-full object-cover" 
-                                src={`http://localhost:5000/TourPackageImages/${tPackage.pImage}`} 
-                                alt="Tour package image"
+                            <div className="relative w-full h-40 mb-4 overflow-hidden rounded-2xl">
+                                <img 
+                                    className="w-full h-full object-cover" 
+                                    src={`http://localhost:5000/TourPackageImages/${tPackage.pImage}`} 
+                                    alt="Tour package image"
+                                />
+                            </div>
+
+                            <p className="text-black-700 text-lg mb-4">
+                                Create Date: {tPackage.pCreateDate}
+                            </p>
+
+                            <p className="text-black-700 text-lg mb-4">
+                                Category: {tPackage.pCategory}
+                            </p>
+
+                            <p className="text-black-700 text-lg mb-4">
+                                Destinations: {tPackage.pDestination}
+                            </p>
+
+                            <p className="text-black-700 text-lg mb-4">
+                                Days: {tPackage.pDays}
+                            </p>
+
+                            <p className="text-black-700 text-lg">
+                                LKR {(tPackage.packagePrice).toFixed(2)} Per person
+                            </p>
+
+                            <div className="flex space-x-4 mt-4">
+                                <Link className="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition duration-300 ease-in-out flex items-center justify-center w-28 h-10" 
+                                    to={`/TourPackage-dashboard/manageTourPackages/${tPackage._id}`} state={{ packageToEdit : tPackage }}>
+                                    Update
+                                </Link>
+                                
+                                <button className="bg-red-600 text-white px-4 py-2 rounded-full hover:bg-red-700 transition duration-300 ease-in-out flex items-center justify-center w-28 h-10"
+                                    onClick={() => deleteTourPackage(tPackage._id)}>
+                                    Delete
+                                </button>
+                            </div>
+                        </div>
+                        
+                    ))):(
+                        <div className="lg:col-span-3 flex justify-center">
+                            <img
+                                src={searchHandleImg}
+                                alt="No packages available"
+                                className="w-40 h-40"
                             />
                         </div>
-
-                        <p className="text-black-700 text-lg mb-4">
-                            Create Date: {tPackage.pCreateDate}
-                        </p>
-
-                        <p className="text-black-700 text-lg mb-4">
-                            Category: {tPackage.pCategory}
-                        </p>
-
-                        <p className="text-black-700 text-lg mb-4">
-                            Destinations: {tPackage.pDestination}
-                        </p>
-
-                        <p className="text-black-700 text-lg mb-4">
-                            Days: {tPackage.pDays}
-                        </p>
-
-                        <p className="text-black-700 text-lg">
-                            LKR {(tPackage.packagePrice).toFixed(2)} Per person
-                        </p>
-
-                        <div className="flex space-x-4 mt-4">
-                            <Link className="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition duration-300 ease-in-out flex items-center justify-center w-28 h-10" 
-                                to={`/TourPackage-dashboard/manageTourPackages/${tPackage._id}`} state={{ packageToEdit : tPackage }}>
-                                Update
-                            </Link>
-                            
-                            <button className="bg-red-600 text-white px-4 py-2 rounded-full hover:bg-red-700 transition duration-300 ease-in-out flex items-center justify-center w-28 h-10"
-                                onClick={() => deleteTourPackage(tPackage._id)}>
-                                Delete
-                            </button>
-                        </div>
-                    </div>
-                    
-                ))):(
-                    <div className="justify-center ">
-                        <img 
-                            src={searchHandleImg}
-                            alt="No packages available" 
-                            className="w-40 h-40 flex "
-                        />
-                    </div>
-                    )
-                }
+                        )
+                    }
 
                 </div>
 

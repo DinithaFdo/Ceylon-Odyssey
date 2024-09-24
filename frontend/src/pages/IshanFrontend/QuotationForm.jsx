@@ -12,14 +12,14 @@ const QuotationForm = () => {
     const [numPeople, setNumPeople] = useState(1);
 
     const [equipment, setEquipment] = useState([]);
-    const [selectedEquipment, setSelectedEquipment] = useState("");
-    const [eqPrice, setEqPrice] = useState(0);
-    const [baseEqPrice, setBaseEqPrice] = useState("");
-    const [numItems, setNumItems] = useState();
+    const [equipmentList, setEquipmentList] = useState([
+        { selectedEquipment: "", numItems: 1, eqPrice: 0, baseEqPrice: "" }
+      ]);
 
     const handleFee = 1000;
-    const vat = ((parseFloat(pPrice) + parseFloat(eqPrice)) * 0.05);
-    const totalPrice = pPrice + eqPrice + handleFee + vat;
+    const totalEquipmentPrice = equipmentList.reduce((total, item) => total + item.eqPrice, 0);
+    const vat = ((parseFloat(pPrice) + totalEquipmentPrice + handleFee) * 0.05);
+    const totalPrice = pPrice + totalEquipmentPrice + handleFee + vat;
     const formatedHandleFee = handleFee.toFixed(2);
     const formatedVat = vat.toFixed(2);
     const formatedTotalPrice = totalPrice.toFixed(2);
@@ -76,30 +76,45 @@ const QuotationForm = () => {
         }
     };
 
-    const handleEquipmentChange = (e) => {
+    const handleEquipmentChange = (index, e) => {
+        const updatedList = [...equipmentList];
         const selectedEqID = e.target.value;
-        setSelectedEquipment(selectedEqID);
-
+        updatedList[index].selectedEquipment = selectedEqID;
+      
         const selectedEq = equipment.find((eq) => eq._id === selectedEqID);
         
         if (selectedEq) {
-            setEqPrice(selectedEq.equipmentPrice * numItems);
-            setBaseEqPrice(selectedEq.equipmentPrice);
+          updatedList[index].eqPrice = selectedEq.equipmentPrice * updatedList[index].numItems;
+          updatedList[index].baseEqPrice = selectedEq.equipmentPrice;
         } else {
-            setEqPrice("");
-            setBaseEqPrice("");
+          updatedList[index].eqPrice = 0;
+          updatedList[index].baseEqPrice = "";
         }
-
-    }
-
-    const handleNumItemsChange = (e) => {
+      
+        setEquipmentList(updatedList);
+      };
+      
+      const handleNumItemsChange = (index, e) => {
+        const updatedList = [...equipmentList];
         const itemCount = e.target.value;
-        setNumItems(itemCount);
-        if (baseEqPrice) {
-            setEqPrice(baseEqPrice * itemCount);
+        updatedList[index].numItems = itemCount;
+      
+        if (updatedList[index].baseEqPrice) {
+          updatedList[index].eqPrice = updatedList[index].baseEqPrice * itemCount;
         }
-    }
+      
+        setEquipmentList(updatedList);
+      };
 
+      const addEquipmentRow = () => {
+        setEquipmentList([
+          ...equipmentList,
+          { selectedEquipment: "", numItems: 1, eqPrice: 0, baseEqPrice: "" }
+        ]);
+      };
+
+      
+      
     const generatePdf = () => {
         const doc = new jsPDF();
     
@@ -141,7 +156,7 @@ const QuotationForm = () => {
     
         doc.setFontSize(15);
         doc.text("Total Price (LKR) :", 125, 180);
-        doc.text(`${(pPrice + eqPrice).toFixed(2)}`, 175, 180);
+        doc.text(`${totalPrice.toFixed(2)}`, 175, 180);
     
         doc.setFontSize(12)
         doc.text("Note: The prices mentioned in this quotation are subject to change without prior notice due to", 15, 250);
@@ -161,14 +176,15 @@ const QuotationForm = () => {
 
             <div className="container mx-auto p-24 pb-20">
                 <form className="bg-white shadow-md rounded-lg p-8"
-                onSubmit={(e) =>
+                    onSubmit={(e) =>
                     {
                         e.preventDefault();
                         generatePdf();
-                    }
-                 } >
+                    }} >
+
                     <h2 className="text-3xl font-semibold mb-6 text-center pb-10">Get a Quotation</h2>
                     
+                    {/*Package Section*/}
                     <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
                     
                         <div>
@@ -177,9 +193,7 @@ const QuotationForm = () => {
                                 id="packageId"
                                 value={selectedPackage}
                                 onChange={handePackageChange}
-                                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                required
-                            >
+                                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" required >
                                 <option value="">Select a Package</option>
                                 {tourPackages.map((pkg) => (
                                     <option key={pkg._id} value={pkg._id}>
@@ -209,46 +223,56 @@ const QuotationForm = () => {
                             value={pPrice.toFixed(2)}
                             className="w-full p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white border-none text-right" disabled/>
                         </div>
+                    
+                    </div>
 
+                    {/*Equipmenet Section*/}
+                    <button type="button" onClick={addEquipmentRow} className="">
+                    Add Equipment
+                    </button>
+
+                    {equipmentList.map((equipmentItem, index) => (
+                    <div key={index} className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                         <div className='mt-8'>
-                            <label htmlFor="equipmenetID" className="block text-gray-700 font-medium mb-2 text-center">Equipment</label>
+                            <label className="block text-gray-700 font-medium mb-2 text-center">Equipment</label>
                             <select
-                                id="equipmentID"
-                                value={selectedEquipment}
-                                onChange={handleEquipmentChange}
-                                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                            >
+                                id={`eq-${index}`}
+                                value={equipmentItem.selectedEquipment}
+                                onChange={(e) => handleEquipmentChange(index, e)}
+                                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" >
                                 <option value="">Select an Equipment</option>
                                 {equipment.map((eqp) => (
-                                    <option key={eqp._id} value={eqp._id}>
-                                        {eqp.equipmentName}
-                                    </option>
+                                <option key={eqp._id} value={eqp._id}>
+                                    {eqp.equipmentName}
+                                </option>
                                 ))}
                             </select>
                         </div>
 
                         <div className='mt-8'>
-                            <label htmlFor="numEquipment" className="block text-gray-700 font-medium mb-2 text-center">Number of items</label>
+                            <label className="block text-gray-700 font-medium mb-2 text-center">Number of items</label>
                             <input
-                            type="number"
-                            id="numItems"
-                            value={numItems}
-                            onChange={handleNumItemsChange}
-                            min="1"
-                            placeholder="Enter Number of items"
-                            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"/>
+                                type="number"
+                                id={`eqItems-${index}`}
+                                value={equipmentItem.numItems}
+                                onChange={(e) => handleNumItemsChange(index, e)}
+                                min="1"
+                                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"/>
                         </div>
 
-                        <div className='mt-8 mb-8'>
-                            <label htmlFor="price" className="block text-gray-700 font-medium mb-2 text-center">Price (LKR)</label>
+                        <div className='mt-8'>
+                            <label className="block text-gray-700 font-medium mb-2 text-center">Price (LKR)</label>
                             <input
-                            type="number"
-                            id="eqPrice"
-                            value={eqPrice.toFixed(2)}
-                            className="w-full p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white border-none text-right" disabled/>
+                                type="number"
+                                id={`eqPrice-${index}`}
+                                value={equipmentItem.eqPrice.toFixed(2)}
+                                className="w-full p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white border-none text-right" disabled/>
                         </div>
-
                     </div>
+                    ))}
+
+
+                    
 
                     <div className='mt-10 flex justify-end items-center x-2 text-lg'>
                         <label className="font-medium">Handling Fee (LKR)</label>
@@ -256,9 +280,7 @@ const QuotationForm = () => {
                             type="text"
                             id="handleFee"
                             value={formatedHandleFee}
-                            className="w-auto p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white border-none text-right"
-                            disabled
-                        />
+                            className="w-auto p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white border-none text-right" disabled />
                     </div>
 
                     <div className='pt-3 flex justify-end items-center x-2 text-lg'>
@@ -267,9 +289,7 @@ const QuotationForm = () => {
                             type="text"
                             id="vat"
                             value={formatedVat}
-                            className="w-auto p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white border-none text-right"
-                            disabled
-                        />
+                            className="w-auto p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white border-none text-right" disabled />
                     </div>
 
                     <div className='pt-3 flex justify-end items-center x-2 text-xl'>
@@ -278,9 +298,7 @@ const QuotationForm = () => {
                             type="text"
                             id="totalPrice"
                             value={formatedTotalPrice}
-                            className="w-auto rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white border-none text-right"
-                            disabled
-                        />
+                            className="w-auto rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white border-none text-right" disabled />
                     </div>
 
 

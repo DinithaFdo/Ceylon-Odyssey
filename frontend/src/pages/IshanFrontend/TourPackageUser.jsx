@@ -108,13 +108,13 @@ const TourPackageUser = () => {
                         </div>
                     </Link>
                     
-                ))):(<h1 className="text-center col-span-full">
+                ))):(<div className="text-center col-span-full">
                         <img 
                             src={searchHandleImg}
                             alt="No packages available" 
                             className="mx-auto mt-4 w-40 h-40"
                         />
-                    </h1>)
+                    </div>)
                     
                 }
 
@@ -152,13 +152,13 @@ const TourPackageUser = () => {
                             </p>
                         </div>
                     </Link>
-                ))):(<h1 className="text-center col-span-full">
+                ))):(<div className="text-center col-span-full">
                         <img 
                             src={searchHandleImg}
                             alt="No packages available" 
                             className="mx-auto mt-4 w-40 h-40"
                         />
-                    </h1>)
+                    </div>)
                 
                 }
 
@@ -196,13 +196,13 @@ const TourPackageUser = () => {
                             </p>
                         </div>
                     </Link>
-                ))):(<h1 className="text-center col-span-full">
+                ))):(<div className="text-center col-span-full">
                         <img 
                             src={searchHandleImg}
                             alt="No packages available" 
                             className="mx-auto mt-4 w-40 h-40"
                         />
-                    </h1>)
+                    </div>)
                 
                 }
 
