@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../../index.css';
+import searchHandleImg from "../../assets/Ishan/notAvailableImg.png";
 
 const AllTourPackages = () => { 
     const [tourPackages, setTourPackages] = useState([]);
@@ -117,7 +118,7 @@ const AllTourPackages = () => {
 
                         <div className="flex space-x-4 mt-4">
                             <Link className="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition duration-300 ease-in-out flex items-center justify-center w-28 h-10" 
-                                to={`/dashboard/manageTourPackages/${tPackage._id}`} state={{ packageToEdit : tPackage }}>
+                                to={`/TourPackage-dashboard/manageTourPackages/${tPackage._id}`} state={{ packageToEdit : tPackage }}>
                                 Update
                             </Link>
                             
@@ -128,8 +129,15 @@ const AllTourPackages = () => {
                         </div>
                     </div>
                     
-                ))):(<h1><p className="text-center col-span-full">No current packages available</p></h1>)
-                    
+                ))):(
+                    <div className="justify-center ">
+                        <img 
+                            src={searchHandleImg}
+                            alt="No packages available" 
+                            className="w-40 h-40 flex "
+                        />
+                    </div>
+                    )
                 }
 
                 </div>

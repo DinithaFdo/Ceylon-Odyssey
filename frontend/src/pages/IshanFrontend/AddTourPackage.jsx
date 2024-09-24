@@ -128,6 +128,7 @@ const AddTourPackage = () =>{
                         <div className="mb-8">
                             <label htmlFor="packagePrice" className="block mb-2 text-l font-medium text-gray-900 dark:text-white">Package Price</label>
                             <input type="number" id="packagePrice" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                            min={0}
                             onChange={(e) => {
                                 setPackagePrice(parseFloat(e.target.value));
                             }} required />

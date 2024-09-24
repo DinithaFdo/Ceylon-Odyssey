@@ -37,6 +37,7 @@ const UpdateTourPackage = () => {
         }).catch((err) => {
             console.error('Error:', err);
         });
+        window.scrollTo(0, 0);
     }, [id]);
     
     const [errors, setErrors] = useState({});

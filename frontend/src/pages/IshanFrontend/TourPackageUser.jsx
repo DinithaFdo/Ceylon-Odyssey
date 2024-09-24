@@ -3,6 +3,7 @@ import axios from 'axios'
 import { Link } from 'react-router-dom';
 import Navbar from "../../components/Navbar/Navbar";
 import quotationIcon from "../../assets/Ishan/quotation_icon.png";
+import searchHandleImg from "../../assets/Ishan/notAvailableImg.png";
 
 const TourPackageUser = () => {
 
@@ -108,11 +109,10 @@ const TourPackageUser = () => {
                     </Link>
                     
                 ))):(<h1 className="text-center col-span-full">
-                        <p>No current packages available</p>
                         <img 
-                            src="path_to_your_image" 
+                            src={searchHandleImg}
                             alt="No packages available" 
-                            className="mx-auto mt-4 w-32 h-32"
+                            className="mx-auto mt-4 w-40 h-40"
                         />
                     </h1>)
                     
@@ -153,11 +153,10 @@ const TourPackageUser = () => {
                         </div>
                     </Link>
                 ))):(<h1 className="text-center col-span-full">
-                        <p>No current packages available</p>
                         <img 
-                            src="path_to_your_image" 
+                            src={searchHandleImg}
                             alt="No packages available" 
-                            className="mx-auto mt-4 w-32 h-32"
+                            className="mx-auto mt-4 w-40 h-40"
                         />
                     </h1>)
                 
@@ -167,7 +166,7 @@ const TourPackageUser = () => {
 
             {/*wildlifePackages list*/}
             <h1 className="text-3xl font-semibold text-black-700 mt-10 pt-10 pb-5 flex justify-center">Wildlife and Nature Tours</h1>
-            <div className="mt-8 pb-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-14">
+            <div className="mt-8 pb-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-14">
             {filteredPackages.filter(p => p.pCategory === "Wildlife and Nature Tours").length > 0 ? (
                 filteredPackages.filter(p => p.pCategory === "Wildlife and Nature Tours").map((wildLifePackage, index) => (
                     <Link to={`/tour-packages/${wildLifePackage._id}`} key={wildLifePackage._id}
@@ -198,11 +197,10 @@ const TourPackageUser = () => {
                         </div>
                     </Link>
                 ))):(<h1 className="text-center col-span-full">
-                        <p>No current packages available</p>
                         <img 
-                            src="path_to_your_image" 
+                            src={searchHandleImg}
                             alt="No packages available" 
-                            className="mx-auto mt-4 w-32 h-32"
+                            className="mx-auto mt-4 w-40 h-40"
                         />
                     </h1>)
                 
