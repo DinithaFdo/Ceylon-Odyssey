@@ -52,7 +52,7 @@ function AddEquipment() {
         setEquipmentQuantity(50);
         setEquipmentImage(null);
 
-        // Hide the message after 3 seconds
+        
         setTimeout(() => {
           setSuccessMessage('');
         }, 3000);
