@@ -9,6 +9,7 @@ import AllDestination from "../pages/destination/allDestination";
 import EditDestinationPage from "../pages/destination/EditDestinationPage";
 import DestinationList from "../pages/destination/DestinationList";
 import DestinationDetail from "../pages/destination/DestinationDetail";
+import DestinationAnalytics from "../pages/destination/DestinationAnalytics";
 
 function AppRoutes() {
     return (
@@ -24,6 +25,7 @@ function AppRoutes() {
                 <Route path="/edit-destination/:id" element={<EditDestinationPage />} />
                 <Route path="/destinations" element={<DestinationList />} />
                 <Route path="/destination/:id" element={<DestinationDetail />} />
+                <Route path="/analytics" element={<DestinationAnalytics />} />
             </Routes>
         </Router>
     );

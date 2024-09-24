@@ -3,7 +3,6 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../../components/Navbar/Navbar';
 import Footer from '../../components/Footer/Footer';
-import * as XLSX from 'xlsx';
 
 export default function AllDestinations() {
     const [destinations, setDestinations] = useState([]);
@@ -33,18 +32,12 @@ export default function AllDestinations() {
         navigate(`/edit-destination/${destinationID}`);
     };
 
-    const generateReport = () => {
-        // Create a workbook and a worksheet
-        const wb = XLSX.utils.book_new();
-        const wsData = destinations.map(destination => ({
-            Title: destination.dTitle,
-            Clicks: destination.clickCount,
-        }));
-        const ws = XLSX.utils.json_to_sheet(wsData);
-        XLSX.utils.book_append_sheet(wb, ws, 'Destinations');
+    const addDestination = () => {
+        navigate('/add-destination');
+    };
 
-        // Generate a file download
-        XLSX.writeFile(wb, 'destinations_report.xlsx');
+    const DestinationAnalytics = () => {
+        navigate('/analytics'); 
     };
 
     useEffect(() => {
@@ -65,16 +58,23 @@ export default function AllDestinations() {
 
             <main className="flex-grow pt-16 px-4 md:px-8 lg:px-16"> {/* Add padding-top to avoid overlap with Navbar */}
                 <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-                    <center><h1 className="text-2xl font-bold mb-4">All Listed Destinations</h1></center>
+                    <center><h1 className="text-2xl font-bold mb-4">Destinations</h1></center>
 
-                    <button 
-                        onClick={generateReport}
-                        className="bg-green-600 text-white px-4 py-2 rounded-full hover:bg-green-700 transition duration-300 mb-4"
-                    >
-                        Generate Report
-                    </button>
+                    <div className="flex justify-between mb-4">
+                        <button 
+                            onClick={addDestination}
+                            className="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition duration-300"
+                        >
+                            Add Destination
+                        </button>
 
-                    <br></br>
+                        <button 
+                            onClick={DestinationAnalytics}
+                            className="bg-green-600 text-white px-4 py-2 rounded-full hover:bg-green-700 transition duration-300"
+                        >
+                            Analytics
+                        </button>
+                    </div>
 
                     <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                         <thead className="text-xs text-center text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">

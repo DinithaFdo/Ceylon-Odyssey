@@ -78,7 +78,7 @@ export default function DestinationList() {
                     <div className="flex-1">
                         <input 
                             type="text" 
-                            placeholder="Search by title..." 
+                            placeholder="Search destinations..." 
                             className="w-full p-2 border border-gray-300 rounded-lg"
                             value={searchTerm}
                             onChange={handleSearchChange}
