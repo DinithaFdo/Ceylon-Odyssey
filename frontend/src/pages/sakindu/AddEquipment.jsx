@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import ValidateAddEquipment from './validateAddEquipment';
 
-
 function AddEquipment() {
   const [equipmentId, setEquipmentId] = useState("");
   const [equipmentName, setEquipmentName] = useState("");
@@ -12,11 +11,11 @@ function AddEquipment() {
   const [equipmentPrice, setEquipmentPrice] = useState("");
   const [equipmentQuantity, setEquipmentQuantity] = useState(50);
   const [errors, setErrors] = useState({});
+  const [successMessage, setSuccessMessage] = useState(''); // Success message state
 
   function addEquipment(e) {
     e.preventDefault();
 
-    
     const equipment = {
       equipmentId,
       equipmentName,
@@ -27,8 +26,6 @@ function AddEquipment() {
       equipmentQuantity
     };
 
-    
-    
     const validationErrors = ValidateAddEquipment(equipment);
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
@@ -46,8 +43,19 @@ function AddEquipment() {
 
     axios.post("http://localhost:5000/equipment/add", formData)
       .then(() => {
-        alert("Equipment Successfully Added!!");
-        
+        setSuccessMessage('✅ Equipment added successfully!');
+        setEquipmentId('');
+        setEquipmentName('');
+        setEquipmentType('');
+        setEquipmentDescription('');
+        setEquipmentPrice('');
+        setEquipmentQuantity(50);
+        setEquipmentImage(null);
+
+        // Hide the message after 3 seconds
+        setTimeout(() => {
+          setSuccessMessage('');
+        }, 3000);
       })
       .catch((err) => {
         alert(err);
@@ -55,11 +63,23 @@ function AddEquipment() {
   }
 
   return (
+    
     <>
+        {successMessage && (
+          <div className="mb-4 p-4 text-white bg-green-600 rounded-md text-center animate-bounce">
+            {successMessage}
+          </div>
+        )}
       <section className="max-w-4xl p-6 mx-auto bg-gray-700 rounded-md shadow-md dark:bg-gray-800 mt-20">
         <h1 className="text-xl font-bold text-white capitalize dark:text-white">Add Equipment</h1>
+
+        
+        
+
         <form onSubmit={addEquipment}>
           <div className="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2">
+            
+
             <div>
               <label className="text-white dark:text-gray-200" htmlFor="equipmentId">Equipment ID</label>
               <input
@@ -82,7 +102,6 @@ function AddEquipment() {
               {errors.equipmentName && <p className="text-red-500">{errors.equipmentName}</p>}
             </div>
 
-            
             <div>
               <label className="text-white dark:text-gray-200" htmlFor="equipmentType">Equipment Type</label>
               <select
@@ -133,9 +152,8 @@ function AddEquipment() {
               />
               {errors.equipmentQuantity && <p className="text-red-500">{errors.equipmentQuantity}</p>}
             </div>
-
             
-            <div className="mb-8">
+            <div>
               <label className="block mb-2 text-l font-medium text-white dark:text-white" htmlFor="equipmentImage">Upload Image</label>
               <input
                 name="equipmentImage"
@@ -146,7 +164,6 @@ function AddEquipment() {
                   setEquipmentImage(e.target.files[0]);
                 }}
               />
-              
             </div>
           </div>
 
