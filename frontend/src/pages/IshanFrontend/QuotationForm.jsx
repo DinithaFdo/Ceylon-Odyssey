@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import jsPDF from 'jspdf';
 import Navbar from '../../components/Navbar/Navbar';
+import AddIcon from '../../assets/Ishan/add-button.png';
+import removeIcon from '../../assets/Ishan/removeBtnImg.png';
 
 const QuotationForm = () => {
 
@@ -14,7 +16,7 @@ const QuotationForm = () => {
     const [equipment, setEquipment] = useState([]);
     const [equipmentList, setEquipmentList] = useState([
         { selectedEquipment: "", numItems: 1, eqPrice: 0, baseEqPrice: "" }
-      ]);
+    ]);
 
     const handleFee = 1000;
     const totalEquipmentPrice = equipmentList.reduce((total, item) => total + item.eqPrice, 0);
@@ -71,6 +73,7 @@ const QuotationForm = () => {
     const handleNumPeopleChange = (e) => {
         const peopleCount = e.target.value;
         setNumPeople(peopleCount);
+        
         if (basePrice) {
             setPPrice(basePrice * peopleCount);
         }
@@ -94,75 +97,98 @@ const QuotationForm = () => {
         setEquipmentList(updatedList);
       };
       
-      const handleNumItemsChange = (index, e) => {
+    const handleNumItemsChange = (index, e) => {
         const updatedList = [...equipmentList];
         const itemCount = e.target.value;
         updatedList[index].numItems = itemCount;
-      
+        
         if (updatedList[index].baseEqPrice) {
-          updatedList[index].eqPrice = updatedList[index].baseEqPrice * itemCount;
+            updatedList[index].eqPrice = updatedList[index].baseEqPrice * itemCount;
         }
-      
+        
         setEquipmentList(updatedList);
-      };
+    };
 
-      const addEquipmentRow = () => {
+    const addEquipmentRow = () => {
         setEquipmentList([
-          ...equipmentList,
-          { selectedEquipment: "", numItems: 1, eqPrice: 0, baseEqPrice: "" }
+            ...equipmentList,
+            { selectedEquipment: "", numItems: 1, eqPrice: 0, baseEqPrice: "" }
         ]);
-      };
+    };
 
-      
+    const removeEquipmentRow = (index) => {
+        const updatedList = equipmentList.filter((_, idx) => idx !== index);
+        setEquipmentList(updatedList);
+    };
+
       
     const generatePdf = () => {
         const doc = new jsPDF();
     
         const pageWidth = doc.internal.pageSize.getWidth();
         const pageHeight = doc.internal.pageSize.getHeight();
-    
+
+        /*const imgData = '';
+        const imgWidth = 156;
+        const imgHeight = 200;
+        const xPos = (pageWidth - imgWidth) / 2;
+        const yPos = (pageHeight - imgHeight) / 2;
+        doc.setGState(new doc.GState({ opacity: 0.5 }));
+        doc.addImage(imgData, 'png', xPos, yPos, imgWidth, imgHeight);
+
+        doc.setGState(new doc.GState({ opacity: 1.0 })); // Reset opacity*/
+        
         doc.rect(10, 10, pageWidth - 20, pageHeight - 20);
     
         doc.setFontSize(30);
-        doc.text('Quotation', 80, 25);
+        doc.text('Quotation', pageWidth / 2, 25, { align: 'center' });
         
-        doc.setFontSize(14);
+        doc.setFontSize(15);
         doc.text("Package Name", 25, 50);
         doc.text("Number of People", 95, 50);
         doc.text("Price (LKR) ", 170, 50);
     
         const packageName = tourPackages.find(pkg => pkg._id === selectedPackage)?.package_Title || 'No packages';
         doc.setFontSize(12);
-        doc.text(packageName, 20, 70);
-        doc.text(`${numPeople}`, 100, 70);
-        doc.text(`${pPrice.toFixed(2)}`, 180, 70); 
-    
-        doc.setFontSize(14);
-        doc.text("Equipment:", 25, 100);
-        doc.text("Number of Items:", 95, 100);
-        doc.text("Price (LKR) ", 170, 100);
+        doc.text(packageName, 20, 60);
+        doc.text(`${numPeople}`, 100, 60);
+        doc.text(`${pPrice.toFixed(2)}`, 173, 60); 
         
-        const eqName = equipment.find(eq => eq._id === selectedEquipment)?.equipmentName || 'No Items';
-        doc.setFontSize(12);
-        doc.text(eqName, 20, 120);
-        doc.text(`${numItems ? numItems : 'No Items'}`, 100, 120);
-        doc.text(`${eqPrice.toFixed(2)}`, 180, 120);
-    
-        doc.setFontSize(13);
-        doc.text("Handling Fee (LKR) :", 125, 150);
-        doc.text(`${handleFee.toFixed(2)}`, 180, 150);
-        doc.text("5% VAT (LKR) :", 125, 160);
-        doc.text(`${vat.toFixed(2)}`, 180, 160);
-    
+        let equipmentYPos = 100;
         doc.setFontSize(15);
-        doc.text("Total Price (LKR) :", 125, 180);
-        doc.text(`${totalPrice.toFixed(2)}`, 175, 180);
-    
-        doc.setFontSize(12)
-        doc.text("Note: The prices mentioned in this quotation are subject to change without prior notice due to", 15, 250);
-        doc.text("fluctuations in market conditions, availability, or other unforeseen circumstances. Please confirm", 15, 257);
-        doc.text("the prices before proceeding with the booking.", 15, 264);
+        doc.text("Equipment Name", 25, equipmentYPos);
+        doc.text("Number of Items", 95, equipmentYPos);
+        doc.text("Price (LKR)", 170, equipmentYPos);
+
+        equipmentList.forEach((equipmentItem, index) => {
+            const eqName = equipment.find(eq => eq._id === equipmentItem.selectedEquipment)?.equipmentName || 'No Items';
+            equipmentYPos += 10;
+            doc.setFontSize(12);
+            doc.text(eqName, 20, equipmentYPos);
+            doc.text(`${equipmentItem.numItems ? equipmentItem.numItems : 'No Items'}`, 100, equipmentYPos);
+            doc.text(`${equipmentItem.eqPrice.toFixed(2)}`, 173, equipmentYPos);
+        });
+
+        let pricingYPos = equipmentYPos + 30;
+
+        doc.setFontSize(13);
+        doc.text("Handling Fee (LKR):", 120, pricingYPos);
+        doc.text(`${handleFee.toFixed(2)}`, 173, pricingYPos);
         
+        pricingYPos += 10;
+        doc.text("5% VAT (LKR):", 120, pricingYPos);
+        doc.text(`${vat.toFixed(2)}`, 173, pricingYPos);
+        
+        pricingYPos += 20;
+        doc.setFontSize(15);
+        doc.text("Total Price (LKR):", 120, pricingYPos);
+        doc.text(`${totalPrice.toFixed(2)}`, 170, pricingYPos);
+
+        doc.setFontSize(12);
+        doc.text("Note: The prices mentioned in this quotation are subject to change without prior notice due to", 15, pageHeight - 40);
+        doc.text("fluctuations in market conditions, availability, or other unforeseen circumstances. Please confirm", 15, pageHeight - 33);
+        doc.text("the prices before proceeding with the booking.", 15, pageHeight - 26);
+
         doc.save('quotation.pdf');
         
     }
@@ -186,7 +212,8 @@ const QuotationForm = () => {
                     
                     {/*Package Section*/}
                     <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-                    
+
+                        {/*Package Name*/}
                         <div>
                             <label htmlFor="packageId" className="block text-gray-700 font-medium mb-2 text-center ">Package Name</label>
                             <select
@@ -202,7 +229,8 @@ const QuotationForm = () => {
                                 ))}
                             </select>
                         </div>
-
+                        
+                        {/*Number of people*/}
                         <div>
                             <label htmlFor="numPeople" className="block text-gray-700 font-medium mb-2 text-center">Number of People</label>
                             <input
@@ -214,7 +242,8 @@ const QuotationForm = () => {
                             placeholder="Enter Number of People"
                             className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"/>
                         </div>
-
+                            
+                        {/*Package Price*/}
                         <div>
                             <label htmlFor="price" className="block text-gray-700 font-medium mb-2 text-center">Price (LKR)</label>
                             <input
@@ -227,14 +256,35 @@ const QuotationForm = () => {
                     </div>
 
                     {/*Equipmenet Section*/}
-                    <button type="button" onClick={addEquipmentRow} className="">
-                    Add Equipment
-                    </button>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-2 mt-8">
+                        <div className='flex items-center justify-between mt-4'>
+                            
+                            {/* Add more Equipment button */}
+                            <button 
+                                type="button" 
+                                onClick={() => addEquipmentRow()} 
+                                className="ml-2">
+                                <img src={AddIcon} alt="add" className="h-10 w-10" />
+                            </button>
+                            <label className="flex-grow text-gray-700 font-medium text-center">Equipment</label>
+                        </div>
+
+                        {/* Number of items */}
+                        <div className='flex items-center justify-center mt-4'>
+                            <label className="block text-gray-700 font-medium">Number of items</label>
+                        </div>
+
+                        {/* Equipment Price */}
+                        <div className='flex items-center justify-center mt-4'>
+                            <label className="block text-gray-700 font-medium">Price (LKR)</label>
+                        </div>
+                    </div>
+
 
                     {equipmentList.map((equipmentItem, index) => (
-                    <div key={index} className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                        <div className='mt-8'>
-                            <label className="block text-gray-700 font-medium mb-2 text-center">Equipment</label>
+                    <div key={index} className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-2">
+                        {/*Equipment Name*/}
+                        <div className='mt-4'>
                             <select
                                 id={`eq-${index}`}
                                 value={equipmentItem.selectedEquipment}
@@ -248,9 +298,9 @@ const QuotationForm = () => {
                                 ))}
                             </select>
                         </div>
-
-                        <div className='mt-8'>
-                            <label className="block text-gray-700 font-medium mb-2 text-center">Number of items</label>
+                        
+                        {/*Number of Equipment items*/}
+                        <div className='mt-4'>
                             <input
                                 type="number"
                                 id={`eqItems-${index}`}
@@ -259,25 +309,31 @@ const QuotationForm = () => {
                                 min="1"
                                 className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"/>
                         </div>
-
-                        <div className='mt-8'>
-                            <label className="block text-gray-700 font-medium mb-2 text-center">Price (LKR)</label>
+                            
+                        {/*Equipment Price*/}
+                        <div className='mt-4 flex justify-between items-center'>
                             <input
                                 type="number"
                                 id={`eqPrice-${index}`}
                                 value={equipmentItem.eqPrice.toFixed(2)}
-                                className="w-full p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white border-none text-right" disabled/>
+                                className="w-full p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white border-none text-right" disabled />
+                            
+                            {/*Remove more Equipmenet button*/}
+                            <button 
+                                type="button" 
+                                onClick={() => removeEquipmentRow(index)} 
+                                className="ml-2">
+                                <img src={removeIcon} alt="remove" className="h-10 w-10" />
+                            </button>
                         </div>
+
                     </div>
                     ))}
-
-
-                    
 
                     <div className='mt-10 flex justify-end items-center x-2 text-lg'>
                         <label className="font-medium">Handling Fee (LKR)</label>
                         <input
-                            type="text"
+                            type="number"
                             id="handleFee"
                             value={formatedHandleFee}
                             className="w-auto p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white border-none text-right" disabled />
@@ -286,7 +342,7 @@ const QuotationForm = () => {
                     <div className='pt-3 flex justify-end items-center x-2 text-lg'>
                         <label className="font-medium">5% vat (LKR)</label>
                         <input
-                            type="text"
+                            type="number"
                             id="vat"
                             value={formatedVat}
                             className="w-auto p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white border-none text-right" disabled />
@@ -295,13 +351,13 @@ const QuotationForm = () => {
                     <div className='pt-3 flex justify-end items-center x-2 text-xl'>
                         <label className="font-medium">Total price (LKR)</label>
                         <input
-                            type="text"
+                            type="number"
                             id="totalPrice"
                             value={formatedTotalPrice}
-                            className="w-auto rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white border-none text-right" disabled />
+                            className="w-auto rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white border-none text-right pr-2" disabled />
                     </div>
 
-
+                    {/*Download button*/}
                     <div className="mt-10 flex justify-end">
                         <button
                             type="submit"

@@ -46,14 +46,13 @@ const AllTourPackages = () => {
     useEffect(() => {
         const lowerCaseQuery = searchQuery.toLowerCase();
 
-        const filtered = tourPackages.filter(
-            (tourPackage) =>
-                tourPackage.packageId.toLowerCase().includes(lowerCaseQuery) ||
-                tourPackage.package_Title.toLowerCase().includes(lowerCaseQuery) ||
-                tourPackage.pDestination.toLowerCase().includes(lowerCaseQuery) ||
-                tourPackage.pCategory.toLowerCase().includes(lowerCaseQuery) ||
-                tourPackage.pDays.toString().includes(lowerCaseQuery) ||
-                tourPackage.packagePrice.toString().includes(lowerCaseQuery)
+        const filtered = tourPackages.filter( (tourPackage) =>
+            tourPackage.packageId.toLowerCase().includes(lowerCaseQuery) ||
+            tourPackage.package_Title.toLowerCase().includes(lowerCaseQuery) ||
+            tourPackage.pDestination.toLowerCase().includes(lowerCaseQuery) ||
+            tourPackage.pCategory.toLowerCase().includes(lowerCaseQuery) ||
+            tourPackage.pDays.toString().includes(lowerCaseQuery) ||
+            tourPackage.packagePrice.toString().includes(lowerCaseQuery)
         );
 
         setFilteredPackages(filtered);

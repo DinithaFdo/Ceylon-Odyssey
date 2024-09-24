@@ -152,7 +152,8 @@ const UpdateTourPackage = () => {
                             value={(values.packagePrice).toFixed(2)}
                             onChange={(e) => {
                                 setValues({...values, packagePrice: parseFloat(e.target.value)});
-                            }} required />
+                            }} 
+                            min={0} required />
                             {errors.packagePrice && <p className="text-red-500 text-xs mt-1">{errors.packagePrice}</p>}
                         </div>
 
@@ -172,7 +173,8 @@ const UpdateTourPackage = () => {
                             value={values.pDays}
                             onChange={(e) => {
                                 setValues({...values, pDays: parseFloat(e.target.value)});
-                            }} required />
+                            }} 
+                            min={3} required />
                             {errors.pDays && <p className="text-red-500 text-xs mt-1">{errors.pDays}</p>}
                         </div>
                     </div>

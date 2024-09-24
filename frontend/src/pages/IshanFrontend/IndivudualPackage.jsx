@@ -46,6 +46,7 @@ const IndivudualPackage = () => {
                         Book Now
                     </button>
                 </div>
+                
             </div>
 
             
