@@ -8,14 +8,12 @@ import * as XLSX from 'xlsx';
 export default function DestinationAnalytics() {
     const [destinations, setDestinations] = useState([]);
     const [filteredData, setFilteredData] = useState([]);
-    const [startDate, setStartDate] = useState('');
-    const [endDate, setEndDate] = useState('');
 
     const fetchDestinations = async () => {
         try {
             const response = await axios.get('http://localhost:5001/destination/');
             setDestinations(response.data);
-            setFilteredData(response.data); // Initialize filteredData with all destinations
+            setFilteredData(response.data);
         } catch (error) {
             console.error('Error fetching destination analytics:', error);
         }
@@ -39,22 +37,13 @@ export default function DestinationAnalytics() {
         XLSX.writeFile(wb, 'destinations_report.xlsx');
     };
 
-    // Function to filter destinations by date
-    const filterByDate = () => {
-        const filtered = destinations.filter(destination => {
-            const creationDate = new Date(destination.creationDate);
-            return (!startDate || creationDate >= new Date(startDate)) && (!endDate || creationDate <= new Date(endDate));
-        });
-        setFilteredData(filtered);
-    };
-
     return (
         <div className="flex flex-col min-h-screen">
-            <Navbar /> {/* Navbar fixed at the top */}
+            <Navbar /> 
 
             <br /><br />
 
-            <main className="flex-grow pt-16 px-4 md:px-8 lg:px-16"> {/* Add padding-top to avoid overlap with Navbar */}
+            <main className="flex-grow pt-16 px-4 md:px-8 lg:px-16">
                 <center><h1 className="text-2xl font-bold mb-4">Destination Analytics</h1></center>
 
                 <br />
@@ -88,7 +77,7 @@ export default function DestinationAnalytics() {
 
             <br /><br />
 
-            <Footer /> {/* Footer fixed at the bottom */}
+            <Footer /> 
         </div>
     );
 }

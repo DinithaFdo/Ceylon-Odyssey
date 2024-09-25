@@ -1,4 +1,3 @@
-// Other imports remain the same
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -17,13 +16,13 @@ export default function EditDestinationPage() {
         destinationID: '',
         dTitle: '',
         dDescription: '',
-        dThumbnail: '', // Keep the original thumbnail
+        dThumbnail: '', 
         dExtImage: '',
         dDistrict: '',
         dProvince: '',
         longitude: '',
         latitude: '',
-        thumbnailFile: null // State for the uploaded file
+        thumbnailFile: null 
     });
 
     const [provinces, setProvinces] = useState([
@@ -54,13 +53,13 @@ export default function EditDestinationPage() {
                         destinationID: destinationData.destinationID,
                         dTitle: destinationData.dTitle,
                         dDescription: destinationData.dDescription,
-                        dThumbnail: destinationData.dThumbnail, // Set the existing thumbnail
+                        dThumbnail: destinationData.dThumbnail,
                         dExtImage: destinationData.dExtImage,
                         dDistrict: destinationData.dDistrict,
                         dProvince: destinationData.dProvince,
                         longitude: destinationData.longitude || '',
                         latitude: destinationData.latitude || '',
-                        thumbnailFile: null // Reset the file on load
+                        thumbnailFile: null
                     });
                 }
             } catch (error) {
@@ -82,8 +81,8 @@ export default function EditDestinationPage() {
     const handleFileChange = (e) => {
         setFormData(prevData => ({
             ...prevData,
-            thumbnailFile: e.target.files[0], // Store the selected file
-            dThumbnail: e.target.files[0] ? e.target.files[0].name : prevData.dThumbnail // Update the thumbnail name
+            thumbnailFile: e.target.files[0],
+            dThumbnail: e.target.files[0] ? e.target.files[0].name : prevData.dThumbnail
         }));
     };
 
@@ -119,11 +118,11 @@ export default function EditDestinationPage() {
         formDataToSubmit.append('destinationID', formData.destinationID);
         formDataToSubmit.append('dTitle', formData.dTitle);
         formDataToSubmit.append('dDescription', formData.dDescription);
-        // Only append the thumbnail file if a new file was uploaded
+        
         if (formData.thumbnailFile) {
             formDataToSubmit.append('dThumbnail', formData.thumbnailFile);
         } else {
-            formDataToSubmit.append('dThumbnail', formData.dThumbnail); // Keep the existing thumbnail if no new file
+            formDataToSubmit.append('dThumbnail', formData.dThumbnail); 
         }
         formDataToSubmit.append('dExtImage', formData.dExtImage);
         formDataToSubmit.append('dDistrict', formData.dDistrict);
@@ -134,7 +133,7 @@ export default function EditDestinationPage() {
         try {
             await axios.put(`http://localhost:5001/destination/update/${id}`, formDataToSubmit, {
                 headers: {
-                    'Content-Type': 'multipart/form-data' // Set content type for file upload
+                    'Content-Type': 'multipart/form-data' 
                 }
             });
             setSuccessMessage('Destination updated successfully!');

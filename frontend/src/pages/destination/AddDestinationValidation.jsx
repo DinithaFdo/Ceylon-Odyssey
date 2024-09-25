@@ -47,7 +47,7 @@ const AddDestinationValidation = (
 
   // Validate external images
   if (!stringPattern.test(extImages) || extImages.length === 0) {
-      errors.extImages = "External images must be valid strings.";
+      errors.extImages = "Things to do must be valid strings.";
   }
 
   // Validate district and province

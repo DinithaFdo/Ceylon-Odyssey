@@ -77,13 +77,13 @@ router.post("/add", upload, [
       destinationID,
       dTitle,
       dDescription,
-      dThumbnail: req.file ? req.file.filename : '', // Handle dThumbnail
+      dThumbnail: req.file ? req.file.filename : '', 
       dExtImage,
       dDistrict,
       dProvince,
       longitude,
       latitude,
-      clickCount: 0 // Initialize click count to 0
+      clickCount: 0 
     });
 
     await newDestination.save();
@@ -153,7 +153,7 @@ router.put("/update/:id", upload, [
     const updatedDestination = {
       dTitle,
       dDescription,
-      dThumbnail: req.file ? req.file.filename : req.body.dThumbnail, // Handle dThumbnail
+      dThumbnail: req.file ? req.file.filename : req.body.dThumbnail, 
       dExtImage,
       dDistrict,
       dProvince,
@@ -181,7 +181,6 @@ router.delete("/delete/:id", async (req, res) => {
       return res.status(404).json({ error: "Destination not found" });
     }
 
-    // Delete the image associated with the destination if it exists
     if (destination.dThumbnail) {
       deleteImage(destination.dThumbnail);
     }

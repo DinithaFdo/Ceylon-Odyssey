@@ -2,21 +2,21 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import Navbar from '../../components/Navbar/Navbar';
 import Footer from '../../components/Footer/Footer';
-import AddDestinationValidation from './AddDestinationValidation'; // Import validation logic
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import AddDestinationValidation from './AddDestinationValidation'; 
+import { useNavigate } from 'react-router-dom';
 
 function AddDestination() {
     const [destinationID, setDestinationID] = useState("");
     const [dTitle, setDTitle] = useState("");
     const [dDescription, setDDescription] = useState("");
-    const [dThumbnail, setDThumbnail] = useState(null); // Set initial value as null for file upload
+    const [dThumbnail, setDThumbnail] = useState(null);
     const [dExtImage, setDExtImage] = useState("");
     const [dDistrict, setDDistrict] = useState("");
     const [dProvince, setDProvince] = useState("");
     const [longitude, setLongitude] = useState("");
     const [latitude, setLatitude] = useState("");
     const [errors, setErrors] = useState({});
-    const navigate = useNavigate(); // Initialize useNavigate
+    const navigate = useNavigate();
 
     // Sri Lankan provinces and districts
     const provinces = [
@@ -53,7 +53,7 @@ function AddDestination() {
         formData.append("destinationID", destinationID);
         formData.append("dTitle", dTitle);
         formData.append("dDescription", dDescription);
-        formData.append("dThumbnail", dThumbnail); // Append the selected file
+        formData.append("dThumbnail", dThumbnail);
         formData.append("dExtImage", dExtImage);
         formData.append("dDistrict", dDistrict);
         formData.append("dProvince", dProvince);
@@ -140,7 +140,6 @@ function AddDestination() {
                         {errors.dDescription && <p className="text-red-500 text-sm">{errors.dDescription}</p>}
                     </div>
 
-                    {/* Updated Thumbnail Field for Image Upload */}
                     <div className="mb-8">
                         <label htmlFor="dThumbnail" className="block mb-2 text-l font-medium text-gray-900">Thumbnail Image</label>
                         <input
@@ -155,13 +154,13 @@ function AddDestination() {
 
                     <div className="mb-8">
                         <label htmlFor="dExtImage" className="block mb-2 text-l font-medium text-gray-900">Things to do</label>
-                        <input
+                        <textarea
                             type="text"
                             id="dExtImage"
                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                             onChange={(e) => setDExtImage(e.target.value)}
                             required
-                        />
+                        ></textarea>
                         {errors.dExtImage && <p className="text-red-500 text-sm">{errors.dExtImage}</p>}
                     </div>
 

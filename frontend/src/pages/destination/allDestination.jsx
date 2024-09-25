@@ -52,11 +52,11 @@ export default function AllDestinations() {
 
     return (
         <div className="flex flex-col min-h-screen">
-            <Navbar /> {/* Navbar fixed at the top */}
+            <Navbar /> 
 
             <br></br><br></br>
 
-            <main className="flex-grow pt-16 px-4 md:px-8 lg:px-16"> {/* Add padding-top to avoid overlap with Navbar */}
+            <main className="flex-grow pt-16 px-4 md:px-8 lg:px-16"> 
                 <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
                     <center><h1 className="text-2xl font-bold mb-4">Destinations</h1></center>
 
@@ -83,7 +83,7 @@ export default function AllDestinations() {
                                 <th scope="col" className="px-6 py-3">Title</th>
                                 <th scope="col" className="px-6 py-3">Description</th>
                                 <th scope="col" className="px-6 py-3">Creation Date</th>
-                                <th scope="col" className="px-6 py-3">Clicks</th> {/* Column for clicks */}
+                                <th scope="col" className="px-6 py-3">Clicks</th> 
                                 <th scope="col" className="px-6 py-3">Actions</th>
                             </tr>
                         </thead>
@@ -100,10 +100,10 @@ export default function AllDestinations() {
                                         {destination.dDescription}
                                     </td>
                                     <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
-                                        {new Date(destination.creationDate).toLocaleDateString()} {/* Display formatted creation date */}
+                                        {new Date(destination.creationDate).toLocaleDateString()} 
                                     </td>
                                     <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white text-center">
-                                        {destination.clickCount} {/* Display the click count */}
+                                        {destination.clickCount} 
                                     </td>
                                     <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white text-center">
                                         <button 
@@ -128,7 +128,7 @@ export default function AllDestinations() {
 
             <br></br><br></br>
 
-            <Footer /> {/* Footer fixed at the bottom */}
+            <Footer />
         </div>
     );
 }

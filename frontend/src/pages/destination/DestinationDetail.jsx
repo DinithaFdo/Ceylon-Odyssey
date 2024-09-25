@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Navbar from '../../components/Navbar/Navbar';
 import Footer from '../../components/Footer/Footer';
-import Map from './Map';  // Ensure this is correctly imported
+import Map from './Map';
 
-const WEATHER_API_KEY = 'c4402a459f61c6974a9b5c47e334105a'; // Replace with your OpenWeather API key
+const WEATHER_API_KEY = 'c4402a459f61c6974a9b5c47e334105a';
 
 export default function DestinationDetail() {
     const [destination, setDestination] = useState(null);
