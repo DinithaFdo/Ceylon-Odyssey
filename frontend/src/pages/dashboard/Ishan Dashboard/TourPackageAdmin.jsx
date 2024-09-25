@@ -35,6 +35,6 @@ const AdminTourPackage = () => {
         </main>
       </div>
     );
-  };
+};
   
-  export default AdminTourPackage;
+export default AdminTourPackage;

@@ -4,6 +4,7 @@ import jsPDF from 'jspdf';
 import Navbar from '../../components/Navbar/Navbar';
 import AddIcon from '../../assets/Ishan/add-button.png';
 import removeIcon from '../../assets/Ishan/removeBtnImg.png';
+import {imgData} from './PdfImg'
 
 const QuotationForm = () => {
 
@@ -122,13 +123,12 @@ const QuotationForm = () => {
     };
 
       
-    const generatePdf = () => {
+    const generatePdf = async () => {
         const doc = new jsPDF();
     
         const pageWidth = doc.internal.pageSize.getWidth();
         const pageHeight = doc.internal.pageSize.getHeight();
-
-        const imgData = '';
+        
         const imgWidth = 156;
         const imgHeight = 200;
         const xPos = (pageWidth - imgWidth) / 2;
@@ -323,7 +323,7 @@ const QuotationForm = () => {
                                 type="button" 
                                 onClick={() => removeEquipmentRow(index)} 
                                 className="ml-2">
-                                <img src={removeIcon} alt="remove" className="h-10 w-10" />
+                                <img src={removeIcon} alt="remove" className="h-10 w-11" />
                             </button>
                         </div>
 

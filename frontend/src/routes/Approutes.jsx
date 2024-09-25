@@ -5,11 +5,14 @@ import QuotationForm from "../pages/IshanFrontend/QuotationForm";
 import AdminTourPackage from "../pages/dashboard/Ishan Dashboard/TourPackageAdmin";
 import AdminCreateTour from "../pages/dashboard/Ishan Dashboard/CreateTourDashboard"
 import AdminUpdateTour from "../pages/dashboard/Ishan Dashboard/UpdatePackageDashboard"
+import Landing from "../pages/landing/Home";
 
 function AppRoutes() {
     return (
         <Router>
             <Routes>
+                <Route path="/" element={<Landing />} />
+
                 <Route path="/tour-packages" element={<TourPackageUser />} />
                 <Route path="/tour-packages/:id" element={<IndivudualPackage />} />
                 <Route path="/quotationForm" element={<QuotationForm />} />

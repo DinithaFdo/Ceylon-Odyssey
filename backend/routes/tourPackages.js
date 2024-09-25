@@ -34,6 +34,7 @@ var upload = multer({
 
 router.post('/AddTPackage', upload, async (req, res) => {
     try {
+
         const existingPackage = await TourPackage.findOne({ packageId: req.body.packageId });
         if (existingPackage) {
             deleteImage(req.file.filename);
@@ -90,10 +91,10 @@ router.put("/update/:id", upload, async(req, res) => {
     
     try {
         const updatedPackage = await TourPackage.findByIdAndUpdate(fetchPackageID, updatePackage, { new: true });
-        res.status(200).send({status: "Package updated!", package: updatedPackage});
+        res.status(200).send({message: "Package Updated Successfully!", package: updatedPackage});
     }catch(err) {
         console.log(err);
-        res.status(500).send({status: "Error with updating data", error: err.message});
+        res.status(500).send({message: "Error with Updating Package", error: err.message});
     };
 
 });

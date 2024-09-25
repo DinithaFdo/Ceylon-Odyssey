@@ -15,7 +15,6 @@ app.use(bodyParser.json());
 
 app.use('/TourPackageImages', express.static(path.join(__dirname, 'TourPackageImages')));
 
-
 const PORT = process.env.PORT || 5000;
 
 const tourPackageRouter = require('./routes/tourPackages.js');
