@@ -128,7 +128,7 @@ const QuotationForm = () => {
         const pageWidth = doc.internal.pageSize.getWidth();
         const pageHeight = doc.internal.pageSize.getHeight();
 
-        /*const imgData = '';
+        const imgData = '';
         const imgWidth = 156;
         const imgHeight = 200;
         const xPos = (pageWidth - imgWidth) / 2;
@@ -136,7 +136,7 @@ const QuotationForm = () => {
         doc.setGState(new doc.GState({ opacity: 0.5 }));
         doc.addImage(imgData, 'png', xPos, yPos, imgWidth, imgHeight);
 
-        doc.setGState(new doc.GState({ opacity: 1.0 })); // Reset opacity*/
+        doc.setGState(new doc.GState({ opacity: 1.0 })); // Reset opacity
         
         doc.rect(10, 10, pageWidth - 20, pageHeight - 20);
     
@@ -348,7 +348,7 @@ const QuotationForm = () => {
                             className="w-auto p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white border-none text-right" disabled />
                     </div>
 
-                    <div className='pt-3 flex justify-end items-center x-2 text-xl'>
+                    <div className='pt-3 flex justify-end items-center x-2 text-xl pb-8'>
                         <label className="font-medium">Total price (LKR)</label>
                         <input
                             type="number"
@@ -358,7 +358,7 @@ const QuotationForm = () => {
                     </div>
 
                     {/*Download button*/}
-                    <div className="mt-10 flex justify-end">
+                    <div className="mt-10 flex justify-end pb-5">
                         <button
                             type="submit"
                             className="w-full md:w-auto px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">

@@ -13,19 +13,20 @@ const TourPackageUser = () => {
     const [filteredPackages, setFilteredPackages] = useState([]);
 
     useEffect(() => {
-        axios.get('http://localhost:5000/tourPackage/')
-            .then(res => {
-                console.log(res.data)
-
+        const fetchTourPackages = async () => {
+            try {
+                const res = await axios.get('http://localhost:5000/tourPackage/');
+                console.log(res.data);
                 setTourPackages(res.data);
                 setFilteredPackages(res.data);
-
-            })
-            .catch(err => {
+            } catch (err) {
                 console.log(err);
-            });
-
+            }
+        };
+    
+        fetchTourPackages();
     }, []);
+    
 
     useEffect(() => {
         const lowerCaseQuery = searchQuery.toLowerCase();

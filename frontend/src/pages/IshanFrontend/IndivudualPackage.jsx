@@ -9,14 +9,18 @@ const IndivudualPackage = () => {
     const [tourPackage, setTourPackage] = useState({});
 
     useEffect(() => {
-        if(!id) {
-            return;
+        const fetchIndividualPackage = async () => {
+            if(!id) {
+                return;
+            }
+            axios.get(`http://localhost:5000/tourPackage/get/${id}`).then((res) => {
+                setTourPackage(res.data.package);
+            }).catch((err) => {
+                console.log(err);
+            });
         }
-        axios.get(`http://localhost:5000/tourPackage/get/${id}`).then((res) => {
-            setTourPackage(res.data.package);
-        }).catch((err) => {
-            console.log(err);
-        });
+        fetchIndividualPackage();
+        
     }, [id]);
 
 
