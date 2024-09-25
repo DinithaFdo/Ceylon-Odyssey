@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import logo from "../../assets/image.png";
 
 const Navbar = () => {
   return (
@@ -6,6 +7,7 @@ const Navbar = () => {
       <div className="container mx-auto flex items-center justify-between p-4">
        
         <div className="flex items-center">
+          <img src={logo} alt="Ceylon Odyssey" className="w-12 h-12" />
           <span className="text-2xl font-bold text-gray-900">Ceylon Odyssey</span>
         </div>
 
