@@ -144,51 +144,51 @@ router.get('/report', async (req, res) => {
         res.setHeader('Content-Disposition', 'attachment; filename="' + filename + '"');
         res.setHeader('Content-Type', 'application/pdf');
 
-        // Pipe the document to the response
+        
         pdfDoc.pipe(res);
 
-        // Add website logo
+        
         const logoPath = path.join(__dirname, '/logo.png');
         pdfDoc.image(logoPath, { fit: [100, 100], align: 'center' });
 
-        // Add title for the report
+        
         pdfDoc.moveDown(2);
         pdfDoc.fontSize(20).text('Low Stock Equipment Report', { align: 'center' });
         pdfDoc.moveDown(2);
 
-        // Draw the top horizontal line
+        
         pdfDoc.moveTo(50, pdfDoc.y).lineTo(550, pdfDoc.y).stroke();
         pdfDoc.moveDown(0.2);
         
 
-        // Set up table header with fixed positions
+        
         pdfDoc.fontSize(12);
 
-        // Adjust Name column to be slightly lower by adding more to Y
-        pdfDoc.text('Name', 80, pdfDoc.y + 5); // Further lowered by adjusting Y
+        
+        pdfDoc.text('Name', 80, pdfDoc.y + 5); 
 
-        // Adjust Quantity column to stay as is
+        
         pdfDoc.text('Quantity', 350, pdfDoc.y - 6);
         pdfDoc.moveDown();
 
-        // Draw a horizontal line after the headers
+        
         pdfDoc.moveTo(50, pdfDoc.y).lineTo(550, pdfDoc.y).stroke();
         pdfDoc.moveDown(0.2);
 
-        // Add table rows with equipment data
+        
         lowStockEquipment.forEach(item => {
-            // Adjust Name to be slightly lower
-            pdfDoc.text(item.equipmentName, 50, pdfDoc.y + 5); // Lower the Name line more
+            
+            pdfDoc.text(item.equipmentName, 50, pdfDoc.y + 5); 
 
-            // Align Quantity
+            
             pdfDoc.text(item.equipmentQuantity.toString(), 370, pdfDoc.y - 10);
             pdfDoc.moveDown();
         });
 
-        // Draw a final horizontal line at the bottom of the table
+        
         pdfDoc.moveTo(50, pdfDoc.y).lineTo(550, pdfDoc.y).stroke();
 
-        // End the document
+        
         pdfDoc.end();
     } catch (error) {
         console.error(error);
