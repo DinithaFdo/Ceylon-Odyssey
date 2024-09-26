@@ -59,11 +59,13 @@ const AddTourPackage = () =>{
                 }, 2000);
 
             }).catch((err) => {
-                toast.error('There was an error Adding the Tour Package');
-
-                let errorMessage = 'An unexpected error occurred.';
+                
                 if (err.response.status === 400) {
-                    errorMessage = 'Package ID already exists. Please use a different ID.';
+                    let errorMessage = 'Package ID already exists. Please use a different ID.';
+                    toast.error(errorMessage);
+                }else {
+                    toast.error('Failed to add Tour Package. Please try again later.');
+
                 }
             });
 

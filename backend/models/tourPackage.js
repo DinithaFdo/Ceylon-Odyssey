@@ -5,7 +5,7 @@ const tourPackageSchema = new Schema({
     packageId: {
         type: String,
         required: [true, "Tour Package ID is required!"],
-        unique: true
+        unique: [true, "Tour Package ID is Alredy Exists!"],
     },
 
     package_Title: {

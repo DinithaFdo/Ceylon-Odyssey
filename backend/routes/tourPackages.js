@@ -99,30 +99,28 @@ router.put("/update/:id", upload, async(req, res) => {
 
 });
 
-router.route("/delete/:id").delete(async(req, res) => {
+router.route("/delete/:id").delete(async (req, res) => {
     
     let fetchPackageID = req.params.id;
-    
-    if (fetchPackageID.pImage) {
-        const imagePath = path.join(__dirname, '..', 'TourPackageImages', fetchPackageID.pImage);
-        
-        fs.access(imagePath, fs.constants.F_OK, (err) => {
-            if (!err) {
-                fs.unlink(imagePath, (unlinkErr) => {
-                    if (unlinkErr) console.error('Error deleting image:', unlinkErr);
-                });
-            }
-        });
-    }
 
-    await TourPackage.findByIdAndDelete(fetchPackageID)
-        .then(() => {
-            res.status(200).send({status: "Package deleted!"});
-    }).catch(err => {
+    try {
+        const packageToDelete = await TourPackage.findById(fetchPackageID);
+
+        if (!packageToDelete) {
+            return res.status(404).send({ status: "Package not found!" });
+        }
+
+        if (packageToDelete.pImage) {
+            deleteImage(packageToDelete.pImage);
+        }
+
+        await TourPackage.findByIdAndDelete(fetchPackageID);
+        res.status(200).send({ status: "Package deleted!" });
+
+    } catch (err) {
         console.log(err.message);
-        res.status(500).send({status: "Error with deleting package", error: err.message});
-    });
-    
+        res.status(500).send({ status: "Error with deleting package", error: err.message });
+    }
 });
 
 router.route("/get/:id").get(async(req, res) => {
