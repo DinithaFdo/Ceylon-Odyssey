@@ -35,14 +35,14 @@ export default function EquipmentUserView() {
     }, [searchQuery, equipmentType, equipmentList]);
 
     return ( 
-            
+
         <div>      
         <div className="container mx-auto pl-10 pr-10 pb-8">
             <div className="pb-10">
                 <Navbar />
             </div>
 
-            {/* Search Bar */}
+            
             <div className="search-bar pt-10 mt-10 flex justify-center">
                 <input
                     type="text"
@@ -53,7 +53,6 @@ export default function EquipmentUserView() {
                 />
             </div>
 
-            {/* Dropdown for filtering by equipment type */}
             <div className="pt-10 flex justify-center">
                 <select
                     className="w-1/4 p-2 rounded-lg border border-gray-300"
@@ -68,7 +67,7 @@ export default function EquipmentUserView() {
                 </select>
             </div>
 
-            {/* Equipment List */}
+            
             <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-14">
                 {filteredEquipment.length > 0 ? (
                     filteredEquipment.map((equipment) => (
