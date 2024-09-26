@@ -24,6 +24,14 @@ var upload = multer({
     storage: storage
 }).single("equipmentImage");
 
+function deleteImage(filePath) {
+    fs.unlink(path.join(__dirname, '..', 'EquipmentImages', filePath), (err) => {
+        if (err) {
+            console.error('Failed to delete the file:', err);
+        }
+    });
+}
+
 
 router.post('/add', upload, async (req, res) => {
     try {
@@ -88,13 +96,25 @@ router.route("/delete/:id").delete(async(req, res) =>{
 
     let fetchequipmentID = req.params.id;
 
-    await Equipment.findByIdAndDelete(fetchequipmentID)
-    .then(() => {
-        res.status(200).send({status: "Equipment deleted"});
-    }).catch((err) => {
+   
+    try {
+        const equipmentToDelete = await Equipment.findById(fetchequipmentID);
+
+        if (!equipmentToDelete) {
+            return res.status(404).send({ status: "Equipment not found!" });
+        }
+
+        if (equipmentToDelete.equipmentImage) {
+            deleteImage(equipmentToDelete.equipmentImage);
+        }
+
+        await Equipment.findByIdAndDelete(fetchequipmentID);
+        res.status(200).send({ status: "Equipment deleted!" });
+
+    } catch (err) {
         console.log(err.message);
         res.status(500).send({status: "Error with deleting Equipment", error: err.message});
-    });
+    }
 });
 
 router.route("/get/:id").get(async(req, res) => {
