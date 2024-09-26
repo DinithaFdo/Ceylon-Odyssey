@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import Navbar from "../../components/Navbar/Navbar";
+import Footer from "../../components/Footer/Footer";
 
 export default function EquipmentUserView() {
     const [equipmentList, setEquipmentList] = useState([]);
@@ -34,6 +35,7 @@ export default function EquipmentUserView() {
     }, [searchQuery, equipmentType, equipmentList]);
 
     return (
+        <div>
         <div className="container mx-auto pl-10 pr-10 pb-8">
             <div className="pb-10">
                 <Navbar />
@@ -87,6 +89,9 @@ export default function EquipmentUserView() {
                     <h1 className="text-center col-span-full">No equipment available</h1>
                 )}
             </div>
+            
+        </div>
+        <Footer/>
         </div>
     );
 }

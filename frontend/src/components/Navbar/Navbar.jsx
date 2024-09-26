@@ -6,9 +6,10 @@ const Navbar = () => {
     <nav className="fixed top-5 left-10 right-10 bg-white shadow-lg rounded-full z-50" >
       <div className="container mx-auto flex items-center justify-between p-4">
        
-        <div className="flex items-center">
+        <div className="flex items-center"><Link to="/" className="flex items-center space-x-2">
           <img src={logo} alt="Ceylon Odyssey" className="w-12 h-12" />
           <span className="text-2xl font-bold text-gray-900">Ceylon Odyssey</span>
+          </Link>
         </div>
 
        

@@ -67,7 +67,8 @@ const Layout = () => {
                     </p>
                     <a
                       href="#book-now"
-                      className="inline-block bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600 transition duration-300"
+                      className="inline-block text-black px-4 py-2 rounded-full hover:bg-blue-600 transition duration-300"
+                      style={{ backgroundColor: "#fdba74" }}
                     >
                       Learn More
                     </a>
