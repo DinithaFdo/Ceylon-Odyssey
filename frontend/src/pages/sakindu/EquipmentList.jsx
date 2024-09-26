@@ -34,8 +34,9 @@ export default function EquipmentUserView() {
         setFilteredEquipment(filtered);
     }, [searchQuery, equipmentType, equipmentList]);
 
-    return (
-        <div>
+    return ( 
+            
+        <div>      
         <div className="container mx-auto pl-10 pr-10 pb-8">
             <div className="pb-10">
                 <Navbar />
