@@ -11,7 +11,7 @@ function AddEquipment() {
   const [equipmentPrice, setEquipmentPrice] = useState("");
   const [equipmentQuantity, setEquipmentQuantity] = useState(50);
   const [errors, setErrors] = useState({});
-  const [successMessage, setSuccessMessage] = useState(''); // Success message state
+  const [successMessage, setSuccessMessage] = useState(''); 
 
   function addEquipment(e) {
     e.preventDefault();

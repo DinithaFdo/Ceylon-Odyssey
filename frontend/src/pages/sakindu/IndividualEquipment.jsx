@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from 'axios';
-import Navbar from "../../components/Navbar/Navbar"; // Import your Navbar component
+import Navbar from "../../components/Navbar/Navbar"; 
 
 export default function IndividualEquipment() {
     const { id } = useParams();
