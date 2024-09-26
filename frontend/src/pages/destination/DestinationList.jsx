@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { FaSearch } from 'react-icons/fa';
 import Navbar from '../../components/Navbar/Navbar';
 import Footer from '../../components/Footer/Footer';
 
@@ -75,14 +76,15 @@ export default function DestinationList() {
 
             <main className="flex-grow pt-16 px-4 md:px-8 lg:px-16">
                 <div className="flex flex-wrap gap-4 mb-4">
-                    <div className="flex-1">
+                    <div className="flex-1 relative">
                         <input 
                             type="text" 
                             placeholder="Search destinations..." 
-                            className="w-full p-2 border border-gray-300 rounded-lg"
+                            className="w-full p-2 pl-10 border border-gray-300 rounded-lg"
                             value={searchTerm}
                             onChange={handleSearchChange}
                         />
+                        <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                     </div>
                     <div className="flex-1 flex gap-4">
                         <select 
