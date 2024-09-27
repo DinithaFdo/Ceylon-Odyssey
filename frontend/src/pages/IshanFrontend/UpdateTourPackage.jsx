@@ -73,7 +73,7 @@ const UpdateTourPackage = () => {
                 toast.success('Tour Package Updated Successfully!');
 
                 setTimeout(() => {
-                    navigate('/TourPackage-dashboard');
+                    navigate('/dashboard');
                 }, 2000);
                 
             }).catch((err) => {

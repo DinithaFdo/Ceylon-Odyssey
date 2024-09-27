@@ -137,7 +137,7 @@ const AllTourPackages = () => {
 
                                     <div className="flex space-x-4 mt-4">
                                         <Link className="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition duration-300 ease-in-out flex items-center justify-center w-28 h-10" 
-                                            to={`/TourPackage-dashboard/manageTourPackages/${tPackage._id}`} state={{ packageToEdit : tPackage }}>
+                                            to={`/dashboard/manageTourPackages/${tPackage._id}`} state={{ packageToEdit : tPackage }}>
                                             Update
                                         </Link>
                                         

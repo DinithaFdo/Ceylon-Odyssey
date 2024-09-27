@@ -11,8 +11,6 @@ const AdminUpdateTour = () => {
         </div>
 
         <nav className="flex-1 px-2 py-4 space-y-2">
-          <a href="/TourPackage-dashboard" className="block px-4 py-2 bg-gray-700 rounded hover:bg-gray-600">Manage TourPackages</a>
-          <a href="/TourPackage-dashboard/AddTPackage" className="block px-4 py-2 hover:bg-gray-700">Add TourPackages</a>
 
         </nav>
 

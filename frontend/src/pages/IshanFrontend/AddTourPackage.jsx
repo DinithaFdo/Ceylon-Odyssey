@@ -55,7 +55,7 @@ const AddTourPackage = () =>{
                 toast.success('Tour Package Added Successfully!!');
 
                 setTimeout(() => {
-                    navigate('/TourPackage-dashboard');
+                    navigate('/dashboard');
                 }, 2000);
 
             }).catch((err) => {
