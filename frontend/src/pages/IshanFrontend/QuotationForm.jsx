@@ -130,10 +130,10 @@ const QuotationForm = () => {
         const pageHeight = doc.internal.pageSize.getHeight();
         
         const imgWidth = 156;
-        const imgHeight = 200;
+        const imgHeight = 46;
         const xPos = (pageWidth - imgWidth) / 2;
         const yPos = (pageHeight - imgHeight) / 2;
-        doc.setGState(new doc.GState({ opacity: 0.5 }));
+        doc.setGState(new doc.GState({ opacity: 0.3 }));
         doc.addImage(imgData, 'png', xPos, yPos, imgWidth, imgHeight);
 
         doc.setGState(new doc.GState({ opacity: 1.0 })); // Reset opacity
