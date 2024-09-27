@@ -1,120 +1,126 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import axios from 'axios';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-export default function UpdateBlog() {
+export default function UpdateBlogForm() {
     const { id } = useParams();
-
-    const [values, setValues] = useState({
-        id: id,
+    const [blog, setBlog] = useState({
         title: '',
-        content: '',
         author: '',
-        image: null // Set to null initially
+        content: '',
+        image: '',
     });
 
+    const [loading, setLoading] = useState(true);
+
     useEffect(() => {
-        // Fetch blog data using the blog ID
+        if (!id) {
+            return;
+        }
+
+        // Fetch the blog data by id
         axios.get(`http://localhost:5000/blog/get/${id}`)
-            .then((response) => {
-                const blogData = response.data.blog;
-                setValues({
-                    ...values, // Keep other fields in case they're already updated
-                    title: blogData.title,
-                    content: blogData.content,
-                    author: blogData.author,
-                    image: blogData.image // Set image URL
-                });
+            .then((res) => {
+                setBlog(res.data); // Set the blog data to the state
+                setLoading(false);  // Set loading to false after data is loaded
             })
             .catch((err) => {
-                console.error('Error fetching blog:', err);
+                console.log(err);
+                setLoading(false);
             });
     }, [id]);
 
-    const navigate = useNavigate();
-
-    const updateBlog = (e) => {
-        e.preventDefault();
-
-        const formData = new FormData();
-        Object.keys(values).forEach(key => {
-            if (key === 'image' && values[key] instanceof File) {
-                formData.append(key, values[key]);
-            } else if (key !== 'image') {
-                formData.append(key, values[key]);
-            }
-        });
-
-        axios.put(`http://localhost:5000/blog/update/${id}`, formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }
-        }).then((response) => {
-            alert("Blog Updated Successfully");
-            navigate('/blog-list');
-        }).catch((err) => {
-            console.error('Error:', err);
-        });
+    // Handle input changes
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setBlog((prevBlog) => ({
+            ...prevBlog,
+            [name]: value,
+        }));
     };
 
+    const Navigate = useNavigate();
+
+    // Handle form submission
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        // Update the blog data with the new values
+        axios.put(`http://localhost:5000/blog/update/${id}`, blog)
+            .then((res) => {
+                alert('Blog updated successfully!');
+                Navigate('/dashboard'); // Redirect to the blog list page
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
+
+    // Wait for the blog data to load before rendering the form
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+
     return (
-        <form onSubmit={updateBlog} encType="multipart/form-data" className="max-w-4xl p-6 mx-auto bg-gray-700 rounded-md shadow-md dark:bg-gray-800 mt-20" >
-            <h1 className="text-3xl font-bold mb-7 text-white">Update Blog</h1>
-
-            <div className="grid grid-cols-2 gap-8">
-                <div className="mb-8">
-                    <label htmlFor="title" className="block mb-2 text-l font-medium text-white dark:text-white">Blog Title</label>
+        <div className="max-w-3xl mx-auto mt-10">
+            <h1 className="text-3xl font-bold mb-6">Update Blog</h1>
+            <form onSubmit={handleSubmit} className="space-y-6">
+                <div>
+                    <label className="block text-sm font-medium text-gray-700">Title</label>
                     <input
                         type="text"
-                        id="title"
-                        className="text-base bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        value={values.title}
-                        onChange={(e) => setValues({ ...values, title: e.target.value })}
+                        name="title"
+                        value={blog.title} // Set the value to the blog title
+                        onChange={handleInputChange}
+                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                         required
                     />
                 </div>
 
-                <div className="mb-8">
-                    <label htmlFor="author" className="block mb-2 text-l font-medium text-white dark:text-white">Author</label>
+                <div>
+                    <label className="block text-sm font-medium text-gray-700">Author</label>
                     <input
                         type="text"
-                        id="author"
-                        className="text-base bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        value={values.author}
-                        onChange={(e) => setValues({ ...values, author: e.target.value })}
+                        name="author"
+                        value={blog.author} // Set the value to the blog author
+                        onChange={handleInputChange}
+                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                         required
                     />
                 </div>
 
-                <div className="col-span-2 mb-8">
-                    <label htmlFor="content" className="block mb-2 text-l font-medium text-white dark:text-white">Blog Content</label>
+                <div>
+                    <label className="block text-sm font-medium text-gray-700">Content</label>
                     <textarea
-                        id="content"
-                        className="text-base bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        name="content"
+                        value={blog.content} // Set the value to the blog content
+                        onChange={handleInputChange}
+                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                         rows="8"
-                        value={values.content}
-                        onChange={(e) => setValues({ ...values, content: e.target.value })}
                         required
                     />
                 </div>
 
-                <div className="mb-8">
-                    <label className="block mb-2 text-l font-medium text-white dark:text-white" htmlFor="image">Upload Image</label>
-                    {values.image && (
-                        <img src={values.image} alt="Blog" className="mb-4 max-h-32" />
-                    )}
+                <div>
+                    <label className="block text-sm font-medium text-gray-700">Image URL</label>
                     <input
+                        type="text"
                         name="image"
-                        id="image"
-                        type="file"
-                        onChange={(e) => setValues({ ...values, image: e.target.files[0] })}
+                        value={blog.image} // Set the value to the blog image
+                        onChange={handleInputChange}
+                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                     />
                 </div>
-            </div>
 
-            <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">
-                Update Blog
-            </button>
-        </form>
+                <div className="text-right">
+                    <button
+                        type="submit"
+                        className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg"
+                    >
+                        Update Blog
+                    </button>
+                </div>
+            </form>
+        </div>
     );
 }

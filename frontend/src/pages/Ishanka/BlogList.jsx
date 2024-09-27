@@ -52,7 +52,7 @@ function BlogList() {
               <div className="flex-1">
                 <h2 className="text-2xl font-semibold text-gray-800 dark:text-white">{blog.title}</h2>
                 <p className="text-gray-600 dark:text-gray-300">Author: {blog.author}</p>
-                <p className="text-gray-600 dark:text-gray-400 mt-2 line-clamp-3">{blog.content.substring(0, 150)}...</p>
+                <p className="text-gray-600 dark:text-gray-400 mt-2 line-clamp-3">{blog.content.substring(0, 20)}...</p>
               </div>
               <div className="flex items-center space-x-4 ml-4">
                 <button
