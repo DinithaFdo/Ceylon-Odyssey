@@ -151,8 +151,10 @@ const QuotationForm = () => {
 
     
         const packageName = tourPackages.find(pkg => pkg._id === selectedPackage)?.package_Title || 'No packages';
+        const wrappedPackageName = doc.splitTextToSize(packageName, 70);
+
         doc.setFontSize(12);
-        doc.text(packageName, 20, 60);
+        doc.text(wrappedPackageName, 20, 60);
         doc.text(`${numPeople}`, 100, 60);
         doc.text(`${pPrice.toFixed(2)}`, 173, 60); 
         

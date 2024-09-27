@@ -104,27 +104,27 @@ const TourPackageUser = () => {
                                     
                                     <div key={index} className="bg-white shadow-lg rounded-2xl p-4 flex flex-col items-center">
 
-                                    <h1 className="text-xl font-semibold mb-4">{advenPackage.package_Title}</h1>
+                                        <h1 className="text-xl font-semibold mb-4">{advenPackage.package_Title}</h1>
 
-                                    <div className="relative w-full h-50 mb-4 overflow-hidden rounded-2xl">
-                                        <img 
-                                            className="w-full h-full object-cover" 
-                                            src={`http://localhost:5000/TourPackageImages/${advenPackage.pImage}`} 
-                                            alt="Tour package image"
-                                        />
-                                    </div>
+                                        <div className="relative w-full h-50 mb-4 overflow-hidden rounded-2xl">
+                                            <img 
+                                                className="w-full h-full object-cover" 
+                                                src={`http://localhost:5000/TourPackageImages/${advenPackage.pImage}`} 
+                                                alt="Tour package image"
+                                            />
+                                        </div>
 
-                                    <p className="text-black-700 text-lg mb-4">
-                                        Destinations: {advenPackage.pDestination}
-                                    </p>
+                                        <p className="text-black-700 text-lg mb-4">
+                                            Destinations: {advenPackage.pDestination}
+                                        </p>
 
-                                    <p className="text-black-700 text-lg mb-4">
-                                        Days: {advenPackage.pDays}
-                                    </p>
+                                        <p className="text-black-700 text-lg mb-4">
+                                            Days: {advenPackage.pDays}
+                                        </p>
 
-                                    <p className="text-black-700 text-lg">
-                                        LKR {(advenPackage.packagePrice).toFixed(2)} Per person
-                                    </p>
+                                        <p className="text-black-700 text-lg">
+                                            LKR {(advenPackage.packagePrice).toFixed(2)} Per person
+                                        </p>
                                     </div>
                                 </Link>
                                 
