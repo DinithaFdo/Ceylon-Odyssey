@@ -1,23 +1,18 @@
-const jwt = require('jsonwebtoken');
 const Wallet = require('../models/Wallet');
 
 exports.getWalletDetails = async (req, res) => {
-    const { token } = req.cookies;
+    try {
+        const userId = req.user.id;
 
-    if (token) {
-        try {
-            const decoded = jwt.verify(token, process.env.JWT_SECRET);
-            const wallet = await Wallet.findOne({ userId: decoded.id });
+        const wallet = await Wallet.findOne({ userId });
 
-            if (!wallet) {
-                return res.status(404).json({ message: 'Wallet not found' });
-            }
-
-            res.status(200).json(wallet);
-        } catch (err) {
-            res.status(403).json({ message: 'Forbidden' });
+        if (!wallet) {
+            return res.status(404).json({ message: 'Wallet not found' });
         }
-    } else {
-        res.status(401).json({ message: 'No token provided' });
+
+        res.status(200).json(wallet);
+    } catch (err) {
+        console.error(err);
+        res.status(403).json({ message: 'Forbidden' });
     }
 };

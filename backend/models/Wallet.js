@@ -1,23 +1,21 @@
 const mongoose = require('mongoose');
-const { Schema } = mongoose;
 
-const walletSchema = new Schema({
-  userId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true
-  },
-  walletBalance: {
-    type: Number,
-    default: 0
-  },
-  transactionHistory: [
-    {
-      amount: Number,
-      type: { type: String, enum: ['credit', 'debit'] },
-      date: { type: Date, default: Date.now }
-    }
-  ]
+const walletSchema = new mongoose.Schema({
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    walletBalance: { type: Number, required: true, default: 0 },
+    transactionHistory: [
+        {
+            amount: { type: Number, required: true },
+            type: {
+                type: String,
+                enum: ['Referral bonus', 'Welcome bonus', 'Purchase', 'Credit', 'Debit'],
+                required: true
+            },
+            date: { type: Date, required: true, default: Date.now },
+            status: { type: String, enum: ['Success', 'Failed'] }
+        }
+    ]
+    
 });
 
 const Wallet = mongoose.model('Wallet', walletSchema);

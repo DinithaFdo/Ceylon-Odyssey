@@ -5,7 +5,8 @@ const referralSchema = new mongoose.Schema({
     referredUserName: { type: String, required: true },
     referringUserId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     referringUserName: { type: String, required: true },
-    date: { type: Date, default: Date.now }
+    date: { type: Date, default: Date.now },
+    status: { type: String, enum: ['Success', 'Failed', 'Suspended'], required: true }
 });
 
 module.exports = mongoose.model('Referral', referralSchema);

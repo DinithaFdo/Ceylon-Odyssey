@@ -1,20 +1,44 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
-import Navbar from "../../components/Navbar/Navbar";
-import Footer from "../../components/Footer/Footer";
+import Lottie from "lottie-react";
+import loginAnimation from "../../assets/dinitha/login.json";
+import { useNavigate } from "react-router-dom"; 
+import AccountSuspendedPopup from '../../components/Suspended'; 
+import axios from 'axios';
 
 function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuspended, setIsSuspended] = useState(false);
+  const navigate = useNavigate(); 
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleLogout = async () => {
+    try {
+      localStorage.removeItem('token');
+      document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+      
+      await axios.post('http://localhost:5000/api/auth/signout', {}, { withCredentials: true });
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
+  };
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
-    setLoading(true);
-  
+    setIsSubmitting(true);
+
     const toastId = toast.loading('Signing in...');
   
     try {
@@ -23,8 +47,8 @@ function Login() {
         headers: {
           "Content-Type": "application/json",
         },
-        credentials: "include", 
-        body: JSON.stringify({ email, password })
+        credentials: "include",
+        body: JSON.stringify(formData),
       });
   
       const data = await response.json();
@@ -33,115 +57,119 @@ function Login() {
         throw new Error(data.message || "Login failed");
       }
   
-  
-      if (data.user.role === "admin") {
-        navigate("/admin-dashboard");
-      } else {
-        navigate("/profile");
+      if (data.user.status === 'suspended') {
+    
+        await handleLogout();
+        setIsSuspended(true);
+        toast.error('Your account has been suspended.', { id: toastId });
+        setIsSubmitting(false); 
+        return; 
       }
   
+      
       toast.success('Login successful!', { id: toastId });
+  
+      if (data.user.role === 'admin') {
+        navigate("/dashboard");
+      } else {
+        if (!data.user.completedOnboarding) {
+          navigate('/onboarding');
+        } else {
+          navigate("/");
+        }
+      }
+  
+      window.location.reload();
+  
     } catch (error) {
       toast.error(error.message || 'Something went wrong. Please try again.', { id: toastId });
     } finally {
-      setLoading(false);
+      setIsSubmitting(false);
     }
   };
 
+  const handleClosePopup = () => {
+    setIsSuspended(false); // Close the popup
+  };
+
   return (
-    <div className="flex flex-col min-h-screen">
-      <Navbar />
-
-      <main className="flex-1 flex items-center justify-center px-6 py-12 lg:px-8">
-        <Toaster />
-
-        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm shadow-lg p-6 bg-white rounded-lg mt-32">
-          <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-            <h2 className="pb-16 mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+    <div className="flex min-h-screen bg-gray-100">
+      <Toaster />
+      <div className="flex flex-1">
+        
+        {/* Right side with the login form */}
+        <div className="flex-1 flex justify-center items-center bg-white p-6 lg:py-12 lg:px-16">
+          <div className="w-full max-w-md space-y-6">
+            <h2 className="text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
               Sign in to your account
             </h2>
-          </div>
-
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
-                Email address
-              </label>
-              <div className="mt-2">
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  autoComplete="email"
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
-                />
-              </div>
-            </div>
-
-            <div>
-              <div className="flex items-center justify-between">
-                <label
-                  htmlFor="password"
-                  className="block text-sm font-medium leading-6 text-gray-900"
-                >
-                  Password
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div>
+                <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
+                  Email address
                 </label>
-                <div className="text-sm">
-                  <Link
-                    to="/forgot-password"
-                    className="font-semibold text-blue-600 hover:text-blue-500"
-                  >
-                    Forgot password?
-                  </Link>
+                <div className="mt-2">
+                  <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    required
+                    autoComplete="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6 p-5"
+                  />
                 </div>
               </div>
-              <div className="mt-2">
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  autoComplete="current-password"
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
-                />
+
+              <div>
+                <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
+                  Password
+                </label>
+                <div className="mt-2">
+                  <input
+                    id="password"
+                    name="password"
+                    type="password"
+                    required
+                    autoComplete="current-password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6 p-5"
+                  />
+                </div>
               </div>
-            </div>
 
-            <div>
-              <button
-                type="submit"
-                className={`flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm ${
-                  loading ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-500'
-                }`}
-                disabled={loading}
-              >
-                {loading ? "Signing in..." : "Sign in"}
-              </button>
-            </div>
-          </form>
+              <div>
+                <button
+                  type="submit"
+                  className={`flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm ${
+                    isSubmitting ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-500'
+                  }`}
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? 'Signing in...' : 'Sign in'}
+                </button>
+              </div>
+            </form>
 
-          <p className="mt-10 text-center text-sm text-gray-500">
-            Not a member?{" "}
-            <Link
-              to="/signup"
-              className="font-semibold leading-6 text-blue-600 hover:text-blue-500"
-            >
-              Register to use our services
-            </Link>
-          </p>
+            <p className="text-center text-sm text-gray-500">
+              Not a member?{' '}
+              <Link to="/signup" className="font-semibold leading-6 text-blue-600 hover:text-blue-500">
+                Create an account
+              </Link>
+            </p>
+          </div>
         </div>
-      </main>
 
-    
-      <Footer />
+        {/* Left side with Lottie animation */}
+        <div className="w-1/2 flex items-center justify-center bg-gray-50">
+          <Lottie animationData={loginAnimation} loop={true} className="w-3/4" />
+        </div>
+        
+      </div>
+
+      {isSuspended && <AccountSuspendedPopup onClose={handleClosePopup} />}
     </div>
   );
 }

@@ -1,32 +1,47 @@
+/* eslint-disable no-unused-vars */
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { jsPDF } from 'jspdf';
 import toast, { Toaster } from 'react-hot-toast';
 import Navbar from "../../components/Navbar/Navbar";
-import Footer from "../../components/Footer/Footer";
+import Banner from "../Dinitha/Banner";
+import ProfileDetails from './Profile/ProfileDetails';
+import WalletTransactions from './Profile/WalletTransactions';
+import ReferralDetails from './Profile/ReferralDetails';
+import Bookings from './Profile/Booking';
+import Spinner from '../../components/spinner/spinner'; 
+import generatePDF from './Profile/pdfGen';
 
 const ProfilePage = () => {
   const [activeTab, setActiveTab] = useState('account');
   const [userData, setUserData] = useState({
-    name: '',
+    firstName: '',
+    lastName: '',
     email: '',
     referralCode: '',
     walletBalance: 0,
     referredUsers: 0,
+    referringUserName: 'N/A',
   });
   const [walletTransactions, setWalletTransactions] = useState([]);
   const [referralLogs, setReferralLogs] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         const response = await axios.get('http://localhost:5000/api/user/profile', { withCredentials: true });
+        const { firstName, lastName, email, referralCode, referringUserName } = response.data;
+
+        const validReferringUserName = referringUserName === "undefined undefined" ? 'N/A' : referringUserName;
+
         setUserData(prevState => ({
           ...prevState,
-          name: response.data.name,
-          email: response.data.email,
-          referralCode: response.data.referralCode,
+          firstName,
+          lastName,
+          email,
+          referralCode,
+          referringUserName: validReferringUserName,
         }));
       } catch (error) {
         setError('Failed to fetch user data');
@@ -36,31 +51,35 @@ const ProfilePage = () => {
     const fetchWalletTransactions = async () => {
       try {
         const response = await axios.get('http://localhost:5000/api/user/wallet', { withCredentials: true });
-        setWalletTransactions(response.data.transactionHistory || []);
+        const { transactionHistory, walletBalance } = response.data;
+        setWalletTransactions(transactionHistory || []);
         setUserData(prevState => ({
           ...prevState,
-          walletBalance: response.data.walletBalance || 0,
+          walletBalance: walletBalance || 0,
         }));
       } catch (error) {
-        setError('Failed to fetch wallet transactions');
+        setWalletTransactions([]); 
+        setUserData(prevState => ({
+          ...prevState,
+          walletBalance: 0,
+        }));
       }
     };
 
     const fetchReferralLogs = async () => {
       try {
         const response = await axios.get('http://localhost:5000/api/user/referrals', { withCredentials: true });
-        setReferralLogs(response.data || []);
+        const referrals = response.data;
 
-        
-        const userId = response.data.userId;
-        const referredUsersCount = response.data.filter(referral => referral.referringUserId.toString() === userId.toString()).length;
+        setReferralLogs(referrals || []);
+        const referredUsersCount = referrals.length || 0;
 
         setUserData(prevState => ({
           ...prevState,
-          referredUsers: referredUsersCount || 0,
+          referredUsers: referredUsersCount,
         }));
       } catch (error) {
-        setError('Failed to fetch referral logs');
+        setReferralLogs([]);
         setUserData(prevState => ({
           ...prevState,
           referredUsers: 0,
@@ -68,9 +87,13 @@ const ProfilePage = () => {
       }
     };
 
-    fetchUserData();
-    fetchWalletTransactions();
-    fetchReferralLogs();
+    const fetchData = async () => {
+      setLoading(true); 
+      await Promise.all([fetchUserData(), fetchWalletTransactions(), fetchReferralLogs()]);
+      setLoading(false); 
+    };
+
+    fetchData();
   }, []);
 
   const shareReferralCode = () => {
@@ -79,36 +102,21 @@ const ProfilePage = () => {
     toast.success('Referral link copied to clipboard!');
   };
 
-  const generatePDF = (data, filename) => {
-    const doc = new jsPDF();
-    doc.text('Report', 10, 10);
-    let yPosition = 20;
-    data.forEach((item, index) => {
-      doc.text(`${index + 1}. ${JSON.stringify(item)}`, 10, yPosition);
-      yPosition += 10;
-      if (yPosition > 280) {
-        doc.addPage();
-        yPosition = 10;
-      }
-    });
-    doc.save(filename);
-  };
-
-  const handleDownloadWallet = () => {
-    generatePDF(walletTransactions, 'wallet-transactions.pdf');
+  const handleDownloadWallet = (filteredTransactions, startDate, endDate, selectedType) => {
+    generatePDF(filteredTransactions, 'wallet-transactions.pdf', 'wallet', `${userData.firstName} ${userData.lastName}`, startDate, endDate, selectedType);
   };
 
   const handleDownloadReferral = () => {
-    generatePDF(referralLogs, 'referral-logs.pdf');
+    generatePDF(referralLogs, 'referral-logs.pdf', 'referral', `${userData.firstName} ${userData.lastName}`);
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-100">
+    <div className="flex flex-col min-h-screen bg-gray-50">
       <Toaster />
       <Navbar />
       <div className="flex flex-1">
         <aside className="w-64 bg-white shadow-lg">
-          <div className="p-6">
+          <div className="p-6 mt-24">
             <h2 className="text-2xl font-bold text-gray-800 mb-8">Profile</h2>
             <nav>
               <ul>
@@ -127,132 +135,23 @@ const ProfilePage = () => {
           </div>
         </aside>
 
-        <main className="flex-1 p-6">
-          <div className="mb-8">
-            <h2 className="text-2xl font-bold text-gray-800">Dashboard</h2>
-            <div className="flex justify-between items-center mt-6">
-              <div className="bg-blue-100 text-blue-600 p-4 rounded-lg shadow-md">
-                <p className="text-lg font-semibold">Wallet Balance</p>
-                <p className="text-2xl">LKR {userData.walletBalance}</p>
-              </div>
-              <div className="bg-green-100 text-green-600 p-4 rounded-lg shadow-md">
-                <p className="text-lg font-semibold">Referred Users</p>
-                <p className="text-2xl">{userData.referredUsers}</p>
-              </div>
+        <main className="flex-1 p-6 mt-24">
+          {loading ? (
+            <div className="flex items-center justify-center h-full">
+              <Spinner /> 
             </div>
-          </div>
-
-          {error && <div className="text-red-600 mb-4">{error}</div>}
-
-          {activeTab === 'account' && (
-            <div>
-              <h3 className="text-xl font-semibold mb-4">Profile Details</h3>
-              <div className="bg-white p-6 rounded-lg shadow-md">
-                <p className="mb-4"><strong>Name:</strong> {userData.name}</p>
-                <p className="mb-4"><strong>Email:</strong> {userData.email}</p>
-              </div>
-            </div>
-          )}
-
-          {activeTab === 'wallet' && (
-            <div>
-              <h3 className="text-xl font-semibold mb-4">Wallet Transactions</h3>
-              <div className="bg-white p-6 rounded-lg shadow-md">
-                {walletTransactions.length > 0 ? (
-                  <div className="overflow-x-auto">
-                    <table className="min-w-full divide-y divide-gray-200">
-                      <thead className="bg-gray-50">
-                        <tr>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                        </tr>
-                      </thead>
-                      <tbody className="bg-white divide-y divide-gray-200">
-                        {walletTransactions.map((transaction, index) => (
-                          <tr key={index}>
-                            <td className="px-6 py-4 whitespace-nowrap">{new Date(transaction.date).toLocaleDateString()}</td>
-                            <td className="px-6 py-4 whitespace-nowrap">{transaction.type}</td>
-                            <td className="px-6 py-4 whitespace-nowrap">LKR {transaction.amount}</td>
-                            <td className="px-6 py-4 whitespace-nowrap">{transaction.status || 'Success'}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                ) : (
-                  <p>No transactions found.</p>
-                )}
-                <button 
-                  className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-                  onClick={handleDownloadWallet}
-                >
-                  Download Wallet Transactions as PDF
-                </button>
-              </div>
-            </div>
-          )}
-
-          {activeTab === 'referral' && (
-            <div>
-              <h3 className="text-xl font-semibold mb-4">Referral Details</h3>
-              <div className="bg-white p-6 rounded-lg shadow-md">
-                <p className="mb-4 text-lg font-semibold">Invite Your Friends and Earn Incentives</p>
-                <p className="mb-4 text-xl font-bold">Your Referral Code: <span className="text-blue-600">{userData.referralCode || 'Not generated yet'}</span></p>
-                <button 
-                  className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-                  onClick={shareReferralCode}
-                >
-                  Copy Referral Link
-                </button>
-                <h4 className="text-lg font-semibold mt-6 mb-4">Referral Logs</h4>
-                {referralLogs.length > 0 ? (
-                  <div className="overflow-x-auto">
-                    <table className="min-w-full divide-y divide-gray-200">
-                      <thead className="bg-gray-50">
-                        <tr>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Referred User</th>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                        </tr>
-                      </thead>
-                      <tbody className="bg-white divide-y divide-gray-200">
-                        {referralLogs.map((log, index) => (
-                          <tr key={index}>
-                            <td className="px-6 py-4 whitespace-nowrap">{new Date(log.date).toLocaleDateString()}</td>
-                            <td className="px-6 py-4 whitespace-nowrap">{log.referredUserName}</td>
-                            <td className="px-6 py-4 whitespace-nowrap">{log.status}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                ) : (
-                  <p>No referral logs found.</p>
-                )}
-                <button 
-                  className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-                  onClick={handleDownloadReferral}
-                >
-                  Download Referral Logs as PDF
-                </button>
-              </div>
-            </div>
-          )}
-
-          {activeTab === 'bookings' && (
-            <div>
-              <h3 className="text-xl font-semibold mb-4">Bookings</h3>
-              <div className="bg-white p-6 rounded-lg shadow-md">
-                {/* Booking details should be fetched and displayed here */}
-                <p>No bookings information available.</p>
-              </div>
-            </div>
+          ) : (
+            <>
+              {error && <div className="text-red-600 mb-4">{error}</div>}
+              {activeTab === 'account' && <ProfileDetails userData={userData} />}
+              {activeTab === 'wallet' && <WalletTransactions walletTransactions={walletTransactions} handleDownloadWallet={handleDownloadWallet} />}
+              {activeTab === 'referral' && <ReferralDetails referralLogs={referralLogs} userData={userData} shareReferralCode={shareReferralCode} handleDownloadReferral={handleDownloadReferral} />}
+              {activeTab === 'bookings' && <Bookings />}
+            </>
           )}
         </main>
       </div>
-      <Footer />
+      <Banner />
     </div>
   );
 };

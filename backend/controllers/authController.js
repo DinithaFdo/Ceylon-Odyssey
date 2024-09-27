@@ -8,6 +8,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const CookieParser = require('cookie-parser');
 const { v4: uuidv4 } = require('uuid');
+
 require('dotenv').config();
 
 const app = express();
@@ -17,21 +18,22 @@ app.use(CookieParser());
 const JWT_SECRET = process.env.JWT_SECRET;
 
 const registerUser = async (req, res) => {
-    const { name, email, password, referralCode } = req.body;
+    const { firstName, lastName, email, password, referralCode } = req.body;
 
     try {
-        if (!(email && password && name)) {
+        if (!(email && password && firstName && lastName)) {
             return res.status(400).json({ message: 'Please fill all fields' });
         }
 
-        const existingUser = await User.findOne({ email });
+        // Normalize the email to lowercase
+        const normalizedEmail = email.toLowerCase();
+        const existingUser = await User.findOne({ email: normalizedEmail });
         if (existingUser) {
             return res.status(400).json({ message: 'User already exists' });
         }
 
         let validReferralCode = null;
         if (referralCode) {
-            
             validReferralCode = await User.findOne({ referralCode });
             if (!validReferralCode) {
                 return res.status(400).json({ message: 'Referral code is not valid. Please check it again or register without the referral code.' });
@@ -42,77 +44,83 @@ const registerUser = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
 
         const newUser = new User({
-            name,
-            email,
+            firstName,
+            lastName,
+            email: normalizedEmail,
             password: hashedPassword,
-            referralCode: newReferralCode
+            referralCode: newReferralCode,
+            completedOnboarding: false
         });
 
         await newUser.save();
 
-        // Create a wallet for the new user
         const newWallet = new Wallet({
             userId: newUser._id,
             walletBalance: 0,
             transactionHistory: []
         });
 
-        await newWallet.save();
+        await newWallet.save(); 
 
         if (validReferralCode) {
-            // Update the wallets for both users
             const referringUserWallet = await Wallet.findOne({ userId: validReferralCode._id });
-            const newUserWallet = await Wallet.findOne({ userId: newUser._id });
+            if (referringUserWallet) {
+                const transactionAmount = 1000;
 
-            const transactionAmount = 1000;
+                referringUserWallet.walletBalance += transactionAmount;
+                referringUserWallet.transactionHistory.push({
+                    amount: transactionAmount,
+                    type: 'Referral bonus',
+                    date: new Date(),
+                    status: 'Success'
+                });
 
-            // Update referring user's wallet
-            referringUserWallet.walletBalance += transactionAmount;
-            referringUserWallet.transactionHistory.push({
-                amount: transactionAmount,
-                type: 'credit',
-                date: new Date()
-            });
-            await referringUserWallet.save();
+                await referringUserWallet.save();
 
-            // Update new user's wallet
-            newUserWallet.walletBalance += transactionAmount;
-            newUserWallet.transactionHistory.push({
-                amount: transactionAmount,
-                type: 'credit',
-                date: new Date()
-            });
-            await newUserWallet.save();
+                const transactionBonus = 1000;
+                newWallet.walletBalance += transactionBonus;
+                newWallet.transactionHistory.push({
+                    amount: transactionBonus,
+                    type: 'Welcome bonus',
+                    date: new Date(),
+                    status: 'Success'
+                });
 
-            // Create a referral record
-            const referral = new Referral({
-                referredUserId: newUser._id,
-                referredUserName: newUser.name,
-                referringUserId: validReferralCode._id,
-                referringUserName: validReferralCode.name,
-                date: new Date()
-            });
-            await referral.save();
+                await newWallet.save();
+
+                const referral = new Referral({
+                    referredUserId: newUser._id,
+                    referredUserName: `${newUser.firstName} ${newUser.lastName}`,
+                    referringUserId: validReferralCode._id,
+                    referringUserName: `${validReferralCode.firstName} ${validReferralCode.lastName}`,
+                    date: new Date(),
+                    status: 'Success'
+                });
+
+                await referral.save();
+            }
         }
 
-        const token = jwt.sign(
-            { id: newUser._id, role: newUser.role },
-            JWT_SECRET,
-            { expiresIn: '30d' }
-        );
-
-        newUser.password = undefined;
-
-        res.status(201).json({ 
-            message: 'User registered successfully',
-            user: newUser,
-            token,
-        });
+        generateTokenAndSetCookie(newUser, res);
 
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server error', error });
     }
+};
+
+const generateTokenAndSetCookie = (user, res) => {
+    const token = jwt.sign(
+        { id: user._id, role: user.role, completedOnboarding: user.completedOnboarding, status: user.status },
+        process.env.JWT_SECRET,
+        { expiresIn: '30d' }
+    );
+
+    res.cookie('token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production' })
+       .json({ 
+           user,
+           token,
+       });
 };
 
 const loginUser = async (req, res) => {
@@ -123,40 +131,21 @@ const loginUser = async (req, res) => {
             return res.status(400).json({ message: 'Please fill all fields' });
         }
 
-        console.log('Received email:', email);
-
-        const user = await User.findOne({ email });
-
-        console.log('Retrieved user:', user);
+        // Normalize the email to lowercase
+        const normalizedEmail = email.toLowerCase();
+        const user = await User.findOne({ email: normalizedEmail });
 
         if (!user) {
             return res.status(400).json({ message: 'No account is matching for this email' });
         }
 
-        console.log('Password provided:', password);
-        console.log('Stored hashed password:', user.password);
-
         const isMatch = await bcrypt.compare(password, user.password);
-
-        console.log('Password match:', isMatch);
 
         if (!isMatch) {
             return res.status(400).json({ message: 'Please re-check your password' });
         }
 
-        const token = jwt.sign(
-            { id: user._id, role: user.role },
-            process.env.JWT_SECRET,
-            { expiresIn: '30d' }
-        );
-
-        console.log('Generated token:', token);
-
-        user.password = undefined; 
-        
-        res.cookie('token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production' })
-           .status(201)
-           .json({ token, user });
+        generateTokenAndSetCookie(user, res);
 
     } catch (error) {
         console.error('Error during login:', error);
@@ -164,5 +153,9 @@ const loginUser = async (req, res) => {
     }
 };
 
+const logoutUser = async (req, res) => {
+    res.clearCookie('token');
+    res.status(200).json({ message: 'Logged out successfully' });
+}
 
-module.exports = { registerUser, loginUser };
+module.exports = { registerUser, loginUser, logoutUser };
