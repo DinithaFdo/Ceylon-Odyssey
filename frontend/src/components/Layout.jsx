@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import ReactPlayer from "react-player";
+
 import video from "../assets/test.mp4";
 const Layout = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

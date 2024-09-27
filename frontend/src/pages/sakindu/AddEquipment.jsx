@@ -55,7 +55,7 @@ function AddEquipment() {
         
         setTimeout(() => {
           setSuccessMessage('');
-        }, 3000);
+        }, 2000);
       })
       .catch((err) => {
         alert(err);
@@ -66,7 +66,7 @@ function AddEquipment() {
     
     <>
         {successMessage && (
-          <div className="mb-4 p-4 text-white bg-green-600 rounded-md text-center animate-bounce">
+          <div className="mb-4 p-4 text-white bg-green-600 rounded-md text-center ">
             {successMessage}
           </div>
         )}

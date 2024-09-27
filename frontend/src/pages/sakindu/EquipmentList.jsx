@@ -3,7 +3,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
-import Spinner from "../../components/Spinner/Spinner";
+import Spinner from "../../components/spinner/spinner";
 
 export default function EquipmentUserView() {
   const [equipmentList, setEquipmentList] = useState([]);
@@ -16,7 +16,7 @@ export default function EquipmentUserView() {
     useEffect(() => {
         const timer = setTimeout(() => {
             setLoading(false);
-        }, 2000); 
+        }, 1500); 
 
         return () => clearTimeout(timer);
     }, []);

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import toast, { Toaster } from "react-hot-toast";
 
 function AllEquipment() {
   const [equipment, setEquipment] = useState([]);
@@ -31,11 +32,11 @@ function AllEquipment() {
     if (confirmed) {
       try {
         await axios.delete(`http://localhost:5000/equipment/delete/${id}`);
-        alert("Equipment deleted successfully!");
+        toast.success('Equipment Deleted Successfully!');
         fetchEquipment();
       } catch (error) {
         console.error('Error deleting Equipment:', error);
-        alert('Equipment deletion failed.');
+        toast.error('Error Deleting Equipment');
       }
     }
   };
@@ -58,6 +59,8 @@ function AllEquipment() {
 
   return (
     <>
+    <div>
+                    <Toaster />
       <section className="max-w-4xl p-6 mx-auto bg-gray-700 rounded-md shadow-md dark:bg-gray-800 mt-20">
         
         <div className="flex justify-between items-center mb-4">
@@ -105,6 +108,7 @@ function AllEquipment() {
           ))}
         </div>
       </section>
+      </div>
     </>
   );
 }

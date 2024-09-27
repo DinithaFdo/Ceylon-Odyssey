@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
+import toast, { Toaster } from "react-hot-toast";
 
 export default function UpdateEquipment() {
     const { id } = useParams();
@@ -51,14 +52,19 @@ export default function UpdateEquipment() {
                 'Content-Type': 'multipart/form-data'
             }
         }).then((response) => {
-            alert("Equipment Updated Successfully");
-            navigate('/inventory');
+            toast.success('Equipment Updated Successfully!');
+           
+            
         }).catch((err) => {
+            toast.error('Error Updating Equipment');
             console.error('Error:', err);
         });
     };
 
     return (
+
+        <div>
+                    <Toaster />
         <form onSubmit={updateequipment} encType="multipart/form-data" className="max-w-4xl p-6 mx-auto bg-gray-700 rounded-md shadow-md dark:bg-gray-800 mt-20" >
             <h1 className="text-3xl font-bold mb-7 text-white">Update Equipment</h1>
 
@@ -117,5 +123,6 @@ export default function UpdateEquipment() {
 
             <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">Update Equipment</button>
         </form>
+        </div>
     );
 }

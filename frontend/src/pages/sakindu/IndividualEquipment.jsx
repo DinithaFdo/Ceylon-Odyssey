@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from 'axios';
 import Navbar from "../../components/Navbar/Navbar"; 
+import Footer from "../../components/Footer/Footer";
 
 export default function IndividualEquipment() {
     const { id } = useParams();
@@ -56,6 +57,7 @@ export default function IndividualEquipment() {
 
 
             </div>
+            <Footer />
         </div>
     );
 }
