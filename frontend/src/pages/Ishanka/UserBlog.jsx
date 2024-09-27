@@ -35,7 +35,7 @@ export default function TourismBlog() {
               <input
                 type="text"
                 placeholder="Search adventures..."
-                className="w-full py-2 px-4 pr-10 rounded-full text-sky-800 focus:outline-none focus:ring-2 focus:ring-sky-300 transition duration-300"
+                className="w-full py-2 px-4 pr-10 rounded-full text-black focus:outline-none focus:ring-2 focus:ring-sky-300 transition duration-300"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
