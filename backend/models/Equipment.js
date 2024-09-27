@@ -6,16 +6,20 @@ const EquipmentSchema = new Schema({
     
     equipmentId : {
         type : String,
-        required : true
+        required : true,
+        unique: true
     },
 
     equipmentName : {
         type : String,
-        required : true
+        required : true,
+        minlength: 3,
+        maxlength: 100
     },
 
     equipmentType : {
         type : String,
+        enum: ['Hiking', 'Luggage', 'Clothes', 'Toiletries'],
         required : true
     },
 
@@ -31,12 +35,15 @@ const EquipmentSchema = new Schema({
 
     equipmentPrice : {
         type : Number,
-        required : true
+        required : true,
+        min: 0
     },
 
     equipmentQuantity : {
         type : Number,
-        required : true
+        required : true,
+        min: 0,
+        integer: true
     },
 
 
