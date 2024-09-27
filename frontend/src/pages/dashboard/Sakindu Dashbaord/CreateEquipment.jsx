@@ -1,7 +1,13 @@
 import React, { useState } from 'react';
 import AddEquipment from '../../sakindu/AddEquipment';
 
+
+
+
 const AdminCreateEquipment = () => {
+
+
+  
   return (
     <div className="flex h-screen overflow-hidden">
       
@@ -27,11 +33,18 @@ const AdminCreateEquipment = () => {
             <h2 className="text-xl font-semibold text-gray-800">Welcome, Admin!</h2>
           </header>
 
+          
+
           <div>
             <AddEquipment/>
           </div>
+          
+          
+          
         </div>
+      
       </main>
+      
     </div>
   );
 };
