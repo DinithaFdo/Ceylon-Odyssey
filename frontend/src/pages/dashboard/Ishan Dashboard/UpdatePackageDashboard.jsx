@@ -1,4 +1,6 @@
 import UpdateTourPackage from "../../IshanFrontend/UpdateTourPackage";
+import backIcon from "../../../assets/Ishan/backIcon.png";
+import { Link } from "react-router-dom";
 
 const AdminUpdateTour = () => {
 
@@ -24,6 +26,14 @@ const AdminUpdateTour = () => {
         <header className="bg-white shadow p-4 rounded mb-4">
           <h2 className="text-xl font-semibold text-gray-800">Welcome, Admin!</h2>
         </header>
+
+        <Link to="/dashboard">
+          <button className="flex items-center text-black font-bold py-2 px-4 rounded hover:bg-blue-600">
+            <img src={backIcon} alt="Back Icon" className="w-6 h-6 mr-2" />
+                Go Back To Dashboard
+          </button>
+        </Link>
+
 
         <div>
           <UpdateTourPackage />

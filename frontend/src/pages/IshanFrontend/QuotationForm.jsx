@@ -147,6 +147,8 @@ const QuotationForm = () => {
         doc.text("Package Name", 25, 50);
         doc.text("Number of People", 95, 50);
         doc.text("Price (LKR) ", 170, 50);
+        doc.line(23, 52, 198, 52);
+
     
         const packageName = tourPackages.find(pkg => pkg._id === selectedPackage)?.package_Title || 'No packages';
         doc.setFontSize(12);
@@ -159,6 +161,7 @@ const QuotationForm = () => {
         doc.text("Equipment Name", 25, equipmentYPos);
         doc.text("Number of Items", 95, equipmentYPos);
         doc.text("Price (LKR)", 170, equipmentYPos);
+        doc.line(23, 102, 198, 102);
 
         equipmentList.forEach((equipmentItem, index) => {
             const eqName = equipment.find(eq => eq._id === equipmentItem.selectedEquipment)?.equipmentName || 'No Items';
