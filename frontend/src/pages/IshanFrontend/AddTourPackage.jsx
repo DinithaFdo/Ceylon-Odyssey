@@ -24,7 +24,6 @@ const AddTourPackage = () =>{
             packageId,
             package_Title,
             pCreateDate,
-            packageDes,
             packagePrice,
             pDestination,
             pDays,
@@ -115,7 +114,6 @@ const AddTourPackage = () =>{
                             onChange={(e) => {
                                 setPackageDes(e.target.value);
                             }} required></textarea>
-                            {errors.packageDes && <p className="text-red-500 text-xs mt-1">{errors.packageDes}</p>}
                         </div>
 
                         <div className="mb-8">

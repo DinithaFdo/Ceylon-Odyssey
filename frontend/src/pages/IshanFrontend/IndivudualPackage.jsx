@@ -58,14 +58,29 @@ const IndivudualPackage = () => {
                             />
                             
                             <div className="mt-6 md:mt-0 md:ml-8 pr-10 text-justify">
+
                                 <p className="text-lg mb-8"><strong>Package Category:</strong> {tourPackage.pCategory}</p>
-                                <p className="text-lg mb-8 break-words whitespace-normal"><strong>Description:<br/></strong> {tourPackage.packageDes}</p>
-                                <p className="text-lg mb-8"><strong>Included Destinations :</strong> {tourPackage.pDestination} days</p>
+
+                                <p className="text-lg mb-8 break-words whitespace-normal">
+                                    <strong>Description:<br /><br /> </strong>
+                                    {tourPackage.packageDes.split('\n').map((paragraph, index) => (
+                                        <span key={index}>
+                                            {paragraph}
+                                            <br />
+                                        </span>
+                                    ))}
+                                </p>
+
+                                <p className="text-lg mb-8"><strong>Included Destinations :</strong> {tourPackage.pDestination}</p>
+
                                 <p className="text-lg mb-8"><strong>Duration:</strong> {tourPackage.pDays} days</p>
+
                                 <p className="text-lg "><strong>Price:</strong> LKR {parseFloat(tourPackage.packagePrice).toFixed(2)} Per Person</p>
+
                                 <button className="bg-blue-600 hover:bg-red-400 text-white font-bold py-3 px-6 rounded-lg shadow-lg mt-4 float-right transition duration-300 ease-in-out">
                                     Book Now
                                 </button>
+                                
                             </div>
                             
                         </div>

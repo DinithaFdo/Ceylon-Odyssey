@@ -2,17 +2,12 @@ const UpdateValidations = (values) => {
     const errors = {};
 
     const tPackageTitlepattern = /^.{10,}$/;
-    const tPackageDescriptionpattern = /^.{100,}$/;
     const tPackagePricepattern = parseFloat(values.packagePrice);
     const tPackageDestinationpattern = /^[A-Za-z]+(?:[\s,]+[A-Za-z]+)*$/;
     const tPackageDayspattern = parseFloat(values.pDays);
 
     if (!tPackageTitlepattern.test(values.package_Title)) {
         errors.package_Title = "Tour Package Title must be at least 10 letters.";
-    }
-
-    if (!tPackageDescriptionpattern.test(values.packageDes)) {
-        errors.packageDes = "Tour Package Description must be at least 75 letters.";
     }
 
     if (isNaN(tPackagePricepattern) || tPackagePricepattern <= 0) {

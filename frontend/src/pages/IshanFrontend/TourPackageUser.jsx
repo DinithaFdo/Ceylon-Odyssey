@@ -216,7 +216,7 @@ const TourPackageUser = () => {
                                         </p>
                                     </div>
                                 </Link>
-                            ))):(<div className="text-center col-span-full">
+                            ))):(<div className="text-center col-span-full mb-10">
                                     <img 
                                         src={searchHandleImg}
                                         alt="No packages available" 

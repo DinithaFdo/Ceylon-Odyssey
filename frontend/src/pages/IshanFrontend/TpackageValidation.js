@@ -2,7 +2,6 @@ const TpackageValidation = (
     packageId,
     package_Title,
     pCreateDate,
-    packageDes,
     packagePrice,
     pDestination,
     pDays,
@@ -13,7 +12,6 @@ const TpackageValidation = (
     const tPackageIDpattern = /^CO\d{4}$/;
     const tPackageTitlepattern = /^.{10,}$/;
     const tPackageCreateDatepattern = new Date().toISOString().split('T')[0];
-    const tPackageDescriptionpattern = /^.{100,}$/;
     const tPackagePricepattern = parseFloat(packagePrice);
     const tPackageDestinationpattern = /^[A-Za-z]+(?:[\s,]+[A-Za-z]+)*$/;
     const tPackageDayspattern = parseFloat(pDays);
@@ -28,10 +26,6 @@ const TpackageValidation = (
 
     if (tPackageCreateDatepattern !== pCreateDate) {
         errors.pCreateDate = "Tour Package Create Date must be today's date";
-    }
-
-    if (!tPackageDescriptionpattern.test(packageDes)) {
-        errors.packageDes = "Tour Package Description must be at least 75 letters.";
     }
 
     if (isNaN(tPackagePricepattern) || tPackagePricepattern <= 0) {
