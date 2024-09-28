@@ -13,7 +13,7 @@ const Footer = () => {
               <h4 className="text-xl font-semibold mb-4">Quick Links</h4>
               <ul className="space-y-2">
                 {['About Us', 'FAQs', 'Terms & Conditions', 'Privacy Policy'].map((item) => (
-                  <li key={item}><a href="#" className="hover:text-orange-500 transition duration-300">{item}</a></li>
+                  <li key={item}><a href="/about" className="hover:text-orange-500 transition duration-300">{item}</a></li>
                 ))}
               </ul>
             </div>
