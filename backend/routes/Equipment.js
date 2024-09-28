@@ -1,20 +1,20 @@
 const router = require('express').Router();
-const equipment = require('../models/Equipment');
-let Equipment = require('../models/Equipment.js');
+const Equipment = require('../models/Equipment');
+const PDFDocument = require('pdfkit');
 const multer = require('multer');
 const express = require('express');
-const app = express();
 const cors = require('cors');
+const fs = require('fs');
+const path = require('path');
 
+const app = express();
 app.use(cors());
 app.use(express.json());
 
 const storage = multer.diskStorage({
-
-    destination: function(req, file, cb){
+    destination: function(req, file, cb) {
         cb(null, "./EquipmentImages");
     },
-   
     filename: function(req, file, cb) {
         cb(null, file.fieldname + "_" + Date.now() + "_" + file.originalname);
     }
@@ -23,6 +23,14 @@ const storage = multer.diskStorage({
 var upload = multer({
     storage: storage
 }).single("equipmentImage");
+
+function deleteImage(filePath) {
+    fs.unlink(path.join(__dirname, '..', 'EquipmentImages', filePath), (err) => {
+        if (err) {
+            console.error('Failed to delete the file:', err);
+        }
+    });
+}
 
 
 router.post('/add', upload, async (req, res) => {
@@ -52,55 +60,140 @@ router.route('/').get((req, res) => {
 });
 
 
-router.route("/update/:id").put(async(req, res) =>{
-
+router.route("/update/:id").put(upload, async (req, res) => {
     let fetchequipmentID = req.params.id;
-    const {equipmentId, equipmentName, equipmentType, equipmentDescription, equipmentImage, equipmentPrice, equipmentQuantity} = req.body;
+    const { equipmentName, equipmentType, equipmentDescription, equipmentPrice, equipmentQuantity } = req.body;
 
-    const updateEquipment = {
-        equipmentId,
-        equipmentName,
-        equipmentType,
-        equipmentDescription,
-        equipmentImage,
-        equipmentPrice,
-        equipmentQuantity
-    }
+    try {
+        
+        const existingEquipment = await Equipment.findById(fetchequipmentID);
 
-    const update = await Equipment.findByIdAndUpdate(fetchequipmentID, updateEquipment)
-    .then(() => {
-        res.status(200).send({status: "Equipment updated"})
-    }).catch((err) => {
+        
+        const equipmentImage = req.file ? req.file.filename : existingEquipment.equipmentImage;
+
+        
+        const updateEquipment = {
+            equipmentName,
+            equipmentType,
+            equipmentDescription,
+            equipmentImage,
+            equipmentPrice,
+            equipmentQuantity
+        };
+
+        
+        await Equipment.findByIdAndUpdate(fetchequipmentID, updateEquipment);
+
+        res.status(200).send({ status: "Equipment updated" });
+    } catch (err) {
         console.log(err);
-        res.status(500).send({status: "Error with updating data", error: err.message});
-    })
+        res.status(500).send({ status: "Error with updating data", error: err.message });
+    }
 });
+
 
 router.route("/delete/:id").delete(async(req, res) =>{
 
     let fetchequipmentID = req.params.id;
 
-    await Equipment.findByIdAndDelete(fetchequipmentID)
-    .then(() => {
-        res.status(200).send({status: "Equipment deleted"});
-    }).catch((err) => {
+   
+    try {
+        const equipmentToDelete = await Equipment.findById(fetchequipmentID);
+
+        if (!equipmentToDelete) {
+            return res.status(404).send({ status: "Equipment not found!" });
+        }
+
+        if (equipmentToDelete.equipmentImage) {
+            deleteImage(equipmentToDelete.equipmentImage);
+        }
+
+        await Equipment.findByIdAndDelete(fetchequipmentID);
+        res.status(200).send({ status: "Equipment deleted!" });
+
+    } catch (err) {
         console.log(err.message);
         res.status(500).send({status: "Error with deleting Equipment", error: err.message});
-    });
+    }
 });
 
-router.route("/get/:equipmentType").get(async(req, res) =>{
+router.route("/get/:id").get(async(req, res) => {
+    let fetchEquipmentID = req.params.id;
 
-    let fetchequipmentType = req.params.equipmentType;
+    try {
+        const fetchEquipment = await Equipment.findById(fetchEquipmentID);
+        console.log(fetchEquipment); 
 
-    const type = await Equipment.find({equipmentType: fetchequipmentType})
-    .then((equipment) => {
-        res.status(200).send({status: "Equipment fetched", equipment})
-    }).catch((err) => {
-        console.log(err.message);
-        res.status(500).send({status: "Error with fetching Equipment", error: err.message});
-    });
+        if (fetchEquipment) {
+            res.status(200).send({ status: "Equipment fetched!", equipment: fetchEquipment });
+        } else {
+            res.status(404).send({ status: "Equipment not found" });
+        }
+    } catch (err) {
+        res.status(500).send({ status: "Error fetching equipment", error: err.message });
+    }
 });
 
+
+
+router.get('/report', async (req, res) => {
+    try {
+        const lowStockEquipment = await Equipment.find({ equipmentQuantity: { $lt: 5 } });
+        const pdfDoc = new PDFDocument();
+        let filename = 'low_stock_equipment_report.pdf';
+        res.setHeader('Content-Disposition', 'attachment; filename="' + filename + '"');
+        res.setHeader('Content-Type', 'application/pdf');
+
+        
+        pdfDoc.pipe(res);
+
+        
+        const logoPath = path.join(__dirname, '/logo.png');
+        pdfDoc.image(logoPath, { fit: [100, 100], align: 'center' });
+
+        
+        pdfDoc.moveDown(2);
+        pdfDoc.fontSize(20).text('Low Stock Equipment Report', { align: 'center' });
+        pdfDoc.moveDown(2);
+
+        
+        pdfDoc.moveTo(50, pdfDoc.y).lineTo(550, pdfDoc.y).stroke();
+        pdfDoc.moveDown(0.2);
+        
+
+        
+        pdfDoc.fontSize(12);
+
+        
+        pdfDoc.text('Name', 80, pdfDoc.y + 5); 
+
+        
+        pdfDoc.text('Quantity', 350, pdfDoc.y - 6);
+        pdfDoc.moveDown();
+
+        
+        pdfDoc.moveTo(50, pdfDoc.y).lineTo(550, pdfDoc.y).stroke();
+        pdfDoc.moveDown(0.2);
+
+        
+        lowStockEquipment.forEach(item => {
+            
+            pdfDoc.text(item.equipmentName, 50, pdfDoc.y + 5); 
+
+            
+            pdfDoc.text(item.equipmentQuantity.toString(), 370, pdfDoc.y - 10);
+            pdfDoc.moveDown();
+        });
+
+        
+        pdfDoc.moveTo(50, pdfDoc.y).lineTo(550, pdfDoc.y).stroke();
+
+        
+        pdfDoc.end();
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+});
 
 module.exports = router;
