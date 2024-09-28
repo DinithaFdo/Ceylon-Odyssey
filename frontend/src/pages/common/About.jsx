@@ -1,6 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import image from "../common/aboutus.jpg";
+import image from "../../assets/aboutus.jpg";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
 import Spinner from "../../components/Spinner/Spinner";
