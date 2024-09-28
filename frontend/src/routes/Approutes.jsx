@@ -14,7 +14,6 @@ import Onboarding from "../pages/Dinitha/Onboarding"
 import Profile from "../pages/Dinitha/Profile"
 import ProtectedRoute from "../components/ProtectedRoute"
 import GuestRoute from "../components/GuestRoute"
-import Admin from "../pages/dashboard/Admin"
 import NotFound from "../components/spinner/404"
 import Test from  "../components/test"
 import PaymentForm from "../components/PaymentForm";
