@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import jsPDF from 'jspdf';
 import Navbar from '../../components/Navbar/Navbar';
 import AddIcon from '../../assets/Ishan/add-button.png';
 import removeIcon from '../../assets/Ishan/removeBtnImg.png';
-import {imgData} from './PdfImg'
+import {GeneratePdf} from './GeneratePdf';
+
 
 const QuotationForm = () => {
 
@@ -16,7 +16,7 @@ const QuotationForm = () => {
 
     const [equipment, setEquipment] = useState([]);
     const [equipmentList, setEquipmentList] = useState([
-        { selectedEquipment: "", numItems: 1, eqPrice: 0, baseEqPrice: "" }
+        { selectedEquipment: "", numItems: 0, eqPrice: 0, baseEqPrice: "" }
     ]);
 
     const handleFee = 1000;
@@ -113,7 +113,7 @@ const QuotationForm = () => {
     const addEquipmentRow = () => {
         setEquipmentList([
             ...equipmentList,
-            { selectedEquipment: "", numItems: 1, eqPrice: 0, baseEqPrice: "" }
+            { selectedEquipment: "", numItems: 0, eqPrice: 0, baseEqPrice: "" }
         ]);
     };
 
@@ -122,80 +122,19 @@ const QuotationForm = () => {
         setEquipmentList(updatedList);
     };
 
-      
-    const generatePdf = async () => {
-        const doc = new jsPDF();
-    
-        const pageWidth = doc.internal.pageSize.getWidth();
-        const pageHeight = doc.internal.pageSize.getHeight();
-        
-        const imgWidth = 156;
-        const imgHeight = 46;
-        const xPos = (pageWidth - imgWidth) / 2;
-        const yPos = (pageHeight - imgHeight) / 2;
-        doc.setGState(new doc.GState({ opacity: 0.3 }));
-        doc.addImage(imgData, 'png', xPos, yPos, imgWidth, imgHeight);
-
-        doc.setGState(new doc.GState({ opacity: 1.0 })); // Reset opacity
-        
-        doc.rect(10, 10, pageWidth - 20, pageHeight - 20);
-    
-        doc.setFontSize(30);
-        doc.text('Quotation', pageWidth / 2, 25, { align: 'center' });
-        
-        doc.setFontSize(15);
-        doc.text("Package Name", 25, 50);
-        doc.text("Number of People", 95, 50);
-        doc.text("Price (LKR) ", 170, 50);
-        doc.line(23, 52, 198, 52);
-
-    
-        const packageName = tourPackages.find(pkg => pkg._id === selectedPackage)?.package_Title || 'No packages';
-        const wrappedPackageName = doc.splitTextToSize(packageName, 70);
-
-        doc.setFontSize(12);
-        doc.text(wrappedPackageName, 20, 60);
-        doc.text(`${numPeople}`, 100, 60);
-        doc.text(`${pPrice.toFixed(2)}`, 173, 60); 
-        
-        let equipmentYPos = 100;
-        doc.setFontSize(15);
-        doc.text("Equipment Name", 25, equipmentYPos);
-        doc.text("Number of Items", 95, equipmentYPos);
-        doc.text("Price (LKR)", 170, equipmentYPos);
-        doc.line(23, 102, 198, 102);
-
-        equipmentList.forEach((equipmentItem, index) => {
-            const eqName = equipment.find(eq => eq._id === equipmentItem.selectedEquipment)?.equipmentName || 'No Items';
-            equipmentYPos += 10;
-            doc.setFontSize(12);
-            doc.text(eqName, 20, equipmentYPos);
-            doc.text(`${equipmentItem.numItems ? equipmentItem.numItems : 'No Items'}`, 100, equipmentYPos);
-            doc.text(`${equipmentItem.eqPrice.toFixed(2)}`, 173, equipmentYPos);
+    const handleGeneratePdf = (e) => {
+        e.preventDefault();
+        GeneratePdf ({
+            tourPackages,
+            selectedPackage,
+            pPrice,
+            numPeople,
+            equipmentList,
+            equipment,
+            handleFee,
+            vat,
+            totalPrice
         });
-
-        let pricingYPos = equipmentYPos + 30;
-
-        doc.setFontSize(13);
-        doc.text("Handling Fee (LKR):", 120, pricingYPos);
-        doc.text(`${handleFee.toFixed(2)}`, 173, pricingYPos);
-        
-        pricingYPos += 10;
-        doc.text("5% VAT (LKR):", 120, pricingYPos);
-        doc.text(`${vat.toFixed(2)}`, 173, pricingYPos);
-        
-        pricingYPos += 20;
-        doc.setFontSize(15);
-        doc.text("Total Price (LKR):", 120, pricingYPos);
-        doc.text(`${totalPrice.toFixed(2)}`, 170, pricingYPos);
-
-        doc.setFontSize(12);
-        doc.text("Note: The prices mentioned in this quotation are subject to change without prior notice due to", 15, pageHeight - 40);
-        doc.text("fluctuations in market conditions, availability, or other unforeseen circumstances. Please confirm", 15, pageHeight - 33);
-        doc.text("the prices before proceeding with the booking.", 15, pageHeight - 26);
-
-        doc.save('quotation.pdf');
-        
     }
 
     return (
@@ -206,12 +145,7 @@ const QuotationForm = () => {
             </div>
 
             <div className="container mx-auto p-24 pb-20">
-                <form className="bg-white shadow-md rounded-lg p-8"
-                    onSubmit={(e) =>
-                    {
-                        e.preventDefault();
-                        generatePdf();
-                    }} >
+                <form className="bg-white shadow-md rounded-lg p-8" onSubmit= {handleGeneratePdf} >
 
                     <h2 className="text-3xl font-semibold mb-6 text-center pb-10">Get a Quotation</h2>
                     
@@ -245,7 +179,8 @@ const QuotationForm = () => {
                             value={numPeople}
                             onChange={handleNumPeopleChange}
                             placeholder="Enter Number of People"
-                            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"/>
+                            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            required/>
                         </div>
                             
                         {/*Package Price*/}
@@ -311,7 +246,7 @@ const QuotationForm = () => {
                                 id={`eqItems-${index}`}
                                 value={equipmentItem.numItems}
                                 onChange={(e) => handleNumItemsChange(index, e)}
-                                min="1"
+                                min="0"
                                 className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"/>
                         </div>
                             
