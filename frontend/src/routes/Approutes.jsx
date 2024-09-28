@@ -12,6 +12,9 @@ import GuestRoute from "../components/GuestRoute"
 import Admin from "../pages/dashboard/Admin"
 import NotFound from "../components/spinner/404"
 import Test from  "../components/test"
+import PaymentForm from "../components/PaymentForm";
+
+
 
 function AppRoutes() {
     return (
@@ -37,6 +40,8 @@ function AppRoutes() {
 
                     <Route path="*" element={<NotFound />} />
                     <Route path="/test" element={<Test />} />
+                    <Route path="/payment" element={<PaymentForm />} />
+             
                 </Routes>
                     
             </Router>

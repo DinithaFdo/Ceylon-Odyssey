@@ -8,7 +8,7 @@ const walletSchema = new mongoose.Schema({
             amount: { type: Number, required: true },
             type: {
                 type: String,
-                enum: ['Referral bonus', 'Welcome bonus', 'Purchase', 'Credit', 'Debit'],
+                enum: ['Referral bonus', 'Welcome bonus', 'Purchase', 'Credit', 'Debit', 'Top-up'],
                 required: true
             },
             date: { type: Date, required: true, default: Date.now },

@@ -3,7 +3,7 @@ import { UserContext } from "../userContext";
 import { Link } from "react-router-dom";
 import axios from 'axios';
 import toast from 'react-hot-toast';
-import logo from '../../assets/logo.png';
+import logo from '../../assets/clogo.png';
 
 const Navbar = () => {
   const { user, setUser } = useContext(UserContext);

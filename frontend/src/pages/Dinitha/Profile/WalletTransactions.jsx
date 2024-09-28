@@ -17,6 +17,7 @@ const WalletTransactions = ({ walletTransactions, handleDownloadWallet }) => {
     'Purchase',
     'Credit',
     'Debit',
+    'Top-up',
   ];
 
   const filteredTransactions = walletTransactions.filter(transaction => {

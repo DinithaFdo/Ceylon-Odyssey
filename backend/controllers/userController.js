@@ -17,6 +17,7 @@ exports.getUserProfile = async (req, res) => {
         let referringUserName = referredUsersCount === 0 ? 'N/A' : referrals[0].referringUserId.firstName || 'N/A';
 
         const userProfile = {
+            userId: user._id,
             firstName: user.firstName,
             lastName: user.lastName,
             email: user.email,

@@ -50,21 +50,21 @@ const ProfilePage = () => {
 
     const fetchWalletTransactions = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/user/wallet', { withCredentials: true });
-        const { transactionHistory, walletBalance } = response.data;
-        setWalletTransactions(transactionHistory || []);
-        setUserData(prevState => ({
-          ...prevState,
-          walletBalance: walletBalance || 0,
-        }));
+          const response = await axios.get('http://localhost:5000/api/user/wallet', { withCredentials: true });
+          const { transactionHistory, successfulTransactionsTotal } = response.data; // Use the new property
+          setWalletTransactions(transactionHistory || []);
+          setUserData(prevState => ({
+              ...prevState,
+              walletBalance: successfulTransactionsTotal || 0, // Set walletBalance to successful transactions total
+          }));
       } catch (error) {
-        setWalletTransactions([]); 
-        setUserData(prevState => ({
-          ...prevState,
-          walletBalance: 0,
-        }));
+          setWalletTransactions([]);
+          setUserData(prevState => ({
+              ...prevState,
+              walletBalance: 0, // Reset on error
+          }));
       }
-    };
+  };
 
     const fetchReferralLogs = async () => {
       try {

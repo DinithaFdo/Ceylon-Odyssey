@@ -128,6 +128,7 @@ const Transactions = () => {
             <option value="Referral bonus">Referral bonus</option>
             <option value="Welcome bonus">Welcome bonus</option>
             <option value="Purchase">Purchase</option>
+            <option value="Top-up">Top-Up</option>
           </select>
         </div>
 

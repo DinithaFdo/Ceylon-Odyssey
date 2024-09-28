@@ -1,16 +1,16 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 import Lottie from "lottie-react";
 import Gift from "../../../assets/Dinitha/gift.json";
 import Wallet from "../../../assets/Dinitha/wallet.json";
 import axios from "axios";
 import toast from "react-hot-toast";
-import Payhere from "payhere-embed-sdk/dist/react"; // Import Payhere component
 
 const ProfileDetails = ({ userData }) => {
   const [referralCode, setReferralCode] = useState("");
   const [showGiftAnimation, setShowGiftAnimation] = useState(false);
-  const [showPayhere, setShowPayhere] = useState(false);
+  const navigate = useNavigate(); // Initialize useNavigate
 
   const handleReferralSubmit = async (event) => {
     event.preventDefault();
@@ -31,7 +31,8 @@ const ProfileDetails = ({ userData }) => {
   };
 
   const handleTopUp = () => {
-    setShowPayhere(true);
+    // Navigate to the payment page
+    navigate('/payment');
   };
 
   return (
@@ -48,7 +49,7 @@ const ProfileDetails = ({ userData }) => {
             <p className="text-lg font-semibold">Wallet Balance</p>
             <p className="text-2xl">LKR {userData.walletBalance}</p>
             <button
-              onClick={handleTopUp}
+              onClick={handleTopUp} // Trigger the handleTopUp function
               className="mt-4 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
             >
               Top Up Wallet
@@ -130,33 +131,6 @@ const ProfileDetails = ({ userData }) => {
           </div>
         </div>
       )}
-
-      {showPayhere && (
-        <Payhere
-          selector="#payhere-modal"
-          embedURL={"https://app.payhere.co/altlabs/coffee"} // Replace with your actual URL
-          open={showPayhere}
-          onSuccess={(data) => {
-            console.log("Payhere success", data);
-            setShowPayhere(false);
-          }}
-          onFailure={(err) => {
-            console.log("Payhere failed", err);
-            setShowPayhere(false);
-          }}
-          onClose={() => {
-            setShowPayhere(false);
-            console.log("Payment modal closed");
-          }}
-        />
-      )}
-
-      <button
-        onClick={() => setShowGiftAnimation(true)}
-        className="mt-4 px-4 py-2 bg-purple-500 text-white rounded-md hover:bg-purple-600 transition duration-300"
-      >
-        Test Animation
-      </button>
     </div>
   );
 };

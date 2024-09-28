@@ -25,15 +25,12 @@ exports.submitReferralCode = async (req, res) => {
         const { referralCode } = req.body;
         const userId = req.user.id;
 
-        // Find the user applying the referral code
         const currentUser = await User.findById(userId);
 
-        // Check if the user is trying to refer themselves
         if (currentUser.referralCode === referralCode) {
             return res.status(400).json({ message: 'You cannot use your own referral code.' });
         }
 
-        // Check if the referral code is valid
         const referringUser = await User.findOne({ referralCode });
         if (!referringUser) {
             return res.status(400).json({ message: 'Invalid referral code' });
@@ -42,7 +39,6 @@ exports.submitReferralCode = async (req, res) => {
         const referringUserWallet = await Wallet.findOne({ userId: referringUser._id });
         const newUserWallet = await Wallet.findOne({ userId });
 
-        // Apply referral bonuses
         const referralBonus = 1000;
         if (referringUserWallet) {
             referringUserWallet.walletBalance += referralBonus;

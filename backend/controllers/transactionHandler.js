@@ -109,4 +109,38 @@ router.delete('/:walletId/transaction/:transactionId', async (req, res) => {
     }
 });
 
+router.post('/update', async (req, res) => {
+    const { amount, status, userId } = req.body; // Get userId from the request body
+
+    console.log('Request body:', req.body);
+    console.log('User ID:', userId);
+
+    if (!userId || amount == null || !status) {
+        return res.status(400).json({ message: 'Missing required fields' });
+    }
+
+    try {
+        const wallet = await Wallet.findOne({ userId });
+
+        if (!wallet) {
+            return res.status(404).json({ message: 'Wallet not found' });
+        }
+    
+        wallet.transactionHistory.push({
+            amount,
+            type: 'Top-up',
+            status,
+            date: new Date(),
+        });
+        await wallet.save();
+
+        res.status(200).json({ message: 'Wallet updated successfully!' });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Error updating wallet', error: err.message });
+    }
+});
+
+
+
 module.exports = router;

@@ -25,7 +25,6 @@ const registerUser = async (req, res) => {
             return res.status(400).json({ message: 'Please fill all fields' });
         }
 
-        // Normalize the email to lowercase
         const normalizedEmail = email.toLowerCase();
         const existingUser = await User.findOne({ email: normalizedEmail });
         if (existingUser) {
@@ -131,7 +130,6 @@ const loginUser = async (req, res) => {
             return res.status(400).json({ message: 'Please fill all fields' });
         }
 
-        // Normalize the email to lowercase
         const normalizedEmail = email.toLowerCase();
         const user = await User.findOne({ email: normalizedEmail });
 
