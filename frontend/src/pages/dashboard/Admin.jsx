@@ -1,28 +1,24 @@
-//import { useState, useContext } from "react";
-import { useState } from "react";
-import { useEffect } from "react";
-//import { UserContext } from "../../components/userContext";
+import { useState, useContext } from "react";
+import { UserContext } from "../../components/userContext";
 import axios from "axios";
-//import toast from "react-hot-toast";
-//import Users from "./Dinitha/Users"; 
+import toast from "react-hot-toast";
+import Users from "./Dinitha/Users"; 
 import AddEquipment from "../sakindu/AddEquipment";
 import Inventory from "../sakindu/Inventory";
 import Spinner from "../../components/spinner/spinner";
+import Transactions from "./Dinitha/Transactions"; 
+import Referrals from "./Dinitha/Referrals"; 
+import Overview from "./Dinitha/Overview";
+
+
 
 const Admin = () => {
-  //const { user, setUser, loading, error } = useContext(UserContext);
-  const [activeTab, setActiveTab] = useState('Manage Inventory');
-  const [loading, setLoading] = useState(true);
+  const { user, setUser, loading, error } = useContext(UserContext);
+  const [activeTab, setActiveTab] = useState('overview');
 
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setLoading(false);
-        }, 500); 
 
-        return () => clearTimeout(timer);
-    }, []);
 
-  /*const handleLogout = async () => {
+  const handleLogout = async () => {
     try {
       localStorage.removeItem('token');
       document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
@@ -35,7 +31,7 @@ const Admin = () => {
       console.error('Logout failed:', error);
       toast.error('Logout failed. Please try again.');
     }
-  };*/
+  };
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
@@ -47,7 +43,7 @@ const Admin = () => {
       <aside className="w-64 bg-gray-800 text-white flex flex-col">
         <div className="p-4 text-xl font-bold bg-gray-900">Admin Dashboard</div>
         <nav className="flex-1 px-2 py-4">
-          {['Manage Inventory', 'Add Equipment'].map((tab) => (
+          {['overview', 'users', 'transactions', 'referrals', 'Manage Inventory', 'Add Equipment'].map((tab) => (
             <button
               key={tab}
               onClick={() => handleTabChange(tab)}
@@ -57,21 +53,21 @@ const Admin = () => {
             </button>
           ))}
         </nav>
-        {/*<div className="p-4">
+        <div className="p-4">
           <button 
             onClick={handleLogout}
             className="bg-red-600 px-4 py-2 w-full rounded hover:bg-red-500"
           >
             Logout
           </button>
-        </div>*/}
+        </div>
       </aside>
 
       
       <main className="flex-1 p-6">
         
         <header className="bg-white shadow p-4 rounded mb-4">
-          {/*<h2 className="text-xl font-semibold text-gray-800">Welcome, {user ? user.name : 'Admin'}!</h2>*/}
+          <h2 className="text-xl font-semibold text-gray-800">Welcome, {user ? user.name : 'Admin'}!</h2>
         </header>
 
       
@@ -81,11 +77,13 @@ const Admin = () => {
           </div>
         ) : (
           <>
-            {/*{error && <div className="text-red-600 mb-4">{error}</div>}*/}
+            {error && <div className="text-red-600 mb-4">{error}</div>}
+            {activeTab === 'overview' && <Overview />}
+            {activeTab === 'users' && <Users />} 
+            {activeTab === 'transactions' && <Transactions />} 
+            {activeTab === 'referrals' && <Referrals />} 
             {activeTab === 'Manage Inventory' && <Inventory />}
-            {activeTab === 'Add Equipment' && <AddEquipment />} 
-            
-
+            {activeTab === 'Add Equipment' && <AddEquipment />}
           </>
         )}
       </main>

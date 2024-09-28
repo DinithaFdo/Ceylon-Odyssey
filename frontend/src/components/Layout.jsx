@@ -1,7 +1,8 @@
-import React, { useState } from "react";
-
-import video from "../assets/test.mp4";
+/* eslint-disable no-unused-vars */
+import { useState } from "react";
+import video from '../assets/test.mp4';
 const Layout = () => {
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
