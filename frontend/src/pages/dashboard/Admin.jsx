@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 import Users from "./Dinitha/Users"; 
 import AddEquipment from "../sakindu/AddEquipment";
 import Inventory from "../sakindu/Inventory";
-import Spinner from "../../components/spinner/spinner";
+import Spinner from "../../components/Spinner/Spinner";
 import Transactions from "./Dinitha/Transactions"; 
 import Referrals from "./Dinitha/Referrals"; 
 import Overview from "./Dinitha/Overview";
