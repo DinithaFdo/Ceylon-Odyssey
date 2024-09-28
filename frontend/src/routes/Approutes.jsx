@@ -1,6 +1,9 @@
-
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Home from "../pages/landing/Home";
+import TourPackageUser from "../pages/IshanFrontend/TourPackageUser";
+import IndivudualPackage from "../pages/IshanFrontend/IndivudualPackage";
+import QuotationForm from "../pages/IshanFrontend/QuotationForm";
+import AdminUpdateTour from "../pages/dashboard/Ishan Dashboard/UpdatePackageDashboard"
+import Admin from "../pages/dashboard/Admin";
 import About from "../pages/common/About";
 import Contact from "../pages/common/Contact";
 import Login from "../pages/login/Login"
@@ -9,7 +12,6 @@ import UpdateEquipment from "../pages/sakindu/UpdateEquipment"
 import EquipmentUserView from "../pages/sakindu/EquipmentList"
 import IndividualEquipment from "../pages/sakindu/IndividualEquipment"; 
 import AdminUpdateEquipment from "../pages/dashboard/Sakindu Dashbaord/UpdateEquipment";
-import Admin from "../pages/dashboard/Admin";
 import Onboarding from "../pages/Dinitha/Onboarding"
 import Profile from "../pages/Dinitha/Profile"
 import ProtectedRoute from "../components/ProtectedRoute"
@@ -51,6 +53,11 @@ function AppRoutes() {
                     <Route path="*" element={<NotFound />} />
                     <Route path="/test" element={<Test />} />
                     <Route path="/payment" element={<PaymentForm />} />
+
+                    <Route path="/dashboard/manageTourPackages/:id" element={<AdminUpdateTour />} />
+                    <Route path="/tour-packages" element={<TourPackageUser />} />
+                <Route path="/tour-packages/:id" element={<IndivudualPackage />} />
+                <Route path="/quotationForm" element={<QuotationForm />} />
              
                 </Routes>
                     

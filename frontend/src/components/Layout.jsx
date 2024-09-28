@@ -1,6 +1,12 @@
 /* eslint-disable no-unused-vars */
 import { useState } from "react";
 import video from '../assets/test.mp4';
+import { Link } from "react-router-dom";
+import culturalImg from '../assets/polonnaruwa.jpg';
+import adventureImg from '../assets/rafting.jpg';
+import wildlifeImg from '../assets/sri-lankan-leopard-yala.jpg';
+import mapImg from '../assets/map.jpg';
+
 const Layout = () => {
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -35,17 +41,17 @@ const Layout = () => {
               {[
                 {
                   title: "Ancient Wonders",
-                  image: "/api/placeholder/600/400",
+                  image: culturalImg,
                   description: "Explore millennia-old ruins and temples",
                 },
                 {
-                  title: "Tropical Beaches",
-                  image: "/api/placeholder/600/400",
-                  description: "Relax on pristine golden sand beaches",
+                  title: "Explore Adventure",
+                  image: adventureImg,
+                  description: "Embark on thrilling journeys through rugged landscapes and untamed wilderness.",
                 },
                 {
                   title: "Wildlife Safaris",
-                  image: "/api/placeholder/600/400",
+                  image: wildlifeImg,
                   description:
                     "Encounter exotic animals in their natural habitats",
                 },
@@ -66,13 +72,16 @@ const Layout = () => {
                     <p className="text-gray-600 mb-4">
                       {experience.description}
                     </p>
-                    <a
-                      href="#book-now"
+                    <Link to="/tour-packages">
+                      <button
                       className="inline-block text-black px-4 py-2 rounded-full hover:bg-blue-600 transition duration-300"
-                      style={{ backgroundColor: "#fdba74" }}
-                    >
-                      Learn More
-                    </a>
+                      style={{ backgroundColor: "#fdba74" }}>
+
+                        Learn More
+
+                      </button>
+                
+                    </Link>
                   </div>
                 </div>
               ))}
@@ -85,12 +94,12 @@ const Layout = () => {
             <h2 className="text-4xl font-bold text-center text-blue-600 mb-12">
               Rich Cultural Heritage
             </h2>
-            <div className="flex flex-col md:flex-row items-center justify-center space-y-8 md:space-y-0 md:space-x-12">
-              <div className="w-full md:w-1/2">
+            <div className="flex flex-col md:flex-row items-start justify-center space-y-8 md:space-y-0 md:space-x-12">
+              <div className="w-full md:w-1/2 flex items-center justify-center">
                 <img
-                  src="/api/placeholder/800/600"
+                  src={mapImg}
                   alt="Sri Lankan Culture"
-                  className="w-full h-auto rounded-lg shadow-lg"
+                  className="w-3/4 h-auto rounded-lg shadow-lg"
                 />
               </div>
               <div className="w-full md:w-1/2 space-y-4">
@@ -105,10 +114,10 @@ const Layout = () => {
                   <li>Savor authentic Sri Lankan cuisine</li>
                 </ul>
                 <a
-                  href="#book-now"
+                  href="/destinations"
                   className="inline-block bg-blue-500 text-white px-6 py-3 rounded-full hover:bg-blue-600 transition duration-300 text-lg font-semibold mt-4"
                 >
-                  Explore Cultural Tours
+                  Explore Our Main Destinations
                 </a>
               </div>
             </div>

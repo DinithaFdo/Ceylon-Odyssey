@@ -5,10 +5,12 @@ import toast from "react-hot-toast";
 import Users from "./Dinitha/Users"; 
 import AddEquipment from "../sakindu/AddEquipment";
 import Inventory from "../sakindu/Inventory";
-import Spinner from "../../components/Spinner/Spinner";
+import Spinner from "../../components/Spinner/spinner";
 import Transactions from "./Dinitha/Transactions"; 
 import Referrals from "./Dinitha/Referrals"; 
 import Overview from "./Dinitha/Overview";
+import AddTourPackage from '../IshanFrontend/AddTourPackage';
+import AllTourPackages from '../IshanFrontend/AllPackagesAdmin';
 
 
 
@@ -43,7 +45,7 @@ const Admin = () => {
       <aside className="w-64 bg-gray-800 text-white flex flex-col">
         <div className="p-4 text-xl font-bold bg-gray-900">Admin Dashboard</div>
         <nav className="flex-1 px-2 py-4">
-          {['overview', 'users', 'transactions', 'referrals', 'Manage Inventory', 'Add Equipment'].map((tab) => (
+          {['overview', 'users', 'transactions', 'referrals', 'Manage Inventory', 'Add Equipment', 'Manage TourPackages', 'Add TourPackage'].map((tab) => (
             <button
               key={tab}
               onClick={() => handleTabChange(tab)}
@@ -84,6 +86,8 @@ const Admin = () => {
             {activeTab === 'referrals' && <Referrals />} 
             {activeTab === 'Manage Inventory' && <Inventory />}
             {activeTab === 'Add Equipment' && <AddEquipment />}
+            {activeTab === 'Manage TourPackages' && <AllTourPackages />}
+            {activeTab === 'Add TourPackage' && <AddTourPackage />}
           </>
         )}
       </main>
