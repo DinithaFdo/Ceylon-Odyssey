@@ -12,7 +12,7 @@ const TicketSchema = new mongoose.Schema({
   ticketID: { type: String, unique: true }, // Custom ticket ID field
 });
 
-// Pre-save hook to generate a ticket ID in the format "TIC0001"
+//ticket ID in the format "TICTIC0001"
 TicketSchema.pre('save', async function (next) {
   if (!this.ticketID) {
     const count = await mongoose.model('Ticket').countDocuments(); // Count existing tickets
