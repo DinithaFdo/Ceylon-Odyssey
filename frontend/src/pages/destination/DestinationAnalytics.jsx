@@ -4,6 +4,8 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsi
 import Navbar from '../../components/Navbar/Navbar';
 import Footer from '../../components/Footer/Footer';
 import * as XLSX from 'xlsx';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
 
 export default function DestinationAnalytics() {
     const [destinations, setDestinations] = useState([]);
@@ -23,8 +25,8 @@ export default function DestinationAnalytics() {
         fetchDestinations();
     }, []);
 
-    const generateReport = () => {
-        // Create a workbook and a worksheet
+    const generateExcelReport = () => {
+        
         const wb = XLSX.utils.book_new();
         const wsData = destinations.map(destination => ({
             Title: destination.dTitle,
@@ -33,13 +35,46 @@ export default function DestinationAnalytics() {
         const ws = XLSX.utils.json_to_sheet(wsData);
         XLSX.utils.book_append_sheet(wb, ws, 'Destinations');
 
-        // Generate a file download
+        
         XLSX.writeFile(wb, 'destinations_report.xlsx');
+    };
+
+    const generatePdfReport = () => {
+        const doc = new jsPDF();
+
+        
+        const img = new Image();
+        img.src = '/logo12.jpg'; 
+
+        
+        doc.addImage(img, 'jpg', (doc.internal.pageSize.getWidth() - 50) / 2, 10, 50, 20); // 50 is the width of the image
+
+        
+        doc.setFontSize(16);
+        doc.text('Destination Report', doc.internal.pageSize.getWidth() / 2, 40, { align: 'center' });
+
+        
+        const tableColumn = ['Destination', 'Clicks'];
+        const tableRows = destinations.map(destination => [destination.dTitle, destination.clickCount]);
+
+        
+        doc.autoTable({
+            head: [tableColumn],
+            body: tableRows,
+            startY: 50, 
+            theme: 'grid',
+            headStyles: {
+                fillColor: [37, 99, 235], 
+                textColor: [255, 255, 255], 
+            },
+        });
+
+        doc.save('destinations_report.pdf');
     };
 
     return (
         <div className="flex flex-col min-h-screen">
-            <Navbar /> 
+            <Navbar />
 
             <br /><br />
 
@@ -49,13 +84,19 @@ export default function DestinationAnalytics() {
                 <br />
 
                 <div className="flex justify-center space-x-4 mb-4">
-                    
-                <button 
-                            onClick={generateReport}
-                            className="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-green-700 transition duration-300"
-                        >
-                            Generate Report
-                </button>
+                    <button 
+                        onClick={generateExcelReport}
+                        className="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-green-700 transition duration-300"
+                    >
+                        Generate Excel Report
+                    </button>
+
+                    <button 
+                        onClick={generatePdfReport}
+                        className="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-green-700 transition duration-300"
+                    >
+                        Generate PDF Report
+                    </button>
                 </div>
 
                 {/* Line Chart for clicks */}
@@ -77,7 +118,7 @@ export default function DestinationAnalytics() {
 
             <br /><br />
 
-            <Footer /> 
+            <Footer />
         </div>
     );
 }
