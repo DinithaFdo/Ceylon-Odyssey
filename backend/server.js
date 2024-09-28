@@ -12,7 +12,6 @@ const path = require('path');
 const Payment = require('./controllers/PaymentHandler.js');
 const { default: mongoose } = require('mongoose');
 require('dotenv').config();
-const path = require('path');
 
 
 import('./config/db.js');
