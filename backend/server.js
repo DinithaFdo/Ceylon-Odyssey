@@ -10,6 +10,7 @@ const referrals = require('./controllers/refHandler.js');
 const bodyParser = require('body-parser');
 const path = require('path'); 
 const Payment = require('./controllers/PaymentHandler.js');
+const bookingRoutes = require('./routes/bookingRoutes');
 const { default: mongoose } = require('mongoose');
 require('dotenv').config();
 
@@ -53,6 +54,8 @@ app.use('/tourPackage', tourPackageRouter);
 const BlogRouter = require('./routes/Blog.js');
 app.use('/BlogImages', express.static(path.join(__dirname, 'BlogImages')));
 app.use('/Blog', BlogRouter);
+
+app.use('/api/bookings', bookingRoutes);
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
