@@ -35,7 +35,7 @@ const BookingForm = () => {
   }, [bookingData]);
 
   const calculateTotalPrice = (numberOfPeople, packagePrice) => {
-    const total = (packagePrice * numberOfPeople) + handlingFee;
+    const total = ((packagePrice * numberOfPeople) + handlingFee)*105/100;
     setTotalPrice(total);
   };
 
@@ -117,7 +117,7 @@ const BookingForm = () => {
       </div>
 
       <p className="text-lg font-semibold text-gray-900">
-        Total Price (including handling fee): Rs. {totalPrice}
+        Total Price (including handling fee & VAT): Rs. {totalPrice}
       </p>
 
       <button
