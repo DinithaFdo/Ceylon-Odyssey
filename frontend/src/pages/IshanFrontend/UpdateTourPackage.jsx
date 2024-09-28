@@ -128,7 +128,6 @@ const UpdateTourPackage = () => {
                             onChange={(e) => {
                                 setValues({...values, packageDes: e.target.value});
                             }} required></textarea>
-                            {errors.packageDes && <p className="text-red-500 text-xs mt-1">{errors.packageDes}</p>}
                         </div>
 
                         <div className="mb-8">
