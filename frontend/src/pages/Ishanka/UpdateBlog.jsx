@@ -9,7 +9,7 @@ export default function UpdateBlogForm() {
         title: '',
         author: '',
         content: '',
-        image: '',
+        image: null, // Set to null for file handling
     });
 
     const [loading, setLoading] = useState(true);
@@ -31,29 +31,59 @@ export default function UpdateBlogForm() {
             });
     }, [id]);
 
-    // Handle input changes
+    // Handle text input changes
     const handleInputChange = (e) => {
-        const { name, value } = e.target;
+        const { name, value, files } = e.target;
+    
+        if (name === "blogImage") {
+            // Handle file input
+            setBlog((prevBlog) => ({
+                ...prevBlog,
+                image: files[0],  // Store the file itself
+            }));
+        } else {
+            setBlog((prevBlog) => ({
+                ...prevBlog,
+                [name]: value,
+            }));
+        }
+    }
+
+    // Handle file input changes (for image)
+    const handleImageChange = (e) => {
+        const file = e.target.files[0]; // Get the uploaded file
         setBlog((prevBlog) => ({
             ...prevBlog,
-            [name]: value,
+            image: file, // Set the file in state
         }));
     };
 
     const Navigate = useNavigate();
 
     // Handle form submission
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Update the blog data with the new values
-        axios.put(`http://localhost:5000/blog/update/${id}`, blog)
-            .then((res) => {
-                alert('Blog updated successfully!');
-                Navigate('/dashboard'); // Redirect to the blog list page
-            })
-            .catch((err) => {
-                console.log(err);
+    
+        const formData = new FormData();
+        formData.append("title", blog.title);
+        formData.append("author", blog.author);
+        formData.append("content", blog.content);
+    
+        if (blog.image) {
+            formData.append("blogImage", blog.image); // Ensure the field name matches
+        }
+    
+        try {
+            await axios.put(`http://localhost:5000/blog/update/${id}`, formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
             });
+            alert('Blog updated successfully!');
+            Navigate('/dashboard');
+        } catch (err) {
+            console.error(err);
+        }
     };
 
     // Wait for the blog data to load before rendering the form
@@ -70,7 +100,7 @@ export default function UpdateBlogForm() {
                     <input
                         type="text"
                         name="title"
-                        value={blog.title} // Set the value to the blog title
+                        value={blog.title}
                         onChange={handleInputChange}
                         className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                         required
@@ -82,7 +112,7 @@ export default function UpdateBlogForm() {
                     <input
                         type="text"
                         name="author"
-                        value={blog.author} // Set the value to the blog author
+                        value={blog.author}
                         onChange={handleInputChange}
                         className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                         required
@@ -93,7 +123,7 @@ export default function UpdateBlogForm() {
                     <label className="block text-sm font-medium text-gray-700">Content</label>
                     <textarea
                         name="content"
-                        value={blog.content} // Set the value to the blog content
+                        value={blog.content}
                         onChange={handleInputChange}
                         className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                         rows="8"
@@ -102,11 +132,10 @@ export default function UpdateBlogForm() {
                 </div>
 
                 <div>
-                    <label className="block text-sm font-medium text-gray-700">Image URL</label>
+                    <label className="block text-sm font-medium text-gray-700">Upload Image</label>
                     <input
-                        type="text"
-                        name="image"
-                        value={blog.image} // Set the value to the blog image
+                        type="file"
+                        name="blogImage"  // <-- Ensure this matches the multer field
                         onChange={handleInputChange}
                         className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                     />

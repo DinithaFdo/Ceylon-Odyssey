@@ -77,6 +77,7 @@ const IndivudualPackage = () => {
 
                                 <p className="text-lg "><strong>Price:</strong> LKR {parseFloat(tourPackage.packagePrice).toFixed(2)} Per Person</p>
 
+                                  
                                 <button className="bg-blue-600 hover:bg-red-400 text-white font-bold py-3 px-6 rounded-lg shadow-lg mt-4 float-right transition duration-300 ease-in-out">
                                     Book Now
                                 </button>

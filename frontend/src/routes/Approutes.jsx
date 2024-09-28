@@ -23,6 +23,9 @@ import PaymentForm from "../components/PaymentForm";
 import TourismBlog from "../pages/Ishanka/UserBlog"
 import IndividualBlog from "../pages/Ishanka/InduvidualBlog";
 import UpdateBlogDashboard from "../pages/dashboard/Ishanka dahsbaord/UpdateBlogDashbaord";
+import BookingForm from "../pages/Jihan/BookingForm";
+import Confirmation from "../pages/Jihan/Confirmation";
+import BookingList from "../pages/Jihan/BookingList"
 
 
 function AppRoutes() {
@@ -65,6 +68,10 @@ function AppRoutes() {
                 <Route path="/update-blog/:id" element={<UpdateBlogDashboard />} />
                 <Route path="/user-blog" element={<TourismBlog />} />
                 <Route path ="/blog/:id" element = {<IndividualBlog />} />
+
+                <Route path="/book/:id" element={<BookingForm />} />
+                <Route path="/confirmation" element={<Confirmation />} />
+                <Route path="/bookings" element={<BookingList />} />
              
                 </Routes>
                     

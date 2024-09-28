@@ -10,7 +10,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Setup for image uploads (optional if blogs include images)
+// Setup for image uploads
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, "./BlogImages");
@@ -24,7 +24,7 @@ var upload = multer({
     storage: storage
 }).single("blogImage");
 
-// Function to delete an image if necessary
+// Function to delete an old image
 function deleteImage(filePath) {
     fs.unlink(path.join(__dirname, '..', 'BlogImages', filePath), (err) => {
         if (err) {
@@ -40,7 +40,7 @@ router.post('/add', upload, async (req, res) => {
             title: req.body.title,
             content: req.body.content,
             author: req.body.author,
-            image: req.file ? req.file.filename : null,
+            image: req.file ? req.file.filename : null, // Set image if file uploaded
             createdAt: req.body.createdAt,
         });
 
@@ -78,25 +78,31 @@ router.get('/get/:id', async (req, res) => {
 // Route to update a blog post by ID
 router.put('/update/:id', upload, async (req, res) => {
     try {
-        const { title, content, author, image } = req.body;
-
+        const { title, content, author } = req.body;
         const existingBlog = await Blog.findById(req.params.id);
 
         if (!existingBlog) {
             return res.status(404).json({ message: 'Blog post not found' });
         }
 
-        const imageUrl = req.file ? req.file.filename : existingBlog.imageUrl;
+        // If new image is uploaded, delete the old one and set the new one
+        let updatedImage = existingBlog.image;
+        if (req.file) {
+            if (existingBlog.image) {
+                deleteImage(existingBlog.image); // Delete old image
+            }
+            updatedImage = req.file.filename; // Set new image filename
+        }
 
         const updatedBlog = {
             title,
             content,
             author,
-            image,
+            image: updatedImage,
             updatedAt: Date.now(),
         };
 
-        await Blog.findByIdAndUpdate(req.params.id, updatedBlog);
+        await Blog.findByIdAndUpdate(req.params.id, updatedBlog, { new: true });
         res.status(200).json({ message: 'Blog post updated successfully' });
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -112,6 +118,7 @@ router.delete('/delete/:id', async (req, res) => {
             return res.status(404).json({ message: 'Blog post not found' });
         }
 
+        // Delete the blog image if it exists
         if (blogToDelete.image) {
             deleteImage(blogToDelete.image);
         }
@@ -122,7 +129,5 @@ router.delete('/delete/:id', async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 });
-
-
 
 module.exports = router;
