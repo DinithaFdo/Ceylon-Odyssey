@@ -5,11 +5,15 @@ import About from "../pages/common/About";
 import Contact from "../pages/common/Contact";
 import Login from "../pages/login/Login"
 import Signup from "../pages/signup/Signup"
+import UpdateEquipment from "../pages/sakindu/UpdateEquipment"
+import EquipmentUserView from "../pages/sakindu/EquipmentList"
+import IndividualEquipment from "../pages/sakindu/IndividualEquipment"; 
+import AdminUpdateEquipment from "../pages/dashboard/Sakindu Dashbaord/UpdateEquipment";
+import Admin from "../pages/dashboard/Admin";
 import Onboarding from "../pages/Dinitha/Onboarding"
 import Profile from "../pages/Dinitha/Profile"
 import ProtectedRoute from "../components/ProtectedRoute"
 import GuestRoute from "../components/GuestRoute"
-import Admin from "../pages/dashboard/Admin"
 import NotFound from "../components/spinner/404"
 import Test from  "../components/test"
 import PaymentForm from "../components/PaymentForm";
@@ -18,9 +22,15 @@ import PaymentForm from "../components/PaymentForm";
 
 function AppRoutes() {
     return (
+        <Router>
+            <Routes>
+                
+                <Route path="/updateequipment/:id" element={<UpdateEquipment />} />
+                <Route path="/userequipment" element={<EquipmentUserView />} />
+                <Route path="/equipment/:id" element={<IndividualEquipment />} />
 
-            <Router>
-                <Routes>
+                <Route path="/Equipment-dashboard/updateequipment/:id" element={<AdminUpdateEquipment />} />
+           
                     <Route path="/" element={<Home />} />
                     <Route path="/about" element={<About />} />
                     <Route path="/contact" element={<Contact />} />

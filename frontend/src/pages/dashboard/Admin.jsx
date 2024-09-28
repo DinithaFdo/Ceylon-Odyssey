@@ -3,14 +3,20 @@ import { UserContext } from "../../components/userContext";
 import axios from "axios";
 import toast from "react-hot-toast";
 import Users from "./Dinitha/Users"; 
+import AddEquipment from "../sakindu/AddEquipment";
+import Inventory from "../sakindu/Inventory";
+import Spinner from "../../components/spinner/spinner";
 import Transactions from "./Dinitha/Transactions"; 
 import Referrals from "./Dinitha/Referrals"; 
 import Overview from "./Dinitha/Overview";
-import Spinner from "../../components/spinner/spinner";
+
+
 
 const Admin = () => {
   const { user, setUser, loading, error } = useContext(UserContext);
   const [activeTab, setActiveTab] = useState('overview');
+
+
 
   const handleLogout = async () => {
     try {
@@ -37,7 +43,7 @@ const Admin = () => {
       <aside className="w-64 bg-gray-800 text-white flex flex-col">
         <div className="p-4 text-xl font-bold bg-gray-900">Admin Dashboard</div>
         <nav className="flex-1 px-2 py-4">
-          {['overview', 'users', 'transactions', 'referrals'].map((tab) => (
+          {['overview', 'users', 'transactions', 'referrals', 'Manage Inventory', 'Add Equipment'].map((tab) => (
             <button
               key={tab}
               onClick={() => handleTabChange(tab)}
@@ -76,6 +82,8 @@ const Admin = () => {
             {activeTab === 'users' && <Users />} 
             {activeTab === 'transactions' && <Transactions />} 
             {activeTab === 'referrals' && <Referrals />} 
+            {activeTab === 'Manage Inventory' && <Inventory />}
+            {activeTab === 'Add Equipment' && <AddEquipment />}
           </>
         )}
       </main>

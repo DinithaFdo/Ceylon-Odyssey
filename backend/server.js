@@ -8,6 +8,7 @@ const adminRoutes = require('./controllers/userHanlder.js');
 const transaction = require('./controllers/transactionHandler.js');
 const referrals = require('./controllers/refHandler.js');
 const bodyParser = require('body-parser');
+const path = require('path'); 
 const Payment = require('./controllers/PaymentHandler.js');
 require('dotenv').config();
 
@@ -36,6 +37,12 @@ app.use('/api/payment', Payment);
 
 
 const PORT = process.env.PORT || 5000;
+
+const EquipmentRouter = require('./routes/Equipment.js');
+
+app.use('/EquipmentImages', express.static(path.join(__dirname, 'EquipmentImages')));
+
+app.use('/equipment', EquipmentRouter);
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
