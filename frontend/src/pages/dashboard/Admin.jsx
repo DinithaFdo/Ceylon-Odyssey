@@ -11,6 +11,8 @@ import Referrals from "./Dinitha/Referrals";
 import Overview from "./Dinitha/Overview";
 import AddTourPackage from '../IshanFrontend/AddTourPackage';
 import AllTourPackages from '../IshanFrontend/AllPackagesAdmin';
+import AddBlog from "../Ishanka/AddBlog";
+import BlogList from "../Ishanka/BlogList";
 
 
 
@@ -45,7 +47,7 @@ const Admin = () => {
       <aside className="w-64 bg-gray-800 text-white flex flex-col">
         <div className="p-4 text-xl font-bold bg-gray-900">Admin Dashboard</div>
         <nav className="flex-1 px-2 py-4">
-          {['overview', 'users', 'transactions', 'referrals', 'Manage Inventory', 'Add Equipment', 'Manage TourPackages', 'Add TourPackage'].map((tab) => (
+          {['overview', 'users', 'transactions', 'referrals', 'Manage Inventory', 'Add Equipment', 'Manage TourPackages', 'Add TourPackage', 'Manage Blogs', 'Add Blogs'].map((tab) => (
             <button
               key={tab}
               onClick={() => handleTabChange(tab)}
@@ -88,6 +90,8 @@ const Admin = () => {
             {activeTab === 'Add Equipment' && <AddEquipment />}
             {activeTab === 'Manage TourPackages' && <AllTourPackages />}
             {activeTab === 'Add TourPackage' && <AddTourPackage />}
+            {activeTab === 'Manage Blogs' && <BlogList />}
+            {activeTab === 'Add Blogs' && <AddBlog />}
           </>
         )}
       </main>

@@ -12,6 +12,7 @@ const path = require('path');
 const Payment = require('./controllers/PaymentHandler.js');
 const { default: mongoose } = require('mongoose');
 require('dotenv').config();
+const path = require('path');
 
 
 import('./config/db.js');
@@ -49,6 +50,10 @@ app.use('/TourPackageImages', express.static(path.join(__dirname, 'TourPackageIm
 const tourPackageRouter = require('./routes/tourPackages.js');
 app.use('/tourPackage', tourPackageRouter);
 
+
+const BlogRouter = require('./routes/Blog.js');
+app.use('/BlogImages', express.static(path.join(__dirname, 'BlogImages')));
+app.use('/Blog', BlogRouter);
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);

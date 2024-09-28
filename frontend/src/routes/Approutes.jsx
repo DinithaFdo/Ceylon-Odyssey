@@ -20,7 +20,12 @@ import GuestRoute from "../components/GuestRoute"
 import NotFound from "../components/spinner/404"
 import Test from  "../components/test"
 import PaymentForm from "../components/PaymentForm";
-
+import Blog from "../pages/Ishanka/AddBlog"
+import BlogList from "../pages/Ishanka/BlogList"
+import TourismBlog from "../pages/Ishanka/UserBlog"
+import IndividualBlog from "../pages/Ishanka/InduvidualBlog";
+import Admin from "../pages/dashboard/Admin";
+import UpdateBlogDashboard from "../pages/dashboard/Ishanka dahsbaord/UpdateBlogDashbaord";
 
 
 function AppRoutes() {
@@ -59,6 +64,12 @@ function AppRoutes() {
                     <Route path="/tour-packages" element={<TourPackageUser />} />
                 <Route path="/tour-packages/:id" element={<IndivudualPackage />} />
                 <Route path="/quotationForm" element={<QuotationForm />} />
+
+                <Route path="/add-blog" element={<Blog />} />
+                <Route path="/blog-list" element={<BlogList />} />
+                <Route path="/update-blog/:id" element={<UpdateBlogDashboard />} />
+                <Route path="/user-blog" element={<TourismBlog />} />
+                <Route path ="/blog/:id" element = {<IndividualBlog />} />
              
                 </Routes>
                     
