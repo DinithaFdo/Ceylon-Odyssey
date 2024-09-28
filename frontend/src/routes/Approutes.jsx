@@ -3,6 +3,7 @@ import TourPackageUser from "../pages/IshanFrontend/TourPackageUser";
 import IndivudualPackage from "../pages/IshanFrontend/IndivudualPackage";
 import QuotationForm from "../pages/IshanFrontend/QuotationForm";
 import AdminUpdateTour from "../pages/dashboard/Ishan Dashboard/UpdatePackageDashboard"
+import Home from "../pages/landing/Home";
 import Admin from "../pages/dashboard/Admin";
 import About from "../pages/common/About";
 import Contact from "../pages/common/Contact";
