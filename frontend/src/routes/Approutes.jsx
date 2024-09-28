@@ -69,7 +69,7 @@ function AppRoutes() {
                 <Route path="/user-blog" element={<TourismBlog />} />
                 <Route path ="/blog/:id" element = {<IndividualBlog />} />
 
-                <Route path="/book/:id" element={<BookingForm />} />
+                <Route path="/booking" element={<BookingForm />} />
                 <Route path="/confirmation" element={<Confirmation />} />
                 <Route path="/bookings" element={<BookingList />} />
              
