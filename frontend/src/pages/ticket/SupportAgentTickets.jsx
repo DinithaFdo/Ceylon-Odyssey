@@ -180,7 +180,7 @@ export default function AllTickets() {
                             {filteredTickets.map(ticket => (
                                 <tr key={ticket._id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                                     <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
-                                        TIC{ticket.ticketID.toString().padStart(4, '0')}
+                                        {ticket.ticketID.toString().padStart(4, '0')}
                                     </td>
                                     <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
                                         {ticket.subject}

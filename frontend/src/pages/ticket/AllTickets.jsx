@@ -152,13 +152,14 @@ export default function AllTickets() {
                             Create Ticket
                         </button>
 
-                        {/* Generate Excel Report button */}
+                        {/* Generate Excel Report button 
                         <button 
                             onClick={generateExcelReport}
                             className="bg-green-600 text-white px-4 py-2 rounded-full hover:bg-green-700 transition duration-300"
                         >
                             Generate Excel Report
                         </button>
+                        */}
 
                         {/* Generate PDF Report button */}
                         <button 
@@ -180,13 +181,14 @@ export default function AllTickets() {
                                 <th scope="col" className="px-6 py-3">Created On</th>
                                 <th scope="col" className="px-6 py-3">Solution</th>
                                 <th scope="col" className="px-6 py-3">Actions</th>
+                                
                             </tr>
                         </thead>
                         <tbody>
                             {filteredTickets.map(ticket => (
                                 <tr key={ticket._id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                                     <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
-                                        TIC{ticket.ticketID.toString().padStart(4, '0')}
+                                        {ticket.ticketID.toString().padStart(4, '0')}
                                     </td>
                                     <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
                                         {ticket.subject}
@@ -207,13 +209,13 @@ export default function AllTickets() {
                                         <div className="flex space-x-2">
                                             <button 
                                                 onClick={() => editTicket(ticket._id)}
-                                                className="bg-yellow-500 text-white px-2 py-1 rounded-md hover:bg-yellow-600 transition duration-300"
+                                                className="bg-yellow-500 text-white px-2 py-1 rounded-md hover:bg-green-600 transition duration-300"
                                             >
                                                 Edit
                                             </button>
                                             <button 
                                                 onClick={() => deleteTicket(ticket._id)}
-                                                className="bg-red-500 text-white px-2 py-1 rounded-md hover:bg-red-600 transition duration-300"
+                                                className="bg-red-500 text-white px-2 py-1 rounded-md hover:bg-blue-600 transition duration-300"
                                             >
                                                 Delete
                                             </button>
