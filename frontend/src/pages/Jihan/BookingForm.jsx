@@ -7,7 +7,7 @@ const BookingForm = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
-  
+
   const bookingData = location.state?.data;
   const [formData, setFormData] = useState({
     fullName: '',
@@ -15,10 +15,14 @@ const BookingForm = () => {
     phone: '',
     address: '',
     numberOfPeople: 1,
+    selectedEquipment: '',
+    date: '',
   });
 
   const [errors, setErrors] = useState({});
   const [totalPrice, setTotalPrice] = useState(0);
+  const [equipmentList, setEquipmentList] = useState([]); // Store the equipment list
+  const [selectedEquipmentPrice, setSelectedEquipmentPrice] = useState(0); 
   const handlingFee = 1000; 
 
   useEffect(() => {
@@ -29,15 +33,31 @@ const BookingForm = () => {
         phone: bookingData.phone || '',
         address: bookingData.address || '',
         numberOfPeople: 1, 
+        selectedEquipment: '',
+        date: '',
       });
       calculateTotalPrice(1, bookingData.packagePrice);
     }
+
+    // Fetch the equipment list from the backend
+    axios.get('http://localhost:5000/equipment/')
+      .then(response => {
+        setEquipmentList(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching equipment list:', error);
+      });
+
   }, [bookingData]);
 
-  const calculateTotalPrice = (numberOfPeople, packagePrice) => {
-    const total = ((packagePrice * numberOfPeople) + handlingFee)*105/100;
+  const calculateTotalPrice = (numberOfPeople, packagePrice = 0, equipmentPrice = 0) => {
+    const total = ((packagePrice * numberOfPeople) + handlingFee + equipmentPrice) * 1.05;
     setTotalPrice(total);
   };
+
+
+  
+
 
   const validateForm = () => {
     const newErrors = {};
@@ -48,6 +68,8 @@ const BookingForm = () => {
       newErrors.phone = 'Phone number must be 10 digits';
     if (!formData.address) newErrors.address = 'Address is required';
     if (formData.numberOfPeople < 1) newErrors.numberOfPeople = 'At least one person is required';
+    if (!formData.selectedEquipment) newErrors.selectedEquipment = 'Please select equipment';
+    if (!formData.date) newErrors.date = 'Please select a date';
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -61,7 +83,7 @@ const BookingForm = () => {
       ...formData,
       packageName: bookingData?.packageName,
       packagePrice: bookingData?.packagePrice,
-      userId: user?._id, 
+      userId: user?._id,
       totalPrice: totalPrice,
     };
 
@@ -89,7 +111,9 @@ const BookingForm = () => {
 
       {['fullName', 'email', 'phone', 'address'].map((field) => (
         <div className="mb-4" key={field}>
-          <label className="block text-sm font-medium mb-1 text-gray-700 capitalize">{field.replace(/([A-Z])/g, ' $1')}</label>
+          <label className="block text-sm font-medium mb-1 text-gray-700 capitalize">
+            {field.replace(/([A-Z])/g, ' $1')}
+          </label>
           <input
             type={field === 'email' ? 'email' : 'text'}
             className="w-full p-2 border rounded text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
@@ -116,8 +140,43 @@ const BookingForm = () => {
         {errors.numberOfPeople && <p className="text-red-500 text-sm">{errors.numberOfPeople}</p>}
       </div>
 
+      <div className="mb-4">
+        <label className="block text-sm font-medium mb-1 text-gray-700">Select Equipment</label>
+        <select
+          className="w-full p-2 border rounded text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
+          onChange={(e) => {
+            const selectedEquipmentId = e.target.value;
+            const selectedEquipment = equipmentList.find(equipment => equipment._id === selectedEquipmentId);
+            const equipmentPrice = selectedEquipment ? selectedEquipment.equipmentPrice : 0;
+
+            setFormData({ ...formData, selectedEquipment: selectedEquipmentId });
+            setSelectedEquipmentPrice(equipmentPrice);
+            calculateTotalPrice(formData.numberOfPeople, bookingData?.packagePrice, equipmentPrice);
+          }}
+        >
+          <option value="">Select equipment</option>
+          {equipmentList.map((equipment) => (
+            <option key={equipment._id} value={equipment._id}>
+              {equipment.equipmentName} - Rs. {equipment.equipmentPrice}
+            </option>
+          ))}
+        </select>
+        {errors.selectedEquipment && <p className="text-red-500 text-sm">{errors.selectedEquipment}</p>}
+      </div>
+
+      <div className="mb-4">
+        <label className="block text-sm font-medium mb-1 text-gray-700">Select Date</label>
+        <input
+          type="date"
+          className="w-full p-2 border rounded text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
+          value={formData.date}
+          onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+        />
+        {errors.date && <p className="text-red-500 text-sm">{errors.date}</p>}
+      </div>
+
       <p className="text-lg font-semibold text-gray-900">
-        Total Price (including handling fee & VAT): Rs. {totalPrice}
+        Total Price (including handling fee & VAT): Rs. {totalPrice.toFixed(2)}
       </p>
 
       <button

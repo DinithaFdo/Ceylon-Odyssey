@@ -13,6 +13,8 @@ const Confirmation = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const bookingData = location.state?.data;
 
+  console.log(bookingData);
+
   // Redirect if booking data is missing
   useEffect(() => {
     if (!bookingData || !bookingData._id) {
@@ -133,16 +135,23 @@ const handlePayNow = () => {
             <td className="py-2 px-4 text-gray-600">{new Date(bookingData.date).toLocaleDateString()}</td>
           </tr>
           <tr>
-            <th className="py-2 px-4 text-gray-800 font-medium">Equipment</th>
-            <td className="py-2 px-4 text-gray-600">{bookingData.equipment.map(eq => eq.name).join(', ')}</td>
+              <th className="py-2 px-4 text-gray-800 font-medium">Equipment</th>
+              <td className="py-2 px-4 text-gray-600">
+                  {bookingData.equipment && bookingData.equipment.length > 0 ? (
+                      bookingData.equipment.map(eq => `${eq.equipmentName} ($${eq.equipmentPrice.toFixed(2)})`).join(', ')
+                  ) : (
+                      'No equipment selected'
+                  )}
+              </td>
           </tr>
+
           <tr>
             <th className="py-2 px-4 text-gray-800 font-medium">Package</th>
             <td className="py-2 px-4 text-gray-600">{bookingData.packageName}</td>
           </tr>
           <tr>
-            <th className="py-2 px-4 text-gray-800 font-medium">Total Price</th>
-            <td className="py-2 px-4 text-gray-600">${bookingData.totalPrice}</td>
+            <th className="py-2 px-4 text-gray-800 font-medium">Total Price (LKR)</th>
+            <td className="py-2 px-4 text-gray-600">{bookingData.totalPrice.toFixed(2)}</td>
           </tr>
         </tbody>
       </table>
