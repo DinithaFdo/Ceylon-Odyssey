@@ -41,7 +41,7 @@ const Navbar = () => {
           <Link to="/tour-packages" className="text-gray-700 hover:text-blue-600 transition duration-300 cursor-pointer">Tour Packages</Link>
           <Link to="/userequipment" className="text-gray-700 hover:text-blue-600 transition duration-300 cursor-pointer">Equipments</Link>
           <Link to="/user-blog" className="text-gray-700 hover:text-blue-600 transition duration-300 cursor-pointer">Blogs</Link>
-          <Link to="/ticket" className="text-gray-700 hover:text-blue-600 transition duration-300 cursor-pointer">Support</Link>
+          <Link to="/tickets" className="text-gray-700 hover:text-blue-600 transition duration-300 cursor-pointer">Support</Link>
         </div>
 
         <div className="flex items-center">
