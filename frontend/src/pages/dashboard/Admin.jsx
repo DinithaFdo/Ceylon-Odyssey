@@ -13,11 +13,14 @@ import AddTourPackage from '../IshanFrontend/AddTourPackage';
 import AllTourPackages from '../IshanFrontend/AllPackagesAdmin';
 import AddBlog from "../Ishanka/AddBlog";
 import BlogList from "../Ishanka/BlogList";
+import AllDestinations from "../destination/allDestination";
+import AddDestination from "../destination/addDestination";
+import BookingList from "../Jihan/BookingList";
 
 
 
 const Admin = () => {
-  const { user, setUser, loading, error } = useContext(UserContext);
+  const { setUser, loading, error } = useContext(UserContext);
   const [activeTab, setActiveTab] = useState('overview');
 
 
@@ -47,7 +50,7 @@ const Admin = () => {
       <aside className="w-64 bg-gray-800 text-white flex flex-col">
         <div className="p-4 text-xl font-bold bg-gray-900">Admin Dashboard</div>
         <nav className="flex-1 px-2 py-4">
-          {['overview', 'users', 'transactions', 'referrals', 'Manage Inventory', 'Add Equipment', 'Manage TourPackages', 'Add TourPackage', 'Manage Blogs', 'Add Blogs'].map((tab) => (
+          {['overview', 'users', 'transactions', 'referrals', 'Manage Inventory', 'Add Equipment', 'Manage TourPackages', 'Add TourPackage', 'Manage Blogs', 'Add Blogs', 'Manage Destinations', 'Add Destinations', 'Booking List'].map((tab) => (
             <button
               key={tab}
               onClick={() => handleTabChange(tab)}
@@ -71,7 +74,7 @@ const Admin = () => {
       <main className="flex-1 p-6">
         
         <header className="bg-white shadow p-4 rounded mb-4">
-          <h2 className="text-xl font-semibold text-gray-800">Welcome, {user ? user.name : 'Admin'}!</h2>
+          <h2 className="text-xl font-semibold text-gray-800">Welcome, Admin!</h2>
         </header>
 
       
@@ -92,6 +95,9 @@ const Admin = () => {
             {activeTab === 'Add TourPackage' && <AddTourPackage />}
             {activeTab === 'Manage Blogs' && <BlogList />}
             {activeTab === 'Add Blogs' && <AddBlog />}
+            {activeTab === 'Manage Destinations' && <AllDestinations />}
+            {activeTab === 'Add Destinations' && <AddDestination />}
+            {activeTab === 'Booking List' && <BookingList />}
           </>
         )}
       </main>

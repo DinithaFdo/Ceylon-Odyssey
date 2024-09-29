@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Typography, Table, TableHead, TableRow, TableCell, TableBody, TableContainer, Paper, TextField,  Button } from '@mui/material';
 import './Booking.css';
+import toast from 'react-hot-toast';
 
 const BookingList = () => {
   const [bookings, setBookings] = useState([]);
@@ -23,6 +24,7 @@ const BookingList = () => {
     axios.delete(`http://localhost:5000/api/bookings/${id}`)
       .then(() => {
         setBookings(bookings.filter(booking => booking._id !== id));
+        toast.success('Booking deleted successfully');
       })
       .catch(error => {
         console.error('Error deleting booking:', error);

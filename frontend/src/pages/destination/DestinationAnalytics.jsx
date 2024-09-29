@@ -1,8 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import Navbar from '../../components/Navbar/Navbar';
-import Footer from '../../components/Footer/Footer';
 import * as XLSX from 'xlsx';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
@@ -13,7 +11,7 @@ export default function DestinationAnalytics() {
 
     const fetchDestinations = async () => {
         try {
-            const response = await axios.get('http://localhost:5001/destination/');
+            const response = await axios.get('http://localhost:5000/destination/');
             setDestinations(response.data);
             setFilteredData(response.data);
         } catch (error) {
@@ -74,10 +72,6 @@ export default function DestinationAnalytics() {
 
     return (
         <div className="flex flex-col min-h-screen">
-            <Navbar />
-
-            <br /><br />
-
             <main className="flex-grow pt-16 px-4 md:px-8 lg:px-16">
                 <center><h1 className="text-2xl font-bold mb-4">Destination Analytics</h1></center>
 
@@ -115,10 +109,6 @@ export default function DestinationAnalytics() {
                 </ResponsiveContainer>
 
             </main>
-
-            <br /><br />
-
-            <Footer />
         </div>
     );
 }

@@ -1,7 +1,5 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
-import Navbar from '../../components/Navbar/Navbar';
-import Footer from '../../components/Footer/Footer';
 import AddDestinationValidation from './AddDestinationValidation'; 
 import { useNavigate } from 'react-router-dom';
 
@@ -96,10 +94,7 @@ function AddDestination() {
 
     return (
         <div className="flex flex-col min-h-screen">
-            <Navbar />
             
-            <br></br><br></br>
-
             <main className="flex-grow pt-16 px-4 md:px-8 lg:px-16">
                 <form onSubmit={addDestination} className="max-w-lg mx-auto border border-gray-300 p-4 rounded-lg bg-white">
                     <h1 className="text-3xl font-bold mb-7 text-gray-800">Add New Destination</h1>
@@ -233,10 +228,6 @@ function AddDestination() {
                     <button type="submit" className="w-full text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Add Destination</button>
                 </form>
             </main>
-
-            <br></br>
-
-            <Footer />
         </div>
     );
 }

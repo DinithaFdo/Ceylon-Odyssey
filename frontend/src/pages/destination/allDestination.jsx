@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import Navbar from '../../components/Navbar/Navbar';
-import Footer from '../../components/Footer/Footer';
 
 export default function AllDestinations() {
     const [destinations, setDestinations] = useState([]);
@@ -52,10 +50,6 @@ export default function AllDestinations() {
 
     return (
         <div className="flex flex-col min-h-screen">
-            <Navbar /> 
-
-            <br></br><br></br>
-
             <main className="flex-grow pt-16 px-4 md:px-8 lg:px-16"> 
                 <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
                     <center><h1 className="text-2xl font-bold mb-4">Destinations</h1></center>
@@ -125,10 +119,6 @@ export default function AllDestinations() {
                     </table>
                 </div>
             </main>
-
-            <br></br><br></br>
-
-            <Footer />
         </div>
     );
 }
