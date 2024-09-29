@@ -5,6 +5,8 @@ import axios from 'axios';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import logo from '../../assets/logo'
+import Navbar from '../../components/Navbar/Navbar';
+import Footer from '../../components/Footer/Footer';
 
 
 const Confirmation = () => {
@@ -121,6 +123,10 @@ const handlePayNow = () => {
 
 
   return (
+    <div>
+            <Navbar />
+    <div className="mt-6 md:mt-10 md:mx-10 pt-20"></div>
+
     <div className="font-inter mt-12 p-6 border border-gray-300 rounded-lg shadow-lg w-full max-w-2xl mx-auto bg-white">
       <Typography variant="h4" gutterBottom className="font-semibold text-3xl text-gray-800 text-center">
         Booking Confirmation
@@ -253,6 +259,10 @@ const handlePayNow = () => {
 </Button>
 
       </div>
+      
+    </div>
+    <br></br>
+    <Footer />
     </div>
   );
 };
