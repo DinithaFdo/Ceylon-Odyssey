@@ -45,7 +45,7 @@ export default function EditDestinationPage() {
     useEffect(() => {
         const fetchDestination = async () => {
             try {
-                const response = await axios.get(`http://localhost:5001/destination/get/${id}`);
+                const response = await axios.get(`http://localhost:5000/destination/get/${id}`);
                 if (response.data.status === 'Destination fetched') {
                     const destinationData = response.data.destination;
                     setDestination(destinationData);
@@ -131,13 +131,13 @@ export default function EditDestinationPage() {
         formDataToSubmit.append('latitude', formData.latitude);
 
         try {
-            await axios.put(`http://localhost:5001/destination/update/${id}`, formDataToSubmit, {
+            await axios.put(`http://localhost:5000/destination/update/${id}`, formDataToSubmit, {
                 headers: {
                     'Content-Type': 'multipart/form-data' 
                 }
             });
             setSuccessMessage('Destination updated successfully!');
-            setTimeout(() => navigate('/view-destinations'), 2000); 
+            setTimeout(() => navigate('/dashboard'), 2000); 
         } catch (error) {
             console.error('Error updating destination:', error);
             setErrors({ update: 'Error updating destination. Please try again later.' });

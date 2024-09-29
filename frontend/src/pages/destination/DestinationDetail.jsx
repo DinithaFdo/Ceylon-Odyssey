@@ -65,7 +65,7 @@ export default function DestinationDetail() {
                     <div id="destination-detail" className="w-full max-w-5xl mx-auto bg-white dark:bg-gray-800 shadow-lg rounded-lg overflow-hidden">
                         {/* Destination Image */}
                         <img
-                            src={"http://localhost:5001/DestinationImages/" + destination.dThumbnail}
+                            src={"http://localhost:5000/DestinationImages/" + destination.dThumbnail}
                             alt="Destination Thumbnail"
                             className="w-full h-80 object-cover"
                         />
