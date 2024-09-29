@@ -2,6 +2,8 @@ import { useState, useEffect, useContext } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { UserContext } from '../../components/userContext'; 
+import Footer from '../../components/Footer/Footer';
+import Navbar from '../../components/Navbar/Navbar';
 
 const BookingForm = () => {
   const location = useLocation();
@@ -103,6 +105,9 @@ const BookingForm = () => {
   };
 
   return (
+    <div>
+            <Navbar />
+    <div className="mt-6 md:mt-10 md:mx-10 pt-20">
     <form
       onSubmit={handleSubmit}
       className="max-w-md mx-auto p-6 border rounded-lg shadow-md bg-white"
@@ -198,6 +203,9 @@ const BookingForm = () => {
         Submit Booking
       </button>
     </form>
+    </div>
+    <Footer />
+    </div>
   );
 };
 
