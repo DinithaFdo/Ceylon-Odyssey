@@ -59,10 +59,6 @@ app.use('/Blog', BlogRouter);
 
 app.use('/api/bookings', bookingRoutes);
 
-// Import routes
-const ticketRouter = require('./routes/ticket');
-const supportAgentRouter = require('./routes/supportAgent'); // Uncomment if support agent routes are available
-
 // Use routes
 app.use('/tickets', ticketRouter);
 app.use('/support-agents', supportAgentRouter);

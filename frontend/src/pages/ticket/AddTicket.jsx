@@ -29,7 +29,7 @@ export default function AddTicket() {
 
         try {
             const newTicket = { subject, description, priority, email };
-            await axios.post('http://localhost:5010/tickets/add', newTicket);
+            await axios.post('http://localhost:5000/tickets/add', newTicket);
             alert('Ticket added successfully!');
             navigate('/tickets'); // Redirect to AllTickets after successful submission
         } catch (error) {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import Navbar from '../../components/Navbar/Navbar';
@@ -24,7 +24,7 @@ export default function EditTicketPage() {
     // Fetch ticket details by ID when component mounts
     const fetchTicketDetails = async () => {
         try {
-            const response = await axios.get(`http://localhost:5010/tickets/get/${ticketID}`);
+            const response = await axios.get(`http://localhost:5000/tickets/get/${ticketID}`);
             setTicket(response.data.ticket);  // Set ticket data to the response
             setLoading(false);
         } catch (error) {
@@ -50,7 +50,7 @@ export default function EditTicketPage() {
         console.log('Submitting:', ticket); // Log the form data for debugging
 
         try {
-            const response = await axios.put(`http://localhost:5010/tickets/update/${ticketID}`, ticket);
+            const response = await axios.put(`http://localhost:5000/tickets/update/${ticketID}`, ticket);
             console.log('Ticket updated successfully:', response.data);
             alert('Ticket updated successfully');
             navigate('/tickets'); // Redirect back to tickets list

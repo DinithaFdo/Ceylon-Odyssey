@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../../components/Navbar/Navbar';
@@ -13,7 +13,7 @@ export default function AllTickets() {
     // Fetch all tickets
     const fetchTickets = async () => {
         try {
-            const response = await axios.get('http://localhost:5010/tickets/');
+            const response = await axios.get('http://localhost:5000/tickets/');
             setTickets(response.data);
         } catch (error) {
             console.error('Error fetching tickets:', error);
@@ -24,7 +24,7 @@ export default function AllTickets() {
     const deleteTicket = async (ticketID) => {
         if (window.confirm('Are you sure you want to delete this ticket?')) {
             try {
-                await axios.delete(`http://localhost:5010/tickets/delete/${ticketID}`);
+                await axios.delete(`http://localhost:5000/tickets/delete/${ticketID}`);
                 setTickets(tickets.filter(ticket => ticket._id !== ticketID));
             } catch (error) {
                 console.error('Error deleting ticket:', error);
@@ -120,7 +120,6 @@ export default function AllTickets() {
                                 <th scope="col" className="px-6 py-3">Subject</th>
                                 <th scope="col" className="px-6 py-3">Description</th>
                                 <th scope="col" className="px-6 py-3">Email</th>  {/* Add Email header */}
-                                <th scope="col" className="px-6 py-3">Status</th>
                                 <th scope="col" className="px-6 py-3">Created On</th>
                                 <th scope="col" className="px-6 py-3">Solution</th>
                                 <th scope="col" className="px-6 py-3">Actions</th>
