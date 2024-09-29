@@ -12,13 +12,14 @@ const Navbar = () => {
           <Link to="/about" className="text-gray-700 hover:text-blue-600 transition duration-300">About</Link>
           <Link to="/contact" className="text-gray-700 hover:text-blue-600 transition duration-300">Contact</Link>
           
-          {/* Destination Links 
-          <Link to="/destinations" className="text-gray-700 hover:text-blue-600 transition duration-300">View Destinations</Link> */}
-          <Link to="/add-destination" className="text-gray-700 hover:text-blue-600 transition duration-300"> Destination</Link>
+          {/* Destination Links */}
+          <Link to="/add-destination" className="text-gray-700 hover:text-blue-600 transition duration-300">Destination</Link>
 
           {/* Ticket Links */}
-          <Link to="/tickets" className="text-gray-700 hover:text-blue-600 transition duration-300">Support</Link>
-          {/*<Link to="/tickets/add" className="text-gray-700 hover:text-blue-600 transition duration-300">Add Ticket</Link>*/}
+          <Link to="/tickets" className="text-gray-700 hover:text-blue-600 transition duration-300">Tickets</Link>
+          
+          {/* Support Agent Link */}
+          <Link to="/support-agent-tickets" className="text-gray-700 hover:text-blue-600 transition duration-300">Support Agent</Link>
         </div>
 
         <div className="flex items-center">

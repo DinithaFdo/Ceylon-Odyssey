@@ -9,6 +9,9 @@ import AddTicket from "../pages/ticket/AddTicket"; // Import AddTicket component
 import ViewTicket from "../pages/ticket/ViewTicket"; // Import ViewTicket component
 import AllTickets from "../pages/ticket/AllTickets"; // Import AllTickets component
 import EditTicketPage from "../pages/ticket/EditTicketPage"; // Import EditTicketPage component
+import EditSupportTicketPage from "../pages/ticket/EditSupportTicketPage"; // Import EditSupportTicketPage component
+import SupportAgentTicket from "../pages/ticket/SupportAgentTickets"; // Adjust the import path as necessary
+
 
 function AppRoutes() {
     return (
@@ -23,6 +26,9 @@ function AppRoutes() {
                 <Route path="/tickets/add" element={<AddTicket />} /> {/* Route for Adding a Ticket */}
                 <Route path="/tickets/:id" element={<ViewTicket />} /> {/* Route for Viewing a Specific Ticket */}
                 <Route path="/tickets/edit/:ticketID" element={<EditTicketPage />} /> {/* Route for Editing a Ticket */}
+                <Route path="/tickets/edit-support/:ticketID" element={<EditSupportTicketPage />} /> {/* Route for Editing a Support Ticket */}
+                <Route path="/support-agent-tickets" element={<SupportAgentTicket />} /> 
+
             </Routes>
         </Router>
     );

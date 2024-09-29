@@ -36,7 +36,7 @@ export default function AllTickets() {
 
     // Edit ticket
     const editTicket = (ticketID) => {
-        navigate(`/tickets/edit/${ticketID}`);
+        navigate(`/tickets/edit-support/${ticketID}`);
     };
 
     // Add new ticket
@@ -145,13 +145,7 @@ export default function AllTickets() {
 
                     {/* Add new ticket and generate report buttons */}
                     <div className="flex space-x-4 mb-4">
-                        <button 
-                            onClick={addNewTicket}
-                            className="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition duration-300"
-                        >
-                            Create Ticket
-                        </button>
-
+                    
                         {/* Generate Excel Report button */}
                         <button 
                             onClick={generateExcelReport}
@@ -209,7 +203,7 @@ export default function AllTickets() {
                                                 onClick={() => editTicket(ticket._id)}
                                                 className="bg-yellow-500 text-white px-2 py-1 rounded-md hover:bg-yellow-600 transition duration-300"
                                             >
-                                                Edit
+                                                Solution
                                             </button>
                                             <button 
                                                 onClick={() => deleteTicket(ticket._id)}
