@@ -13,8 +13,10 @@ const Payment = require('./controllers/PaymentHandler.js');
 const bookingRoutes = require('./routes/bookingRoutes');
 const ticketRouter = require('./routes/ticket');
 const supportAgentRouter = require('./routes/supportAgent');
+const destinationRouter = require('./routes/destination');
 const { default: mongoose } = require('mongoose');
 require('dotenv').config();
+const imagePath = require('path');
 
 
 import('./config/db.js');
@@ -40,6 +42,7 @@ app.use('/api/transaction', transaction);
 app.use('/api/referral', referrals);
 app.use('/api/payment', Payment);
 
+app.use('/DestinationImages', express.static(imagePath.join(__dirname, 'DestinationImages')));
 
 const PORT = process.env.PORT || 5000;
 
@@ -62,6 +65,8 @@ app.use('/api/bookings', bookingRoutes);
 // Use routes
 app.use('/tickets', ticketRouter);
 app.use('/support-agents', supportAgentRouter);
+
+app.use('/destination', destinationRouter);
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);

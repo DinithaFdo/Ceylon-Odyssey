@@ -31,6 +31,12 @@ import AddTicket from "../pages/ticket/AddTicket"; // Import AddTicket component
 import ViewTicket from "../pages/ticket/ViewTicket"; // Import ViewTicket component
 import AllTickets from "../pages/ticket/AllTickets"; // Import AllTickets component
 import EditTicketPage from "../pages/ticket/EditTicketPage"; // Import EditTicketPage component
+import AddDestination from "../pages/destination/addDestination";
+import AllDestination from "../pages/destination/allDestination";
+import EditDestinationPage from "../pages/destination/EditDestinationPage";
+import DestinationList from "../pages/destination/DestinationList";
+import DestinationDetail from "../pages/destination/DestinationDetail";
+import DestinationAnalytics from "../pages/destination/DestinationAnalytics";
 
 
 function AppRoutes() {
@@ -82,6 +88,13 @@ function AppRoutes() {
                 <Route path="/tickets/add" element={<AddTicket />} /> {/* Route for Adding a Ticket */}
                 <Route path="/tickets/:id" element={<ViewTicket />} /> {/* Route for Viewing a Specific Ticket */}
                 <Route path="/tickets/edit/:ticketID" element={<EditTicketPage />} /> {/* Route for Editing a Ticket */}
+
+                <Route path="/add-destination" element={<AddDestination />} />
+                <Route path="/view-destinations" element={<AllDestination />} />
+                <Route path="/edit-destination/:id" element={<EditDestinationPage />} />
+                <Route path="/destinations" element={<DestinationList />} />
+                <Route path="/destination/:id" element={<DestinationDetail />} />
+                <Route path="/analytics" element={<DestinationAnalytics />} />
              
                 </Routes>
                     
@@ -91,5 +104,4 @@ function AppRoutes() {
 }
 
 export default AppRoutes;
-
 
