@@ -76,7 +76,7 @@ function AddDestination() {
             return;
         }
 
-        axios.post("http://localhost:5001/destination/add", formData, {
+        axios.post("http://localhost:5000/destination/add", formData, {
             headers: {
                 "Content-Type": "multipart/form-data", // Set headers for file upload
             },
