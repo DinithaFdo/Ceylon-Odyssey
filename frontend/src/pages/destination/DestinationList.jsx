@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { FaSearch } from 'react-icons/fa';
@@ -14,7 +14,7 @@ export default function DestinationList() {
 
     const fetchDestinations = async () => {
         try {
-            const response = await axios.get('http://localhost:5001/destination/');
+            const response = await axios.get('http://localhost:5000/destination/');
             setDestinations(response.data);
         } catch (error) {
             console.error('Error fetching destinations:', error);
@@ -31,7 +31,7 @@ export default function DestinationList() {
 
     const handleThumbnailClick = async (destinationId) => {
         try {
-            await axios.put(`http://localhost:5001/destination/${destinationId}/click`);
+            await axios.put(`http://localhost:5000/destination/${destinationId}/click`);
             navigate(`/destination/${destinationId}`);
         } catch (error) {
             console.error('Error updating click count:', error);
@@ -40,7 +40,7 @@ export default function DestinationList() {
 
     const handleReadMoreClick = async (destinationId) => {
         try {
-            await axios.put(`http://localhost:5001/destination/${destinationId}/click`);
+            await axios.put(`http://localhost:5000/destination/${destinationId}/click`);
             navigate(`/destination/${destinationId}`);
         } catch (error) {
             console.error('Error updating click count:', error);
@@ -119,7 +119,7 @@ export default function DestinationList() {
                             <div key={destination._id} className="flex border rounded-lg p-6 bg-white shadow-lg transition-transform transform hover:scale-105 dark:bg-gray-800 dark:border-gray-700">
                                 <div className="w-1/3">
                                     <img 
-                                        src={"http://localhost:5001/DestinationImages/" + destination.dThumbnail} 
+                                        src={"http://localhost:5000/DestinationImages/" + destination.dThumbnail} 
                                         alt="Destination Thumbnail" 
                                         className="w-full h-48 object-cover rounded-md cursor-pointer transition-transform transform hover:scale-110"
                                         onClick={() => handleThumbnailClick(destination._id)}

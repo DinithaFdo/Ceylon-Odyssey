@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../../components/Navbar/Navbar';
@@ -10,7 +10,7 @@ export default function AllDestinations() {
 
     const fetchDestinations = async () => {
         try {
-            const response = await axios.get('http://localhost:5001/destination/');
+            const response = await axios.get('http://localhost:5000/destination/');
             setDestinations(response.data);
         } catch (error) {
             console.error('Error fetching destinations:', error);
@@ -20,7 +20,7 @@ export default function AllDestinations() {
     const deleteDestination = async (destinationID) => {
         if (window.confirm('Are you sure you want to delete this destination?')) {
             try {
-                await axios.delete(`http://localhost:5001/destination/delete/${destinationID}`);
+                await axios.delete(`http://localhost:5000/destination/delete/${destinationID}`);
                 setDestinations(destinations.filter(destination => destination._id !== destinationID));
             } catch (error) {
                 console.error('Error deleting destination:', error);
@@ -91,7 +91,7 @@ export default function AllDestinations() {
                             {destinations.map((destination) => (
                                 <tr key={destination._id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                                     <td className="p-4">
-                                        <img src={`http://localhost:5001/DestinationImages/${destination.dThumbnail}`} alt="Destination Thumbnail" className="w-16 md:w-32 max-w-full max-h-full" />
+                                        <img src={`http://localhost:5000/DestinationImages/${destination.dThumbnail}`} alt="Destination Thumbnail" className="w-16 md:w-32 max-w-full max-h-full" />
                                     </td>
                                     <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
                                         {destination.dTitle}

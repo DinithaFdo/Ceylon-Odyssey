@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Navbar from '../../components/Navbar/Navbar';
 import Footer from '../../components/Footer/Footer';
@@ -16,7 +16,7 @@ export default function DestinationDetail() {
     // Fetch destination details
     const fetchDestination = async (id) => {
         try {
-            const response = await axios.get(`http://localhost:5001/destination/get/${id}`);
+            const response = await axios.get(`http://localhost:5000/destination/get/${id}`);
             const destinationData = response.data.destination;
             setDestination(destinationData);
 
