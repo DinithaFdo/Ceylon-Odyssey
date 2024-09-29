@@ -49,9 +49,7 @@ export default function IndividualEquipment() {
                         <p className="text-lg mb-2"><strong>Available Quantity:</strong> {equipment.equipmentQuantity}</p>
                     </div>
 
-                    <button className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg mt-8">
-                        Add to Cart
-                    </button>
+                    
                     </div>
                 </div>
 
