@@ -83,7 +83,7 @@ function AddDestination() {
         })
             .then(() => {
                 alert("Destination Added Successfully");
-                navigate("/view-destinations"); // Redirect to the view destinations page
+                navigate("/dashboard"); // Redirect to the view destinations page
             })
             .catch((err) => {
                 alert(err);
