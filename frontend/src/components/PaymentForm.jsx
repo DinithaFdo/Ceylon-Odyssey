@@ -35,6 +35,8 @@ const PaymentForm = () => {
         setIsAgreed((prev) => !prev);
     };
 
+    
+
     const validateForm = () => {
         const errors = {};
         if (!formData.firstName) errors.firstName = "First Name is required.";

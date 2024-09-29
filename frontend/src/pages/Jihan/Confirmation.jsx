@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Button, Typography, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import axios from 'axios';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
+import logo from '../../assets/logo'
 
 
 const Confirmation = () => {
@@ -33,7 +34,7 @@ const Confirmation = () => {
     }
     axios.delete(`http://localhost:5000/api/bookings/${bookingData._id}`)
       .then(() => {
-        navigate('/package');
+        navigate('/');
       })
       .catch((err) => {
         console.error(err);
@@ -60,6 +61,20 @@ const handlePayNow = () => {
     // Create a new instance of jsPDF
     const doc = new jsPDF();
 
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const imgWidth = 80; // Logo width
+    const imgHeight = 20; // Logo height
+    const xPos = (pageWidth - imgWidth) / 2; // Center horizontally
+    const yPos = 10; // Position near the top of the page
+
+    doc.addImage(logo, 'PNG', xPos, yPos, imgWidth, imgHeight);
+
+    // Add a line below the logo
+    const lineY = yPos + imgHeight + 5; // Position for the line
+    doc.setDrawColor(0);
+    doc.setLineWidth(0.5);
+    doc.line(10, lineY, pageWidth - 10, lineY); // Line below logo
+
     // Set the title of the PDF
     doc.setFontSize(20);
     doc.text('Booking Receipt', 14, 22);
@@ -76,7 +91,6 @@ const handlePayNow = () => {
         { title: 'Phone', value: bookingData.phone },
         { title: 'Address', value: bookingData.address },
         { title: 'Date', value: new Date(bookingData.date).toLocaleDateString() },
-        { title: 'Equipment', value: bookingData.equipment.map(eq => eq.name).join(', ') },
         { title: 'Package', value: bookingData.packageName },
         { title: 'Total Price', value: `$${bookingData.totalPrice}` },
     ];
@@ -133,16 +147,6 @@ const handlePayNow = () => {
           <tr>
             <th className="py-2 px-4 text-gray-800 font-medium">Date</th>
             <td className="py-2 px-4 text-gray-600">{new Date(bookingData.date).toLocaleDateString()}</td>
-          </tr>
-          <tr>
-              <th className="py-2 px-4 text-gray-800 font-medium">Equipment</th>
-              <td className="py-2 px-4 text-gray-600">
-                  {bookingData.equipment && bookingData.equipment.length > 0 ? (
-                      bookingData.equipment.map(eq => `${eq.equipmentName} ($${eq.equipmentPrice.toFixed(2)})`).join(', ')
-                  ) : (
-                      'No equipment selected'
-                  )}
-              </td>
           </tr>
 
           <tr>
@@ -232,7 +236,7 @@ const handlePayNow = () => {
 </Button>
 
 <Button
-  onClick={() => navigate('/package')}
+  onClick={() => navigate('/')}
   sx={{
     backgroundColor: '#1E3A8A', // Gray 600 from Tailwind
     color: '#fff',

@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const BookingSchema = new mongoose.Schema({
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   fullName: {
     type: String,
     required: [true, 'Full Name is required'],
@@ -26,12 +27,6 @@ const BookingSchema = new mongoose.Schema({
   date: {
     type: Date,
     required: [true, 'Booking date is required'],
-    validate: {
-      validator: function(value) {
-        return value >= new Date();
-      },
-      message: 'Booking date must be today or in the future'
-    }
   },
   packageName: {
     type: String,

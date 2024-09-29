@@ -3,10 +3,11 @@ const Booking = require('../models/Booking');
 
 // Create a new booking
 exports.createBooking = async (req, res) => {
-    const { fullName, email, phone, address, date, packageName, packagePrice, equipment, totalPrice } = req.body;
+    const {userId, fullName, email, phone, address, date, packageName, packagePrice, equipment, totalPrice } = req.body;
   
     try {
       const newBooking = new Booking({
+        userId,
         fullName,
         email,
         phone,
@@ -18,9 +19,10 @@ exports.createBooking = async (req, res) => {
         totalPrice
       });
       await newBooking.save();
+
       res.json(newBooking);
     } catch (error) {
-      res.status(500).json({ error: 'Server error while creating booking' });
+      res.status(500).json({ error: 'Server error while creating booking', error });
     }
   };
   

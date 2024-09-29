@@ -33,8 +33,8 @@ const BookingForm = () => {
         phone: bookingData.phone || '',
         address: bookingData.address || '',
         numberOfPeople: 1, 
-        selectedEquipment: '',
-        date: '',
+        selectedEquipment: bookingData.selectedEquipment || '',
+        date: Date.now(),
       });
       calculateTotalPrice(1, bookingData.packagePrice);
     }
@@ -83,13 +83,15 @@ const BookingForm = () => {
       ...formData,
       packageName: bookingData?.packageName,
       packagePrice: bookingData?.packagePrice,
-      userId: user?._id,
+      userId: user.userId,
       totalPrice: totalPrice,
     };
 
     const apiCall = bookingData?._id
-      ? axios.put(`http://localhost:5000/api/bookings/${bookingData._id}`, updatedBookingData)
+      ? axios.put(`http://localhost:5000/api/bookings`, updatedBookingData)
       : axios.post('http://localhost:5000/api/bookings', updatedBookingData);
+      console.log(formData);
+      
 
     apiCall
       .then((response) => {
