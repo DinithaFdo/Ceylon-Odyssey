@@ -11,6 +11,8 @@ const bodyParser = require('body-parser');
 const path = require('path'); 
 const Payment = require('./controllers/PaymentHandler.js');
 const bookingRoutes = require('./routes/bookingRoutes');
+const ticketRouter = require('./routes/ticket');
+const supportAgentRouter = require('./routes/supportAgent');
 const { default: mongoose } = require('mongoose');
 require('dotenv').config();
 
@@ -56,6 +58,14 @@ app.use('/BlogImages', express.static(path.join(__dirname, 'BlogImages')));
 app.use('/Blog', BlogRouter);
 
 app.use('/api/bookings', bookingRoutes);
+
+// Import routes
+const ticketRouter = require('./routes/ticket');
+const supportAgentRouter = require('./routes/supportAgent'); // Uncomment if support agent routes are available
+
+// Use routes
+app.use('/tickets', ticketRouter);
+app.use('/support-agents', supportAgentRouter);
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);

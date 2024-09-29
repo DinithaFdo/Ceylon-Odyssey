@@ -26,6 +26,11 @@ import UpdateBlogDashboard from "../pages/dashboard/Ishanka dahsbaord/UpdateBlog
 import BookingForm from "../pages/Jihan/BookingForm";
 import Confirmation from "../pages/Jihan/Confirmation";
 import BookingList from "../pages/Jihan/BookingList"
+import TicketList from "../pages/ticket/TicketList"; // Import TicketList component
+import AddTicket from "../pages/ticket/AddTicket"; // Import AddTicket component
+import ViewTicket from "../pages/ticket/ViewTicket"; // Import ViewTicket component
+import AllTickets from "../pages/ticket/AllTickets"; // Import AllTickets component
+import EditTicketPage from "../pages/ticket/EditTicketPage"; // Import EditTicketPage component
 
 
 function AppRoutes() {
@@ -72,6 +77,11 @@ function AppRoutes() {
                 <Route path="/booking" element={<BookingForm />} />
                 <Route path="/confirmation" element={<Confirmation />} />
                 <Route path="/bookings" element={<BookingList />} />
+
+                <Route path="/tickets" element={<AllTickets />} /> {/* Route for All Tickets */}
+                <Route path="/tickets/add" element={<AddTicket />} /> {/* Route for Adding a Ticket */}
+                <Route path="/tickets/:id" element={<ViewTicket />} /> {/* Route for Viewing a Specific Ticket */}
+                <Route path="/tickets/edit/:ticketID" element={<EditTicketPage />} /> {/* Route for Editing a Ticket */}
              
                 </Routes>
                     
