@@ -26,16 +26,21 @@ import UpdateBlogDashboard from "../pages/dashboard/Ishanka dahsbaord/UpdateBlog
 import BookingForm from "../pages/Jihan/BookingForm";
 import Confirmation from "../pages/Jihan/Confirmation";
 import BookingList from "../pages/Jihan/BookingList"
+
 import AddTicket from "../pages/ticket/AddTicket"; // Import AddTicket component
 import ViewTicket from "../pages/ticket/ViewTicket"; // Import ViewTicket component
 import AllTickets from "../pages/ticket/AllTickets"; // Import AllTickets component
 import EditTicketPage from "../pages/ticket/EditTicketPage"; // Import EditTicketPage component
+import EditSupportTicketPage from "../pages/ticket/EditSupportTicketPage"; // Import EditSupportTicketPage component
+import SupportAgentTicket from "../pages/ticket/SupportAgentTickets"; // Adjust the import path as necessary
+
 import AddDestination from "../pages/destination/addDestination";
 import AllDestination from "../pages/destination/allDestination";
 import EditDestinationPage from "../pages/destination/EditDestinationPage";
 import DestinationList from "../pages/destination/DestinationList";
 import DestinationDetail from "../pages/destination/DestinationDetail";
 import DestinationAnalytics from "../pages/destination/DestinationAnalytics";
+
 
 
 function AppRoutes() {
@@ -87,6 +92,9 @@ function AppRoutes() {
                 <Route path="/tickets/add" element={<AddTicket />} /> {/* Route for Adding a Ticket */}
                 <Route path="/tickets/:id" element={<ViewTicket />} /> {/* Route for Viewing a Specific Ticket */}
                 <Route path="/tickets/edit/:ticketID" element={<EditTicketPage />} /> {/* Route for Editing a Ticket */}
+                <Route path="/dashboard/tickets/edit-support/:ticketID" element={<EditSupportTicketPage />} /> {/* Route for Editing a Support Ticket */}
+                <Route path="/dashboard/support-agent-tickets" element={<SupportAgentTicket />} />
+                
 
                 <Route path="/dashboard/add-destination" element={<AddDestination />} />
                 <Route path="dashboard/view-destinations" element={<AllDestination />} />
