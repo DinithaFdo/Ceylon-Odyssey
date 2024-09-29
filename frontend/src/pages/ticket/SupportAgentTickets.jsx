@@ -33,7 +33,7 @@ export default function AllTickets() {
 
     // Edit ticket
     const editTicket = (ticketID) => {
-        navigate(`dashboard/tickets/edit-support/${ticketID}`);
+        navigate(`/edit-support/${ticketID}`);
     };
 
 

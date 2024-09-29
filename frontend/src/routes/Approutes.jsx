@@ -92,7 +92,7 @@ function AppRoutes() {
                 <Route path="/tickets/add" element={<AddTicket />} /> {/* Route for Adding a Ticket */}
                 <Route path="/tickets/:id" element={<ViewTicket />} /> {/* Route for Viewing a Specific Ticket */}
                 <Route path="/tickets/edit/:ticketID" element={<EditTicketPage />} /> {/* Route for Editing a Ticket */}
-                <Route path="/dashboard/tickets/edit-support/:ticketID" element={<EditSupportTicketPage />} /> {/* Route for Editing a Support Ticket */}
+                <Route path="/edit-support/:ticketID" element={<EditSupportTicketPage />} /> {/* Route for Editing a Support Ticket */}
                 <Route path="/dashboard/support-agent-tickets" element={<SupportAgentTicket />} />
                 
 
