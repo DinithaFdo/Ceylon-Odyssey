@@ -54,6 +54,7 @@ const BookingSchema = new mongoose.Schema({
       min: [0, 'Equipment price must be a positive number']
     }
   }],
+
   totalPrice: {
     type: Number,
     required: [true, 'Total Price is required'],
