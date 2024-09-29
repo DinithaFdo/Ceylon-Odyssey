@@ -11,12 +11,26 @@ const Footer = () => {
           <div className="flex flex-col justify-between text-center h-full">
             <h4 className="text-xl font-semibold mb-4">Quick Links</h4>
             <ul className="space-y-2 mb-4">
-              {['About Us', 'Tour Packages', 'Destinations', 'Equipment', 'Blogs', 'Contact'].map((item) => (
-                <li key={item}>
-                  <a href="#" className="hover:text-orange-300 transition duration-300">{item}</a>
-                </li>
-              ))}
+              {['About Us', 'Tour Packages', 'Destinations', 'Equipment', 'Blogs', 'Contact'].map((item) => {
+                const links = {
+                  'About Us': '/about',
+                  'Tour Packages': '/tour-packages',
+                  'Destinations': '/destinations',
+                  'Equipment': '/userequipment',
+                  'Blogs': '/blogs',
+                  'Contact': '/tickets'
+                };
+
+                return (
+                  <li key={item}>
+                    <a href={links[item]} className="hover:text-orange-300 transition duration-300">
+                      {item}
+                    </a>
+                  </li>
+                );
+              })}
             </ul>
+
           </div>
 
           {/* Center Section for Ceylon Odyssey */}
