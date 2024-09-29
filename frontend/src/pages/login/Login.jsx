@@ -1,9 +1,8 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import Lottie from "lottie-react";
 import loginAnimation from "../../assets/dinitha/login.json";
-import { useNavigate } from "react-router-dom"; 
 import AccountSuspendedPopup from '../../components/Suspended'; 
 import axios from 'axios';
 
@@ -14,6 +13,7 @@ function Login() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuspended, setIsSuspended] = useState(false);
+  const [errors, setErrors] = useState({}); // State for error messages
   const navigate = useNavigate(); 
 
   const handleChange = (e) => {
@@ -21,6 +21,7 @@ function Login() {
       ...formData,
       [e.target.name]: e.target.value,
     });
+    setErrors({ ...errors, [e.target.name]: "" }); // Clear error on input change
   };
 
   const handleLogout = async () => {
@@ -34,11 +35,26 @@ function Login() {
     }
   };
   
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsSubmitting(true);
 
+    // Clear previous errors
+    const newErrors = {};
+
+    // Validate form fields
+    if (!formData.email) {
+      newErrors.email = "Email is required.";
+    }
+    if (!formData.password) {
+      newErrors.password = "Password is required.";
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors); // Set error messages
+      return;
+    }
+
+    setIsSubmitting(true);
     const toastId = toast.loading('Signing in...');
   
     try {
@@ -58,7 +74,6 @@ function Login() {
       }
   
       if (data.user.status === 'suspended') {
-    
         await handleLogout();
         setIsSuspended(true);
         toast.error('Your account has been suspended.', { id: toastId });
@@ -66,7 +81,6 @@ function Login() {
         return; 
       }
   
-      
       toast.success('Login successful!', { id: toastId });
   
       if (data.user.role === 'admin') {
@@ -113,12 +127,12 @@ function Login() {
                     id="email"
                     name="email"
                     type="email"
-                    required
                     autoComplete="email"
                     value={formData.email}
                     onChange={handleChange}
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6 p-5"
                   />
+                  {errors.email && <p className="text-red-600 text-sm mt-1">{errors.email}</p>} {/* Error message */}
                 </div>
               </div>
 
@@ -131,18 +145,19 @@ function Login() {
                     id="password"
                     name="password"
                     type="password"
-                    required
                     autoComplete="current-password"
                     value={formData.password}
                     onChange={handleChange}
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6 p-5"
                   />
+                  {errors.password && <p className="text-red-600 text-sm mt-1">{errors.password}</p>} {/* Error message */}
                 </div>
               </div>
 
               <div>
                 <button
                   type="submit"
+                  id="submit"
                   className={`flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm ${
                     isSubmitting ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-500'
                   }`}

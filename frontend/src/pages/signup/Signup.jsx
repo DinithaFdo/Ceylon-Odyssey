@@ -14,6 +14,7 @@ function SignUp() {
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errors, setErrors] = useState({}); // State for error messages
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -34,10 +35,33 @@ function SignUp() {
       ...formData,
       [e.target.name]: e.target.value
     });
+    setErrors({ ...errors, [e.target.name]: "" }); // Clear error on input change
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Clear previous errors
+    const newErrors = {};
+
+    // Validate form fields
+    if (!formData.firstName) {
+      newErrors.firstName = "First Name is required.";
+    }
+    if (!formData.lastName) {
+      newErrors.lastName = "Last Name is required.";
+    }
+    if (!formData.email) {
+      newErrors.email = "Email is required.";
+    }
+    if (!formData.password) {
+      newErrors.password = "Password is required.";
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors); // Set error messages
+      return;
+    }
 
     setIsSubmitting(true);
 
@@ -95,12 +119,11 @@ function SignUp() {
                       id="firstName"
                       name="firstName"
                       type="text"
-                      required
-                      autoComplete="given-name"
                       value={formData.firstName}
                       onChange={handleChange}
                       className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6 p-5"
                     />
+                    {errors.firstName && <p className="text-red-600 text-sm mt-1">{errors.firstName}</p>} {/* Error message */}
                   </div>
                 </div>
 
@@ -113,12 +136,11 @@ function SignUp() {
                       id="lastName"
                       name="lastName"
                       type="text"
-                      required
-                      autoComplete="family-name"
                       value={formData.lastName}
                       onChange={handleChange}
                       className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6 p-5"
                     />
+                    {errors.lastName && <p className="text-red-600 text-sm mt-1">{errors.lastName}</p>} {/* Error message */}
                   </div>
                 </div>
               </div>
@@ -132,12 +154,11 @@ function SignUp() {
                     id="email"
                     name="email"
                     type="email"
-                    required
-                    autoComplete="email"
                     value={formData.email}
                     onChange={handleChange}
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6 p-5"
                   />
+                  {errors.email && <p className="text-red-600 text-sm mt-1">{errors.email}</p>} {/* Error message */}
                 </div>
               </div>
 
@@ -150,12 +171,11 @@ function SignUp() {
                     id="password"
                     name="password"
                     type="password"
-                    required
-                    autoComplete="current-password"
                     value={formData.password}
                     onChange={handleChange}
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6 p-5"
                   />
+                  {errors.password && <p className="text-red-600 text-sm mt-1">{errors.password}</p>} {/* Error message */}
                 </div>
               </div>
 
