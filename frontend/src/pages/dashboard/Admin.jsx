@@ -16,7 +16,8 @@ import BlogList from "../Ishanka/BlogList";
 import AllDestinations from "../destination/allDestination";
 import AddDestination from "../destination/addDestination";
 import BookingList from "../Jihan/BookingList";
-
+import SupportAgentTickets from "../ticket/SupportAgentTickets";
+import EditTicketPage from "../ticket/EditTicketPage";
 
 
 const Admin = () => {
@@ -50,7 +51,7 @@ const Admin = () => {
       <aside className="w-64 bg-gray-800 text-white flex flex-col">
         <div className="p-4 text-xl font-bold bg-gray-900">Admin Dashboard</div>
         <nav className="flex-1 px-2 py-4">
-          {['overview', 'users', 'transactions', 'referrals', 'Manage Inventory', 'Add Equipment', 'Manage TourPackages', 'Add TourPackage', 'Manage Blogs', 'Add Blogs', 'Manage Destinations', 'Add Destinations', 'Booking List'].map((tab) => (
+          {['overview', 'users', 'transactions', 'referrals', 'Manage Inventory', 'Add Equipment', 'Manage TourPackages', 'Add TourPackage', 'Manage Blogs', 'Add Blogs', 'Manage Destinations', 'Add Destinations', 'Booking List', 'Manage Tickets', 'Edit Tickets'].map((tab) => (
             <button
               key={tab}
               onClick={() => handleTabChange(tab)}
@@ -98,6 +99,8 @@ const Admin = () => {
             {activeTab === 'Manage Destinations' && <AllDestinations />}
             {activeTab === 'Add Destinations' && <AddDestination />}
             {activeTab === 'Booking List' && <BookingList />}
+            {activeTab === 'Manage Ticket' && <SupportAgentTickets />}
+            {activeTab === 'Edit TIckets' && <EditTicketPage />}
           </>
         )}
       </main>
