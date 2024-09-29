@@ -157,11 +157,21 @@ const BookingForm = () => {
           <option value="">Select equipment</option>
           {equipmentList.map((equipment) => (
             <option key={equipment._id} value={equipment._id}>
-              {equipment.equipmentName} - Rs. {equipment.equipmentPrice}
+              {equipment.equipmentName}
             </option>
           ))}
         </select>
         {errors.selectedEquipment && <p className="text-red-500 text-sm">{errors.selectedEquipment}</p>}
+      </div>
+
+      <div className="mb-4">
+        <label className="block text-sm font-medium mb-1 text-gray-700">Selected Equipment Price</label>
+        <input
+          type="text"
+          className="w-full p-2 border rounded text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
+          value={selectedEquipmentPrice}
+          readOnly
+        />
       </div>
 
       <div className="mb-4">
