@@ -1,14 +1,12 @@
-
-import './App.css'
-import AppRoutes from './routes/Approutes'
-
+import './App.css';
+import AppRoutes from './routes/Approutes';
+import UserContextProvider from '../src/components/userContext'; 
 function App() {
-
   return (
-    <> 
-    <AppRoutes />
-    </>
-  )
+    <UserContextProvider> 
+      <AppRoutes />
+    </UserContextProvider>
+  );
 }
 
-export default App
+export default App;
