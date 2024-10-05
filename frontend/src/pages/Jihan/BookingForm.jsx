@@ -10,6 +10,9 @@ const BookingForm = () => {
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
 
+  //get id from the url
+  const _id = location.pathname.split('/').pop();
+
   const bookingData = location.state?.data;
   const [formData, setFormData] = useState({
     fullName: '',
@@ -90,8 +93,8 @@ const BookingForm = () => {
     };
 
     const apiCall = bookingData?._id
-      ? axios.put(`http://localhost:5000/api/bookings`, updatedBookingData)
-      : axios.post('http://localhost:5000/api/bookings', updatedBookingData);
+      ? axios.put(`http://localhost:5000/api/bookings/${_id}`, updatedBookingData)
+      : axios.post(`http://localhost:5000/api/bookings/${_id}`, updatedBookingData);
       console.log(formData);
       
 
