@@ -33,7 +33,7 @@ export default function AllTickets() {
 
     // Edit ticket
     const editTicket = (ticketID) => {
-        navigate(`/edit-support/${ticketID}`);
+        navigate(`/tickets/edit-support/${ticketID}`);
     };
 
 
@@ -58,17 +58,15 @@ export default function AllTickets() {
     const generatePDFReport = () => {
         const doc = new jsPDF();
 
-        // Load and add logo image from file system (assuming it's located in the /public folder)
-        const logoURL = `${window.location.origin}/logo12.jpg`;  // Assuming 'logo.png' is placed in the public folder
+        const logoURL = `${window.location.origin}/logo12.jpg`;
 
         // Adding the image to the PDF
         const img = new Image();
         img.src = logoURL;
         img.onload = function () {
-            // Add the logo image to the PDF once it's loaded
-            doc.addImage(img, 'JPG', 10, 10, 50, 20);  // Customize dimensions as needed
+            
+            doc.addImage(img, 'JPG', 10, 10, 50, 20);
 
-            // Add a title under the logo
             doc.setFontSize(18);
             doc.text('Tickets Report', 20, 40);
 
@@ -92,11 +90,10 @@ export default function AllTickets() {
             doc.autoTable({
                 head: [tableColumn],
                 body: tableRows,
-                startY: 50  // Adjust to leave space for the logo and title
+                startY: 50
             });
 
-            // Save the generated PDF
-            doc.save('tickets_report.pdf');
+            doc.save('supportAgent_report.pdf');
         };
     };
 
@@ -114,7 +111,7 @@ export default function AllTickets() {
     const filteredTickets = tickets.filter(ticket =>
         ticket.subject.toLowerCase().includes(searchTerm.toLowerCase()) ||
         ticket.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        ticket.email.toLowerCase().includes(searchTerm.toLowerCase())  // Add email to filtering
+        ticket.email.toLowerCase().includes(searchTerm.toLowerCase()) 
     );
 
     return (
@@ -123,7 +120,6 @@ export default function AllTickets() {
                 <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
                     <center><h1 className="text-2xl font-bold mb-4">All Tickets</h1></center>
 
-                    {/* Search input */}
                     <input 
                         type="text"
                         placeholder="Search by Subject, Description, or Email"
@@ -159,7 +155,7 @@ export default function AllTickets() {
                                 <th scope="col" className="px-6 py-3">Ticket ID</th>
                                 <th scope="col" className="px-6 py-3">Subject</th>
                                 <th scope="col" className="px-6 py-3">Description</th>
-                                <th scope="col" className="px-6 py-3">Email</th>  {/* Add Email header */}
+                                <th scope="col" className="px-6 py-3">Email</th>
                                 <th scope="col" className="px-6 py-3">Created On</th>
                                 <th scope="col" className="px-6 py-3">Solution</th>
                                 <th scope="col" className="px-6 py-3">Actions</th>
@@ -178,7 +174,7 @@ export default function AllTickets() {
                                         {ticket.description}
                                     </td>
                                     <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
-                                        {ticket.email}  {/* Display Email */}
+                                        {ticket.email}
                                     </td>
                                     <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
                                         {new Date(ticket.date).toLocaleDateString()}

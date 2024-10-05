@@ -20,7 +20,7 @@ export default function AddTicket() {
             return;
         }
         
-        // Validate email format
+      
         const emailPattern = /.+\@.+\..+/;
         if (!emailPattern.test(email)) {
             alert('Please enter a valid email address.');

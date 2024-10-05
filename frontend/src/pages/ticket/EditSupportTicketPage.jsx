@@ -5,7 +5,7 @@ import Navbar from '../../components/Navbar/Navbar';
 import Footer from '../../components/Footer/Footer';
 
 export default function EditSupportTicketPage() {
-    const { ticketID } = useParams(); // Get ticket ID from URL parameters
+    const { ticketID } = useParams();
     const navigate = useNavigate();
 
     // State to hold ticket details
@@ -27,7 +27,7 @@ export default function EditSupportTicketPage() {
     const fetchTicketDetails = async () => {
         try {
             const response = await axios.get(`http://localhost:5000/tickets/get/${ticketID}`);
-            setTicket(response.data.ticket);  // Set ticket data to the response
+            setTicket(response.data.ticket); 
             setLoading(false);
         } catch (error) {
             console.error('Error fetching ticket details:', error);
@@ -49,13 +49,13 @@ export default function EditSupportTicketPage() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        console.log('Submitting:', ticket); // Log the form data for debugging
+        console.log('Submitting:', ticket); 
 
         try {
             const response = await axios.put(`http://localhost:5000/tickets/update/${ticketID}`, ticket);
             console.log('Ticket updated successfully:', response.data);
             alert('Ticket updated successfully');
-            navigate('/tickets'); // Redirect back to tickets list
+            navigate('/dashboard/support-agent-tickets'); // Redirect back to tickets list
         } catch (error) {
             console.error('Error updating ticket:', error);
             alert('Error updating ticket');
@@ -90,58 +90,54 @@ export default function EditSupportTicketPage() {
                                 type="text"
                                 id="ticketID"
                                 name="ticketID"
-                                value={ticket.ticketID}  // Display the correct ticket ID
+                                value={ticket.ticketID} 
                                 readOnly
                                 className="w-full px-4 py-2 border rounded bg-gray-100 cursor-not-allowed"
                             />
                         </div>
 
-                        {/* Subject field (Non-editable) */}
                         <div className="mb-4">
                             <label htmlFor="subject" className="block font-semibold">Subject</label>
                             <input
                                 type="text"
                                 id="subject"
                                 name="subject"
-                                value={ticket.subject}  // Display existing subject
+                                value={ticket.subject} 
                                 readOnly
                                 className="w-full px-4 py-2 border rounded bg-gray-100 cursor-not-allowed"
                             />
                         </div>
 
-                        {/* Description field (Non-editable) */}
                         <div className="mb-4">
                             <label htmlFor="description" className="block font-semibold">Description</label>
                             <textarea
                                 id="description"
                                 name="description"
-                                value={ticket.description}  // Display existing description
+                                value={ticket.description}  
                                 readOnly
                                 className="w-full px-4 py-2 border rounded bg-gray-100 cursor-not-allowed"
                             />
                         </div>
 
-                        {/* Email field (Non-editable) */}
                         <div className="mb-4">
                             <label htmlFor="email" className="block font-semibold">Email</label>
                             <input
                                 type="email"
                                 id="email"
                                 name="email"
-                                value={ticket.email}  // Display existing email
+                                value={ticket.email}
                                 readOnly
                                 className="w-full px-4 py-2 border rounded bg-gray-100 cursor-not-allowed"
                             />
                         </div>
 
-                        {/* Ticket Creation Date (Non-editable) */}
                         <div className="mb-4">
                             <label htmlFor="date" className="block font-semibold">Created On</label>
                             <input
                                 type="text"
                                 id="date"
                                 name="date"
-                                value={new Date(ticket.date).toLocaleDateString()}  // Display formatted date
+                                value={new Date(ticket.date).toLocaleDateString()} 
                                 readOnly
                                 className="w-full px-4 py-2 border rounded bg-gray-100 cursor-not-allowed"
                             />
@@ -160,7 +156,7 @@ export default function EditSupportTicketPage() {
                             />
                         </div>
 
-                        {/* Status field (Editable) *
+                        {/* Status field (Editable) 
                         <div className="mb-4">
                             <label htmlFor="isComplete" className="block font-semibold">Status</label>
                             <select
@@ -175,7 +171,8 @@ export default function EditSupportTicketPage() {
                                 <option value="Complete">Complete</option>
                             </select>
                         </div>
-                        /}
+                        */}
+                        
 
                         {/* Submit button */}
                         <div className="flex justify-end space-x-4">
@@ -188,7 +185,7 @@ export default function EditSupportTicketPage() {
                             <button
                                 type="button"
                                 className="bg-gray-600 text-white px-4 py-2 rounded-full hover:bg-gray-700 transition duration-300"
-                                onClick={() => navigate('/tickets')}
+                                onClick={() => navigate('/support-agent-tickets')}
                             >
                                 Cancel
                             </button>

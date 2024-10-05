@@ -5,7 +5,7 @@ import Navbar from '../../components/Navbar/Navbar';
 import Footer from '../../components/Footer/Footer';
 
 export default function EditTicketPage() {
-    const { ticketID } = useParams(); // Get ticket ID from URL parameters
+    const { ticketID } = useParams();
     const navigate = useNavigate();
 
     // State to hold ticket details
@@ -21,7 +21,6 @@ export default function EditTicketPage() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    // Fetch ticket details by ID when component mounts
     const fetchTicketDetails = async () => {
         try {
             const response = await axios.get(`http://localhost:5000/tickets/get/${ticketID}`);
@@ -47,13 +46,13 @@ export default function EditTicketPage() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        console.log('Submitting:', ticket); // Log the form data for debugging
+        console.log('Submitting:', ticket);
 
         try {
             const response = await axios.put(`http://localhost:5000/tickets/update/${ticketID}`, ticket);
             console.log('Ticket updated successfully:', response.data);
             alert('Ticket updated successfully');
-            navigate('/tickets'); // Redirect back to tickets list
+            navigate('/tickets'); 
         } catch (error) {
             console.error('Error updating ticket:', error);
             alert('Error updating ticket');
@@ -88,67 +87,62 @@ export default function EditTicketPage() {
                                 type="text"
                                 id="ticketID"
                                 name="ticketID"
-                                value={ticket.ticketID}  // Display the correct ticket ID
+                                value={ticket.ticketID} 
                                 readOnly
                                 className="w-full px-4 py-2 border rounded bg-gray-100 cursor-not-allowed"
                             />
                         </div>
 
-                        {/* Subject field */}
                         <div className="mb-4">
                             <label htmlFor="subject" className="block font-semibold">Subject</label>
                             <input
                                 type="text"
                                 id="subject"
                                 name="subject"
-                                value={ticket.subject}  // Display existing subject
+                                value={ticket.subject}
                                 onChange={handleInputChange}
                                 className="w-full px-4 py-2 border rounded"
                                 required
                             />
                         </div>
 
-                        {/* Description field */}
                         <div className="mb-4">
                             <label htmlFor="description" className="block font-semibold">Description</label>
                             <textarea
                                 id="description"
                                 name="description"
-                                value={ticket.description}  // Display existing description
+                                value={ticket.description} 
                                 onChange={handleInputChange}
                                 className="w-full px-4 py-2 border rounded"
                                 required
                             />
                         </div>
 
-                        {/* Email field */}
                         <div className="mb-4">
                             <label htmlFor="email" className="block font-semibold">Email</label>
                             <input
                                 type="email"
                                 id="email"
                                 name="email"
-                                value={ticket.email}  // Display existing email
+                                value={ticket.email}
                                 onChange={handleInputChange}
                                 className="w-full px-4 py-2 border rounded"
                                 required
                             />
                         </div>
 
-                        {/* Ticket Creation Date (Non-editable) */}
                         <div className="mb-4">
                             <label htmlFor="date" className="block font-semibold">Created On</label>
                             <input
                                 type="text"
                                 id="date"
                                 name="date"
-                                value={new Date(ticket.date).toLocaleDateString()}  // Display formatted date
+                                value={new Date(ticket.date).toLocaleDateString()} 
                                 readOnly
                                 className="w-full px-4 py-2 border rounded bg-gray-100 cursor-not-allowed"
                             />
                         </div>
 
-                        {/* Submit button */}
                         <div className="flex justify-end space-x-4">
                             <button
                                 type="submit"

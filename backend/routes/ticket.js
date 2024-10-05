@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const { body, validationResult } = require('express-validator');
-const mongoose = require('mongoose'); // Add mongoose for ObjectID validation
-const Ticket = require('../models/Ticket'); // Adjust the path if needed
+const mongoose = require('mongoose'); 
+const Ticket = require('../models/Ticket'); 
 
 // Add a new ticket
 router.post("/add", [
@@ -47,16 +47,14 @@ router.post("/add", [
       subject,
       description,
       priority,
-      email, // Include email field
+      email,
       date: new Date(), // Automatically set to current date
       solution,
       isComplete
     });
 
-    // Save ticket with auto-incremented and formatted ticketID
     await newTicket.save();
     
-    // Respond with success and the created ticket details
     res.status(201).json({
       message: "Ticket added successfully",
       ticket: newTicket
@@ -99,7 +97,7 @@ router.get("/get/:id", async (req, res) => {
   }
 });
 
-// Update an existing ticket (support agent can update the solution field)
+// Update an existing ticket
 router.put("/update/:id", async (req, res) => {
   try {
     const ticketID = req.params.id;
@@ -111,13 +109,13 @@ router.put("/update/:id", async (req, res) => {
 
     const { subject, description, priority, email, solution, isComplete } = req.body;
 
-    // Prepare the update object, allowing support agent to update solution
+    // Prepare the update object
     const updatedTicket = {
       subject,
       description,
       priority,
-      email, // Include email update
-      date: new Date(), // Update date if necessary
+      email, 
+      date: new Date(),
       solution,
       isComplete
     };

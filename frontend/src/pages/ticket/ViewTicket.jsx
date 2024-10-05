@@ -11,7 +11,7 @@ export default function ViewTicket() {
     // Fetch ticket details
     const fetchTicket = async (id) => {
         try {
-            const response = await axios.get(`http://localhost:5010/tickets/get/${id}`); // Adjusted endpoint to match your server
+            const response = await axios.get(`http://localhost:5000/tickets/get/${id}`);
             setTicket(response.data.ticket);
             setLoading(false);
         } catch (err) {
@@ -20,7 +20,6 @@ export default function ViewTicket() {
         }
     };
 
-    // Get ID from URL
     const ticketID = window.location.pathname.split('/').pop();
 
     useEffect(() => {
@@ -49,9 +48,7 @@ export default function ViewTicket() {
                             <div className="mb-6">
                                 <p className="text-gray-700 dark:text-gray-300"><strong>Status:</strong> {ticket.isComplete ? "Complete" : "Incomplete"}</p>
                                 <p className="text-gray-700 dark:text-gray-300"><strong>Created On:</strong> {new Date(ticket.createdAt).toLocaleDateString()}</p>
-                                {/* Updated: Removed "Updated On" and solution display */}
                                 <p className="text-gray-700 dark:text-gray-300"><strong>Customer Email:</strong> {ticket.customerEmail}</p>
-                                {/* Display solution only if available */}
                             </div>
                         </div>
                     </div>
