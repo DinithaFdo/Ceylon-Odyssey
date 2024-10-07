@@ -5,7 +5,7 @@ import { toast } from 'react-hot-toast';
 
 const MainComponent = () => {
   const [packages, setPackages] = useState([]);
-  const [showBanner, setShowBanner] = useState(false); // Start with false to prevent automatic display
+  const [showBanner, setShowBanner] = useState(false);
   const [showToggle, setShowToggle] = useState(false);
 
   useEffect(() => {
@@ -17,7 +17,7 @@ const MainComponent = () => {
 
         if (response.data && response.data.length > 0) {
           setPackages(response.data);
-          setShowToggle(true); // Show the toggle button if packages are available
+          setShowToggle(true); 
         } else {
           console.log('No tour packages found.');
         }
@@ -42,7 +42,7 @@ const MainComponent = () => {
       await axios.delete('http://localhost:5000/api/user/preferences', { withCredentials: true });
       toast.success('You will no longer see preference-based ads.');
       setShowBanner(false);
-      setPackages([]); // Clear packages if preferences are deleted
+      setPackages([]);
       console.log('Preferences deleted successfully.');
     } catch (error) {
       console.error('Error deleting preferences:', error);

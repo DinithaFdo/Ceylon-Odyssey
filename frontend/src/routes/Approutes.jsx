@@ -24,7 +24,7 @@ import TourismBlog from "../pages/Ishanka/UserBlog"
 import IndividualBlog from "../pages/Ishanka/InduvidualBlog";
 import UpdateBlogDashboard from "../pages/dashboard/Ishanka dahsbaord/UpdateBlogDashbaord";
 import BookingForm from "../pages/Jihan/BookingForm";
-import Confirmation from "../pages/Jihan/Confirmation";
+//import Confirmation from "../pages/Jihan/Confirmation";
 import BookingList from "../pages/Jihan/BookingList"
 
 import AddTicket from "../pages/ticket/AddTicket"; // Import AddTicket component
@@ -40,7 +40,7 @@ import EditDestinationPage from "../pages/destination/EditDestinationPage";
 import DestinationList from "../pages/destination/DestinationList";
 import DestinationDetail from "../pages/destination/DestinationDetail";
 import DestinationAnalytics from "../pages/destination/DestinationAnalytics";
-import EditBooking from "../pages/Jihan/Confirmation";
+//import EditBooking from "../pages/Jihan/Confirmation";
 
 
 function AppRoutes() {
@@ -85,9 +85,9 @@ function AppRoutes() {
                 <Route path ="/blog/:id" element = {<IndividualBlog />} />
 
                 <Route path="/book/:id" element={<BookingForm />} />
-                <Route path="/confirmation" element={<Confirmation />} />
+               {/*<Route path="/confirmation" element={<Confirmation /> } /> */}
                 <Route path="/bookings" element={<BookingList />} />
-                <Route path="/book/:id" element={<EditBooking />} />
+                {/*<Route path="/book/:id" element={<EditBooking />} /> */}
 
                 <Route path="/tickets" element={<AllTickets />} /> {/* Route for All Tickets */}
                 <Route path="/tickets/add" element={<AddTicket />} /> {/* Route for Adding a Ticket */}

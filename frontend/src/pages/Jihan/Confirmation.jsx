@@ -1,3 +1,4 @@
+/*
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Button, Typography, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
@@ -451,3 +452,5 @@ const Confirmation = () => {
 };
 
 export default Confirmation;
+
+*/
