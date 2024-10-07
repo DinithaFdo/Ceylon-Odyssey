@@ -268,30 +268,6 @@ const Confirmation = () => {
           Booking Confirmation
         </Typography>
 
-<<<<<<< Updated upstream
-        <table className="min-w-full table-auto mt-6 text-left">
-          <tbody>
-            <tr>
-              <th className="py-2 px-4 text-gray-800 font-medium">Full Name</th>
-              <td className="py-2 px-4 text-gray-600">{bookingData.fullName}</td>
-            </tr>
-            <tr>
-              <th className="py-2 px-4 text-gray-800 font-medium">Email</th>
-              <td className="py-2 px-4 text-gray-600">{bookingData.email}</td>
-            </tr>
-            <tr>
-              <th className="py-2 px-4 text-gray-800 font-medium">Phone</th>
-              <td className="py-2 px-4 text-gray-600">{bookingData.phone}</td>
-            </tr>
-            <tr>
-              <th className="py-2 px-4 text-gray-800 font-medium">Address</th>
-              <td className="py-2 px-4 text-gray-600">{bookingData.address}</td>
-            </tr>
-            <tr>
-              <th className="py-2 px-4 text-gray-800 font-medium">Date</th>
-              <td className="py-2 px-4 text-gray-600">{new Date(bookingData.date).toLocaleDateString()}</td>
-            </tr>
-=======
       <table className="min-w-full table-auto mt-6 text-left">
         <tbody>
           <tr>
@@ -320,7 +296,6 @@ const Confirmation = () => {
             <th className="py-2 px-4 text-gray-800 font-medium">Bank</th>
             <td className="py-2 px-4 text-gray-600">ndb</td>
           </tr>
->>>>>>> Stashed changes
 
             <tr>
               <th className="py-2 px-4 text-gray-800 font-medium">Package</th>
