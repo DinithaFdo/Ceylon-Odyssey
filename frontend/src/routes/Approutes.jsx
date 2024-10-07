@@ -40,6 +40,7 @@ import EditDestinationPage from "../pages/destination/EditDestinationPage";
 import DestinationList from "../pages/destination/DestinationList";
 import DestinationDetail from "../pages/destination/DestinationDetail";
 import DestinationAnalytics from "../pages/destination/DestinationAnalytics";
+import EditBooking from "../pages/Jihan/Confirmation";
 
 
 function AppRoutes() {
@@ -86,6 +87,7 @@ function AppRoutes() {
                 <Route path="/book/:id" element={<BookingForm />} />
                 <Route path="/confirmation" element={<Confirmation />} />
                 <Route path="/bookings" element={<BookingList />} />
+                <Route path="/book/:id" element={<EditBooking />} />
 
                 <Route path="/tickets" element={<AllTickets />} /> {/* Route for All Tickets */}
                 <Route path="/tickets/add" element={<AddTicket />} /> {/* Route for Adding a Ticket */}

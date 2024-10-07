@@ -153,7 +153,7 @@ const PaymentGateWay = ({ amount }) => {
 
     return (
         <>
-            <button onClick={initiatePayment} className="btn btn-primary bg-blue-500 hover:bg-blue-600">
+            <button onClick={initiatePayment} className="btn btn-primary bg-blue-500 hover:bg-blue-600 p-2 rounded-md text-white">
                 Top Up Wallet
             </button>
             {isModalOpen && (
