@@ -6,6 +6,7 @@ import quotationIcon from "../../assets/Ishan/quotation_icon.png";
 import searchHandleImg from "../../assets/Ishan/notAvailableImg.png";
 import Spinner from "../../components/spinner/spinner";
 import Footer from "../../components/Footer/Footer";
+import TourBot from "./TourBot";
 
 const TourPackageUser = () => {
 
@@ -55,6 +56,15 @@ const TourPackageUser = () => {
 
     }, [searchQuery, tourPackages]);
 
+    useEffect(() => {
+        if (!document.querySelector('script[src="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/df-messenger.js"]')) {
+            const script = document.createElement('script');
+            script.src = "https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/df-messenger.js";
+            script.async = true;
+            document.body.appendChild(script);
+        }
+    }, []);
+    
 
     return(
         
@@ -228,6 +238,7 @@ const TourPackageUser = () => {
 
                         </div>
                         
+                        <TourBot />
                     </div>
 
                     <Footer />

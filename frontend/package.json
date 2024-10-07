@@ -12,10 +12,18 @@
   "dependencies": {
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
+<<<<<<< Updated upstream
     "@google/generative-ai": "^0.21.0",
     "@mui/icons-material": "^5.16.7",
     "@mui/material": "^5.16.7",
     "axios": "^1.7.5",
+=======
+    "@google-cloud/dialogflow-cx": "^4.8.0",
+    "@mui/icons-material": "^5.16.7",
+    "@mui/material": "^5.16.7",
+    "axios": "^1.7.5",
+    "dialogflow-v2": "^2.2.0",
+>>>>>>> Stashed changes
     "html2canvas": "^1.4.1",
     "jspdf": "^2.5.2",
     "jspdf-autotable": "^3.8.3",
@@ -26,6 +34,8 @@
     "pdfkit": "^0.15.0",
     "prop-types": "^15.8.1",
     "react": "^18.3.1",
+    "react-chat-widget": "^3.1.4",
+    "react-chatbot-kit": "^2.2.2",
     "react-datepicker": "^7.4.0",
     "react-dom": "^18.3.1",
     "react-google-recaptcha": "^3.1.0",

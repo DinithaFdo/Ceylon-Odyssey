@@ -42,7 +42,6 @@ import DestinationDetail from "../pages/destination/DestinationDetail";
 import DestinationAnalytics from "../pages/destination/DestinationAnalytics";
 
 
-
 function AppRoutes() {
     return (
         <Router>

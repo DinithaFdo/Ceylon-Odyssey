@@ -183,6 +183,14 @@ const BookingForm = () => {
           readOnly
         />
       </div>
+      <div className="mb-4">
+        <label className="block text-sm font-medium mb-1 text-gray-700">Bank</label>
+        <input
+          type="text"
+          className="w-full p-2 border rounded text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
+          
+        />
+      </div>
 
       <div className="mb-4">
         <label className="block text-sm font-medium mb-1 text-gray-700">Select Date</label>
