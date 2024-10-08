@@ -89,7 +89,7 @@ const MainComponent = () => {
             </div>
           </div>
         </div>
-      )}
+    )}
 
       {showToggle && !showBanner && (
         <div className="fixed bottom-0 left-0 right-0 bg-blue-600 rounded-md bg-clip-padding backdrop-filter backdrop-blur-xl bg-opacity-10 border border-gray-100 text-gray-700 p-2 flex justify-center items-center shadow-lg rounded-t-lg cursor-pointer" onClick={toggleBanner}>

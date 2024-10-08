@@ -1,7 +1,6 @@
 import { useState, useContext } from "react";
 import axios from "axios";
 import { UserContext } from "../components/userContext";
-import toast from "react-hot-toast";
 import PaymentGateway from "../PaymentGateWay/PaymentGateWay";
 import Navbar from "../components/Navbar/Navbar";
 import Footer from "../components/Footer/Footer";
@@ -24,33 +23,44 @@ const PaymentForm = () => {
 
     const [isAgreed, setIsAgreed] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState("");
-    const [paymentConfirmed, setPaymentConfirmed] = useState(false);
+    const [errors, setErrors] = useState({});
+    const [paymentInitiated, setPaymentInitiated] = useState(false);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prevData) => ({ ...prevData, [name]: value }));
+        setErrors((prevErrors) => ({ ...prevErrors, [name]: "" }));
     };
 
     const handleCheckboxChange = () => {
         setIsAgreed((prev) => !prev);
+        setErrors((prevErrors) => ({ ...prevErrors, terms: "" }));
     };
 
-    const isFormValid = () => {
-        return (
-            formData.firstName &&
-            formData.lastName &&
-            formData.email &&
-            isValidPhone(formData.phone) &&
-            formData.address &&
-            formData.city &&
-            isValidAmount(formData.amount) &&
-            isAgreed
-        );
+    const validate = () => {
+        const newErrors = {};
+        
+        if (!formData.firstName) newErrors.firstName = "First name is required.";
+        if (!formData.lastName) newErrors.lastName = "Last name is required.";
+        if (!formData.email) newErrors.email = "Email is required.";
+        
+        if (!formData.phone) {
+            newErrors.phone = "Phone number is required.";
+        } else if (!isValidPhone(formData.phone)) {
+            newErrors.phone = "Phone number should start with 07 and must have 10 digits.";
+        }
+
+        if (!formData.address) newErrors.address = "Address is required.";
+        if (!formData.city) newErrors.city = "City is required.";
+        if (!isValidAmount(formData.amount)) newErrors.amount = "Amount should be greater than 100 and less than 10,000.";
+        if (!isAgreed) newErrors.terms = "You must agree to the terms and conditions.";
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
     };
 
     const isValidPhone = (phone) => {
-        const phonePattern = /^[0-9]{10,}$/;
+        const phonePattern = /^07[0-9]{8}$/;
         return phonePattern.test(phone);
     };
 
@@ -61,145 +71,141 @@ const PaymentForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (!isFormValid()) {
-            showErrorMessages();
+        if (!validate()) {
             return;
         }
 
         setLoading(true);
-        setError("");
 
         try {
             const response = await axios.post("http://localhost:5000/api/payment/create-payment", formData);
-            setAmount(response.data.amount); 
-            setPaymentConfirmed(true);
+            setAmount(response.data.amount);
+            setPaymentInitiated(true);
         } catch (err) {
-            setError(err.response?.data?.message || "An error occurred");
-            toast.error(err.response?.data?.message || "An error occurred");
+            setErrors((prevErrors) => ({ ...prevErrors, server: err.response?.data?.message || "An error occurred" }));
         } finally {
             setLoading(false);
-        }
-    };
-
-    const showErrorMessages = () => {
-        if (!formData.firstName || !formData.lastName || !formData.email) {
-            toast.error("Please fill in all required fields.");
-        }
-        if (!isValidPhone(formData.phone)) {
-            toast.error("Please enter a valid phone number.");
-        }
-        if (!formData.address || !formData.city) {
-            toast.error("Address and City are required.");
-        }
-        if (!isValidAmount(formData.amount)) {
-            toast.error("Amount must be greater than 100 and less than 10,000.");
-        }
-        if (!isAgreed) {
-            toast.error("You must agree to the terms and conditions.");
         }
     };
 
     return (
         <div>
             <Navbar />
-        <div className="flex flex-col items-center justify-center pt-32 pb-20">
-            <div className="bg-white p-6 rounded-lg shadow-lg max-w-3xl w-full flex flex-col">
-                <form onSubmit={handleSubmit} className="bg-white p-4 w-full space-y-4">
-                    <h3 className="text-xl font-semibold mb-4 text-center pb-4">Payment Details</h3>
-                    {error && <p className="text-red-600">{error}</p>}
+            <div className="flex flex-col items-center justify-center pt-32 pb-20">
+                <div className="bg-white p-6 rounded-lg shadow-lg max-w-3xl w-full flex flex-col">
+                    <form onSubmit={handleSubmit} className="bg-white p-4 w-full space-y-4">
+                        <h3 className="text-xl font-semibold mb-4 text-center pb-4">Payment Details</h3>
 
-                    <div className="flex space-x-2">
-                        <input
-                            name="firstName"
-                            placeholder="First Name"
-                            value={formData.firstName}
-                            onChange={handleChange}
-                            className="p-3 border border-gray-300 rounded-md w-full"
-                            required
-                        />
-                        <input
-                            name="lastName"
-                            placeholder="Last Name"
-                            value={formData.lastName}
-                            onChange={handleChange}
-                            className="p-3 border border-gray-300 rounded-md w-full"
-                            required
-                        />
-                    </div>
+                        {errors.server && <p className="text-red-600">{errors.server}</p>}
 
-                    <input
-                        name="email"
-                        placeholder="Email"
-                        type="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        className="p-3 border border-gray-300 rounded-md w-full"
-                        required
-                    />
+                        <div className="flex space-x-2">
+                            <div className="w-full">
+                                <input
+                                    name="firstName"
+                                    placeholder="First Name"
+                                    value={formData.firstName}
+                                    onChange={handleChange}
+                                    className="p-3 border border-gray-300 rounded-md w-full"
+                                />
+                                {errors.firstName && <p className="text-red-600 text-sm">{errors.firstName}</p>}
+                            </div>
+                            <div className="w-full">
+                                <input
+                                    name="lastName"
+                                    placeholder="Last Name"
+                                    value={formData.lastName}
+                                    onChange={handleChange}
+                                    className="p-3 border border-gray-300 rounded-md w-full"
+                                />
+                                {errors.lastName && <p className="text-red-600 text-sm">{errors.lastName}</p>}
+                            </div>
+                        </div>
 
-                    <input
-                        name="phone"
-                        type="tel"
-                        placeholder="Phone"
-                        value={formData.phone}
-                        onChange={handleChange}
-                        className="p-3 border border-gray-300 rounded-md w-full"
-                        required
-                    />
-                    <input
-                        name="address"
-                        placeholder="Address"
-                        value={formData.address}
-                        onChange={handleChange}
-                        className="p-3 border border-gray-300 rounded-md w-full"
-                        required
-                    />
-                    <input
-                        name="city"
-                        placeholder="City"
-                        value={formData.city}
-                        onChange={handleChange}
-                        className="p-3 border border-gray-300 rounded-md w-full"
-                        required
-                    />
-                    <input
-                        name="amount"
-                        placeholder="Amount"
-                        type="number"
-                        value={formData.amount}
-                        onChange={handleChange}
-                        className="p-3 border border-gray-300 rounded-md w-full"
-                        required
-                    />
+                        <div>
+                            <input
+                                name="email"
+                                placeholder="Email"
+                                type="email"
+                                value={formData.email}
+                                onChange={handleChange}
+                                className="p-3 border border-gray-300 rounded-md w-full"
+                            />
+                            {errors.email && <p className="text-red-600 text-sm">{errors.email}</p>}
+                        </div>
 
-                    <div className="flex items-center">
-                        <input
-                            type="checkbox"
-                            checked={isAgreed}
-                            onChange={handleCheckboxChange}
-                            required
-                            className="mr-2"
-                        />
-                        <label className="text-sm">I agree to the Terms and Conditions</label>
-                    </div>
+                        <div>
+                            <input
+                                name="phone"
+                                type="tel"
+                                placeholder="07XXXXXXXX"
+                                value={formData.phone}
+                                onChange={handleChange}
+                                className="p-3 border border-gray-300 rounded-md w-full"
+                            />
+                            {errors.phone && <p className="text-red-600 text-sm">{errors.phone}</p>}
+                        </div>
 
-                    <button
-                        type="submit"
-                        className={`w-full py-3 mt-4 bg-blue-500 text-white rounded-md hover:bg-blue-600 ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
-                        disabled={!isFormValid() || loading}
-                    >
-                        {loading ? "Processing..." : "Confirm Payment"}
-                    </button>
-                </form>
+                        <div>
+                            <input
+                                name="address"
+                                placeholder="Address"
+                                value={formData.address}
+                                onChange={handleChange}
+                                className="p-3 border border-gray-300 rounded-md w-full"
+                            />
+                            {errors.address && <p className="text-red-600 text-sm">{errors.address}</p>}
+                        </div>
+
+                        <div>
+                            <input
+                                name="city"
+                                placeholder="City"
+                                value={formData.city}
+                                onChange={handleChange}
+                                className="p-3 border border-gray-300 rounded-md w-full"
+                            />
+                            {errors.city && <p className="text-red-600 text-sm">{errors.city}</p>}
+                        </div>
+
+                        <div>
+                            <input
+                                name="amount"
+                                placeholder="Amount"
+                                type="number"
+                                value={formData.amount}
+                                onChange={handleChange}
+                                className="p-3 border border-gray-300 rounded-md w-full"
+                            />
+                            {errors.amount && <p className="text-red-600 text-sm">{errors.amount}</p>}
+                        </div>
+
+                        <div className="flex items-center">
+                            <input
+                                type="checkbox"
+                                checked={isAgreed}
+                                onChange={handleCheckboxChange}
+                                className="mr-2"
+                            />
+                            <label className="text-sm">I agree to the Terms and Conditions</label>
+                        </div>
+                        {errors.terms && <p className="text-red-600 text-sm">{errors.terms}</p>}
+
+                        <button
+                            type="submit"
+                            className={`w-full py-3 mt-4 bg-blue-500 text-white rounded-md hover:bg-blue-600 ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
+                            disabled={loading}
+
+                        >
+                            {loading ? "Processing..." : "Confirm Payment"}
+                        </button>
+                    </form>
+                </div>
+
+                {paymentInitiated && (
+                    <PaymentGateway amount={amount} paymentInitiated={true}/>
+                )}
             </div>
-
-            {paymentConfirmed && (
-                <PaymentGateway
-                    amount={amount}
-                />
-            )}
-        </div>
-        <Footer />
+            <Footer />
         </div>
     );
 };
