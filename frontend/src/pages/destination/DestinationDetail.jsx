@@ -161,68 +161,68 @@ export default function DestinationDetail() {
               <h2 className="text-2xl font-semibold mb-4 text-gray-900 dark:text-white">
                 Recommended Equipment
               </h2>
-              <div className="max-w-2xl mx-auto mb-8">
-                <div
-                  className="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg shadow-md"
-                  style={{
-                    width:
-                      equipment.length > 0
-                        ? `${Math.min(300 * equipment.length, 1200)}px`
-                        : "auto",
-                    margin: "0 auto",
-                  }}
-                >
-                  {equipment.length > 0 ? (
-                    <ul
-                      className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 auto-rows-fr"
-                      style={{
-                        gridTemplateColumns: `repeat(auto-fit, minmax(150px, 1fr))`,
-                        gridAutoRows: "1fr",
-                      }}
-                    >
-                      {equipment.map((item) => (
-                        <li
-                          key={item._id}
-                          className="bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-md transition-transform duration-300 hover:scale-105 flex flex-col"
-                        >
-                          {item.equipmentImage && (
-                            <div className="h-20 w-full overflow-hidden relative">
-                              <img
-                                src={`http://localhost:5000/EquipmentImages/${item.equipmentImage}`}
-                                alt={item.equipmentName}
-                                className="w-full h-full object-contain"
-                              />
-                            </div>
-                          )}
-                          <div className="p-3 flex flex-col flex-grow">
-                            <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-1 truncate">
-                              {item.equipmentName}
-                            </h3>
-                            <p className="text-xs text-gray-600 dark:text-gray-400 mb-2">
-                              Essential for your adventure
-                            </p>
-                            <div className="flex justify-between items-center mt-auto">
-                              <span className="text-sm font-bold text-indigo-600 dark:text-indigo-400">
-                                Rs. {item.equipmentPrice}
-                              </span>
-                              <Link
-                                to={`/equipment/${item._id ? item._id : ""}`}
-                                className="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-1 px-2 rounded-full transition duration-300"
-                              >
-                                View Details
-                              </Link>
-                            </div>
-                          </div>
-                        </li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <p className="text-gray-700 dark:text-gray-300 text-center">
-                      No equipment recommendations available for this district.
-                    </p>
-                  )}
-                </div>
+              <div className="max-w-full mx-auto mb-8">
+  <div
+    className="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg shadow-md"
+    style={{
+      overflowX: equipment.length > 4 ? "auto" : "hidden", 
+      whiteSpace: "nowrap", 
+    }}
+  >
+    {equipment.length > 0 ? (
+      <ul
+        className="inline-flex gap-4"
+        style={{
+          paddingBottom: "10px", // Adds some space to prevent content from touching the edge
+        }}
+      >
+        {equipment.map((item) => (
+          <li
+            key={item._id}
+            className="bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-md transition-transform duration-300 hover:scale-105 flex-shrink-0"
+            style={{
+              width: "250px", // Fixed width for each item to control the size in the slider
+            }}
+          >
+            {item.equipmentImage && (
+              <div className="h-40 w-full overflow-hidden relative">
+                <img
+                  src={`http://localhost:5000/EquipmentImages/${item.equipmentImage}`}
+                  alt={item.equipmentName}
+                  className="w-full h-full object-contain"
+                />
               </div>
+            )}
+            <div className="p-3 flex flex-col">
+              <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-1 truncate">
+                {item.equipmentName}
+              </h3>
+              <p className="text-xs text-gray-600 dark:text-gray-400 mb-2">
+                Essential for your adventure
+              </p>
+              <div className="flex justify-between items-center mt-auto">
+                <span className="text-sm font-bold text-indigo-600 dark:text-indigo-400">
+                  Rs. {item.equipmentPrice}
+                </span>
+                <Link
+                  to={`/equipment/${item._id ? item._id : ""}`}
+                  className="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-1 px-2 rounded-full transition duration-300"
+                >
+                  View Details
+                </Link>
+              </div>
+            </div>
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <p className="text-gray-700 dark:text-gray-300 text-center">
+        No equipment recommendations available for this district.
+      </p>
+    )}
+  </div>
+</div>
+
 
               {/* Map Section */}
               <div className="mb-8">
