@@ -44,8 +44,9 @@ export default function AllTickets() {
         navigate('/tickets/add');
     };
 
+    
     // Generate Excel report
-    const generateExcelReport = () => {
+    function generateExcelReport() {
         const wb = XLSX.utils.book_new();
         const wsData = tickets.map(ticket => ({
             TicketID: `TIC${ticket.ticketID.toString().padStart(4, '0')}`,
@@ -59,22 +60,20 @@ export default function AllTickets() {
         const ws = XLSX.utils.json_to_sheet(wsData);
         XLSX.utils.book_append_sheet(wb, ws, 'Tickets');
         XLSX.writeFile(wb, 'tickets_report.xlsx');
-    };
+    }
 
     // Generate PDF report with logo
     const generatePDFReport = () => {
         const doc = new jsPDF();
 
-        // Load and add logo image from file system (assuming it's located in the /public folder)
-        const logoURL = `${window.location.origin}/logo12.jpg`;  // Ensure this path is correct
+        const logoURL = `${window.location.origin}/logo12.jpg`;
 
         const img = new Image();
         img.src = logoURL;
         img.onload = function () {
-            // Add the logo image to the PDF once it's loaded
-            doc.addImage(img, 'JPEG', 10, 10, 50, 20);  // Customize dimensions as needed
 
-            // Add a title under the logo
+            doc.addImage(img, 'JPEG', 10, 10, 50, 20);
+
             doc.setFontSize(18);
             doc.text('Tickets Report', 20, 40);
 
@@ -98,10 +97,10 @@ export default function AllTickets() {
             doc.autoTable({
                 head: [tableColumn],
                 body: tableRows,
-                startY: 50  // Adjust to leave space for the logo and title
+                startY: 50 
             });
 
-            // Save the generated PDF
+    
             doc.save('tickets_report.pdf');
         };
     };
@@ -151,13 +150,15 @@ export default function AllTickets() {
                             Create Ticket
                         </button>
 
-                        {/* Generate Excel Report button */}
+                        {/* Generate Excel Report button
                         <button 
                             onClick={generateExcelReport}
                             className="bg-green-600 text-white px-4 py-2 rounded-full hover:bg-green-700 transition duration-300"
                         >
                             Generate Excel Report
                         </button>
+
+                        */}
 
                         {/* Generate PDF Report button */}
                         <button 

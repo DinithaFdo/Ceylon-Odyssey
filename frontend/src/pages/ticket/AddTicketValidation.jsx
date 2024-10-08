@@ -1,9 +1,8 @@
 const AddTicketValidation = (subject, description, priority, customerEmail) => {
     const errors = {};
 
-    // Subject length between 3 and 100 characters
     const subjectPattern = /^.{3,100}$/;
-    // Description length between 20 and 500 characters
+
     const descriptionPattern = /^.{20,500}$/;
     // Email pattern for validation
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

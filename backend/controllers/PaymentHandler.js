@@ -2,6 +2,9 @@ const express = require('express');
 const md5 = require('crypto-js/md5');
 const { v4: uuidv4 } = require('uuid'); 
 const router = express.Router();
+require('dotenv').config();
+
+const { MERCHANT_ID, MERCHANT_SECRET } = process.env;
 
 let paymentData;
 

@@ -10,6 +10,9 @@ const BookingForm = () => {
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
 
+  //get id from the url
+  const _id = location.pathname.split('/').pop();
+
   const bookingData = location.state?.data;
   const [formData, setFormData] = useState({
     fullName: '',
@@ -95,8 +98,8 @@ const BookingForm = () => {
     };
 
     const apiCall = bookingData?._id
-      ? axios.put(`http://localhost:5000/api/bookings`, updatedBookingData)
-      : axios.post('http://localhost:5000/api/bookings', updatedBookingData);
+      ? axios.put(`http://localhost:5000/api/bookings/${_id}`, updatedBookingData)
+      : axios.post(`http://localhost:5000/api/bookings/${_id}`, updatedBookingData);
       console.log(formData);
       
 
@@ -177,40 +180,61 @@ const BookingForm = () => {
           </div>
 
           <div className="mb-4">
-            <label className="block text-sm font-medium mb-1 text-gray-700">Selected Equipment Price</label>
-            <input
-              type="text"
-              className="w-full p-2 border rounded text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
-              value={selectedEquipmentPrice}
-              readOnly
-            />
-          </div>
-
-          <div className="mb-4">
-            <label className="block text-sm font-medium mb-1 text-gray-700">Select Date</label>
-            <input
-              type="date"
-              className="w-full p-2 border rounded text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
-              value={formData.date}
-              onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-            />
-            {errors.date && <p className="text-red-500 text-sm">{errors.date}</p>}
-          </div>
-
-          <p className="text-lg font-semibold text-gray-900">
-            Total Price (including handling fee & VAT): Rs. {totalPrice.toFixed(2)}
-          </p>
-
-          <button
-            type="submit"
-            className="w-full p-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition duration-200"
-          >
-            Submit Booking
-          </button>
-        </form>
+        <label className="block text-sm font-medium mb-1 text-gray-700">Selected Equipment Price</label>
+        <input
+          type="text"
+          className="w-full p-2 border rounded text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
+          value={selectedEquipmentPrice}
+          readOnly
+        />
       </div>
-      <Footer />
+      <div className="mb-4">
+        <label className="block text-sm font-medium mb-1 text-gray-700">Bank</label>
+        <input
+          type="text"
+          className="w-full p-2 border rounded text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
+          
+        />
+      </div>
+
+      <div className="mb-4">
+        <label className="block text-sm font-medium mb-1 text-gray-700">bank</label>
+        <input
+          type="text"
+          className="w-full p-2 border rounded text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
+        
+        
+        />
+      </div>
+
+
+      <div className="mb-4">
+        <label className="block text-sm font-medium mb-1 text-gray-700">Select Date</label>
+        <input
+          type="date"
+          className="w-full p-2 border rounded text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
+          value={formData.date}
+          onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+        />
+        {errors.date && <p className="text-red-500 text-sm">{errors.date}</p>}
+      </div>
+
+      <p className="text-lg font-semibold text-gray-900">
+        Total Price (including handling fee & VAT): Rs. {totalPrice.toFixed(2)}
+      </p>
+
+      <button
+        type="submit"
+        className="w-full p-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition duration-200"
+      >
+        Submit Booking
+      </button>
+    </form>
     </div>
+    <Footer />
+    </div>
+
+      
   );
 };
 

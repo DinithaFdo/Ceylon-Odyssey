@@ -13,7 +13,7 @@ export default function TicketList() {
     // Fetch all tickets
     const fetchTickets = async () => {
         try {
-            const response = await axios.get('http://localhost:5010/tickets/');
+            const response = await axios.get('http://localhost:5000/tickets/');
             setTickets(response.data);
         } catch (error) {
             console.error('Error fetching tickets:', error);
@@ -23,7 +23,6 @@ export default function TicketList() {
     useEffect(() => {
         fetchTickets();
 
-        // Auto refresh tickets every 10 seconds
         const interval = setInterval(() => {
             fetchTickets();
         }, 10000);
@@ -32,7 +31,7 @@ export default function TicketList() {
     }, []);
 
     const handleThumbnailClick = (ticketId) => {
-        navigate(`/ticket/${ticketId}`); // Redirect to TicketDetails page
+        navigate(`/ticket/${ticketId}`);
     };
 
     const handleSearchChange = (e) => {
@@ -43,7 +42,7 @@ export default function TicketList() {
         setSelectedStatus(e.target.value);
     };
 
-    // Filter tickets based on searchTerm and status (isComplete)
+    // Filter tickets 
     const filteredTickets = tickets.filter(ticket =>
         (ticket.subject.toLowerCase().includes(searchTerm.toLowerCase()) || 
         ticket.description.toLowerCase().includes(searchTerm.toLowerCase())) &&
