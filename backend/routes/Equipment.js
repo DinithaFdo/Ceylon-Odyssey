@@ -6,6 +6,7 @@ const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
+const Destination = require('../models/destination');
 
 const app = express();
 app.use(cors());
@@ -197,6 +198,34 @@ router.get('/report', async (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(500).send('Internal Server Error');
+    }
+});
+
+router.get('/recommend/:destinationID', async (req, res) => {
+    try {
+        // Find the destination by ID
+        const destination = await Destination.findById(req.params.destinationID);
+
+        if (!destination) {
+            return res.status(404).json({ message: 'Destination not found' });
+        }
+
+        const destinationDistrict = destination.dDistrict;
+
+        // Find all equipment that has district tags matching the destination district
+        const recommendedEquipment = await Equipment.find({ districtTags: destinationDistrict });
+
+        // If no equipment is found, send an empty array
+        if (recommendedEquipment.length === 0) {
+            return res.status(200).json({ message: 'No relevant equipment found for this destination', equipment: [] });
+        }
+
+        // Send the recommended equipment back
+        res.status(200).json({ equipment: recommendedEquipment });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error', error: error.message });
     }
 });
 
