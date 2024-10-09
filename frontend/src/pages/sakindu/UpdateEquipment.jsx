@@ -3,16 +3,22 @@ import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import toast, { Toaster } from "react-hot-toast";
 
+const districtNames = [
+  "Colombo", "Gampaha", "Kalutara", "Kandy", "Matale", "Nuwara Eliya", "Galle", "Matara", "Hambantota", "Jaffna",
+  "Kilinochchi", "Mullaitivu", "Vavuniya", "Batticaloa", "Ampara", "Polonnaruwa", "Anuradhapura", "Kurunegala", 
+  "Puttalam", "Trincomalee", "Ratnapura", "Kegalle", "Badulla", "Moneragala", "Sabaragamuwa"
+];
+
 export default function UpdateEquipment() {
     const { id } = useParams();
-
     const [values, setValues] = useState({
         equipmentId: '',
         equipmentName: '',
         equipmentPrice: 0,
         equipmentType: '',
         equipmentQuantity: 0,
-        equipmentImage: ''
+        equipmentImage: '',
+        districtTags: []
     });
 
     useEffect(() => {
@@ -25,7 +31,8 @@ export default function UpdateEquipment() {
                     equipmentPrice: equipmentData.equipmentPrice,
                     equipmentType: equipmentData.equipmentType,
                     equipmentQuantity: equipmentData.equipmentQuantity,
-                    equipmentImage: equipmentData.equipmentImage
+                    equipmentImage: equipmentData.equipmentImage,
+                    districtTags: equipmentData.districtTags || []
                 });
             })
             .catch((err) => {
@@ -35,26 +42,36 @@ export default function UpdateEquipment() {
 
     const navigate = useNavigate();
 
+    const handleTagChange = (district) => {
+        setValues(prevValues => ({
+            ...prevValues,
+            districtTags: prevValues.districtTags.includes(district)
+                ? prevValues.districtTags.filter(tag => tag !== district)
+                : [...prevValues.districtTags, district]
+        }));
+    };
+
     const updateequipment = (e) => {
         e.preventDefault();
-
+    
         const formData = new FormData();
         Object.keys(values).forEach(key => {
             if (key === 'equipmentImage' && typeof values[key] === 'object') {
                 formData.append(key, values[key]);
+            } else if (key === 'districtTags') {
+                formData.append(key, JSON.stringify(values.districtTags));
             } else if (key !== 'equipmentImage') {
                 formData.append(key, values[key]);
             }
         });
-
+    
         axios.put(`http://localhost:5000/equipment/update/${id}`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data'
             }
         }).then((response) => {
             toast.success('Equipment Updated Successfully!');
-           
-            
+            navigate(`/dashboard`);
         }).catch((err) => {
             toast.error('Error Updating Equipment');
             console.error('Error:', err);
@@ -62,67 +79,141 @@ export default function UpdateEquipment() {
     };
 
     return (
+        <div className="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+            <Toaster />
+            <div className="max-w-3xl mx-auto">
+                <div className="bg-white shadow-md rounded-lg overflow-hidden">
+                    <div className="px-6 py-4 bg-gray-800 border-b border-gray-700">
+                        <h2 className="text-2xl font-bold text-white">Update Equipment</h2>
+                    </div>
 
-        <div>
-                    <Toaster />
-        <form onSubmit={updateequipment} encType="multipart/form-data" className="max-w-4xl p-6 mx-auto bg-gray-700 rounded-md shadow-md dark:bg-gray-800 mt-20" >
-            <h1 className="text-3xl font-bold mb-7 text-white">Update Equipment</h1>
+                    <form onSubmit={updateequipment} className="px-6 py-4 space-y-6">
+                        <div className="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2">
+                            <div>
+                                <label htmlFor="equipmentId" className="block text-sm font-medium text-gray-700">
+                                    Equipment ID
+                                </label>
+                                <input
+                                    type="text"
+                                    id="equipmentId"
+                                    className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm bg-gray-100"
+                                    value={values.equipmentId}
+                                    readOnly
+                                />
+                            </div>
 
+                            <div>
+                                <label htmlFor="equipmentName" className="block text-sm font-medium text-gray-700">
+                                    Equipment Name
+                                </label>
+                                <input
+                                    type="text"
+                                    id="equipmentName"
+                                    className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                    value={values.equipmentName}
+                                    onChange={(e) => setValues({ ...values, equipmentName: e.target.value })}
+                                    required
+                                />
+                            </div>
 
-            <div className="grid grid-cols-2 gap-8">
-                
-           
-                <div className="mb-8">
-                    <label htmlFor="equipmentId" className="block mb-2 text-l font-medium text-white dark:text-white">Equipment ID</label>
-                    <input type="text" id="equipmentId" className=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                    value={values.equipmentId}  />
-                </div>
+                            <div>
+                                <label htmlFor="equipmentPrice" className="block text-sm font-medium text-gray-700">
+                                    Equipment Price
+                                </label>
+                                <input
+                                    type="number"
+                                    id="equipmentPrice"
+                                    className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                    value={values.equipmentPrice}
+                                    onChange={(e) => setValues({ ...values, equipmentPrice: parseFloat(e.target.value) })}
+                                    required
+                                />
+                            </div>
 
-                <div className="mb-8">
-                    <label htmlFor="equipmentName" className="block mb-2 text-l font-medium text-white dark:text-white">Equipment Name</label>
-                    <input type="text" id="equipmentName"className="text-base bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                     value={values.equipmentName} 
-                     onChange={(e) => setValues({ ...values, equipmentName: e.target.value })} required />
-                </div>
+                            <div>
+                                <label htmlFor="equipmentType" className="block text-sm font-medium text-gray-700">
+                                    Equipment Type
+                                </label>
+                                <select
+                                    id="equipmentType"
+                                    className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                    value={values.equipmentType}
+                                    onChange={(e) => setValues({ ...values, equipmentType: e.target.value })}
+                                    required
+                                >
+                                    <option value="">Select Type</option>
+                                    <option>Hiking</option>
+                                    <option>Luggage</option>
+                                    <option>Clothes</option>
+                                    <option>Toiletries</option>
+                                </select>
+                            </div>
 
+                            <div>
+                                <label htmlFor="equipmentQuantity" className="block text-sm font-medium text-gray-700">
+                                    Equipment Quantity
+                                </label>
+                                <input
+                                    type="number"
+                                    id="equipmentQuantity"
+                                    className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                    value={values.equipmentQuantity}
+                                    onChange={(e) => setValues({ ...values, equipmentQuantity: parseInt(e.target.value) })}
+                                    required
+                                />
+                            </div>
 
-                <div className="mb-8">
-                    <label htmlFor="equipmentPrice" className="block mb-2 text-l font-medium text-white dark:text-white">Equipment Price</label>
-                    <input type="number" id="equipmentPrice" className="text-base bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                    value={values.equipmentPrice}
-                    onChange={(e) => setValues({...values, equipmentPrice: parseFloat(e.target.value)})} required />
-                </div>
+                            <div>
+                                <label htmlFor="equipmentImage" className="block text-sm font-medium text-gray-700">
+                                    Equipment Image
+                                </label>
+                                <input
+                                    type="file"
+                                    id="equipmentImage"
+                                    className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                    onChange={(e) => setValues({ ...values, equipmentImage: e.target.files[0] })}
+                                />
+                            </div>
 
-                <div className="mb-8">
-                    <label htmlFor="equipmentType" className="block mb-2 text-l font-medium text-white dark:text-white">Equipment Type</label>
-        
-                    <select id="equipmentType" className="text-base block w-full px-4 py-2 mt-2" value={values.equipmentType}
-                onChange={(e) => setValues({...values, equipmentType: e.target.value})} required
-                    >
-                    <option value={values.equipmentType}>{values.equipmentType}</option>
-                    <option>Hiking</option>
-                    <option>Luggage</option>
-                    <option>Clothes</option>
-                    <option>Toiletries</option>
-                </select>
-                </div>
+                            <div className="sm:col-span-2">
+                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                    Select Tags (Districts)
+                                </label>
+                                <div className="mt-2 p-4 bg-gray-50 rounded-lg border border-gray-200 shadow-sm">
+                                    <div className="flex flex-wrap gap-2">
+                                        {districtNames.map((district) => (
+                                            <button
+                                                key={district}
+                                                type="button"
+                                                onClick={() => handleTagChange(district)}
+                                                className={`px-3 py-1 text-sm font-medium rounded-full transition-colors duration-200 ease-in-out ${
+                                                    values.districtTags.includes(district)
+                                                        ? 'bg-indigo-600 text-white hover:bg-indigo-700'
+                                                        : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                                                }`}
+                                            >
+                                                {district}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                                <p className="mt-2 text-sm text-gray-500">
+                                    Selected: {values.districtTags.length} / {districtNames.length}
+                                </p>
+                            </div>
+                        </div>
 
-
-                <div className="mb-8">
-                    <label htmlFor="equipmentQuantity" className="block mb-2 text-l font-medium text-white dark:text-white">Equipment Quantity</label>
-                    <input type="number" id="equipmentQuantity" className="text-base bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                    value={values.equipmentQuantity}
-                    onChange={(e) => setValues({...values, equipmentQuantity: parseFloat(e.target.value)})} required />
-                </div>
-
-                <div className="mb-8">
-                    <label className="block mb-2 text-l font-medium text-white dark:text-white" htmlFor="equipmentImage">Upload Image</label>
-                    <input name="equipmentImage" id="equipmentImage" type="file" onChange={(e) => setValues({ ...values, equipmentImage: e.target.files[0] })} />
+                        <div className="flex items-center justify-end mt-4">
+                            <button
+                                type="submit"
+                                className="px-4 py-2 bg-indigo-600 text-white font-semibold rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                            >
+                                Update Equipment
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
-
-            <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">Update Equipment</button>
-        </form>
         </div>
     );
 }

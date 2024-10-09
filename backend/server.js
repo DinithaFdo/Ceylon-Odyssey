@@ -51,8 +51,8 @@ app.use('/EquipmentImages', express.static(path.join(__dirname, 'EquipmentImages
 app.use('/equipment', EquipmentRouter);
 
 
-app.use('/TourPackageImages', express.static(path.join(__dirname, 'TourPackageImages')));
 const tourPackageRouter = require('./routes/tourPackages.js');
+app.use('/TourPackageImages', express.static(path.join(__dirname, 'TourPackageImages')));
 app.use('/tourPackage', tourPackageRouter);
 
 

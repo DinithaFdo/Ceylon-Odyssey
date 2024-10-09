@@ -6,6 +6,7 @@ const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
+const Destination = require('../models/destination');
 
 const app = express();
 app.use(cors());
@@ -35,6 +36,9 @@ function deleteImage(filePath) {
 
 router.post('/add', upload, async (req, res) => {
     try {
+        // Parse tags (districtTags) if they're sent as a JSON string
+        const tags = req.body.districtTags ? JSON.parse(req.body.districtTags) : [];
+
         const newEquipment = new Equipment({
             equipmentId: req.body.equipmentId,
             equipmentName: req.body.equipmentName,
@@ -42,11 +46,11 @@ router.post('/add', upload, async (req, res) => {
             equipmentDescription: req.body.equipmentDescription,
             equipmentImage: req.file.filename,
             equipmentPrice: Number(req.body.equipmentPrice),
-            equipmentQuantity: Number(req.body.equipmentQuantity)
+            equipmentQuantity: Number(req.body.equipmentQuantity),
+            districtTags: tags // Add the district tags
         });
 
         await newEquipment.save();
-
         res.status(200).json(newEquipment);
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -65,26 +69,27 @@ router.route("/update/:id").put(upload, async (req, res) => {
     const { equipmentName, equipmentType, equipmentDescription, equipmentPrice, equipmentQuantity } = req.body;
 
     try {
-        
         const existingEquipment = await Equipment.findById(fetchequipmentID);
-
         
+        // If no image is uploaded, use the existing image
         const equipmentImage = req.file ? req.file.filename : existingEquipment.equipmentImage;
 
-        
+        // Update equipment with the new fields
         const updateEquipment = {
             equipmentName,
             equipmentType,
             equipmentDescription,
             equipmentImage,
-            equipmentPrice,
-            equipmentQuantity
+            equipmentPrice: Number(equipmentPrice),
+            equipmentQuantity: Number(equipmentQuantity),
+            districtTags: req.body.districtTags ? JSON.parse(req.body.districtTags) : existingEquipment.districtTags // Handle districtTags if present
         };
 
-        
-        await Equipment.findByIdAndUpdate(fetchequipmentID, updateEquipment);
+        // Update the equipment document in the database
+        const updatedEquipment = await Equipment.findByIdAndUpdate(fetchequipmentID, updateEquipment, { new: true });
 
-        res.status(200).send({ status: "Equipment updated" });
+        // Send response with updated equipment data
+        res.status(200).json({ status: "Equipment updated", equipment: updatedEquipment });
     } catch (err) {
         console.log(err);
         res.status(500).send({ status: "Error with updating data", error: err.message });
@@ -193,6 +198,34 @@ router.get('/report', async (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(500).send('Internal Server Error');
+    }
+});
+
+router.get('/recommend/:destinationID', async (req, res) => {
+    try {
+        // Find the destination by ID
+        const destination = await Destination.findById(req.params.destinationID);
+
+        if (!destination) {
+            return res.status(404).json({ message: 'Destination not found' });
+        }
+
+        const destinationDistrict = destination.dDistrict;
+
+        // Find all equipment that has district tags matching the destination district
+        const recommendedEquipment = await Equipment.find({ districtTags: destinationDistrict });
+
+        // If no equipment is found, send an empty array
+        if (recommendedEquipment.length === 0) {
+            return res.status(200).json({ message: 'No relevant equipment found for this destination', equipment: [] });
+        }
+
+        // Send the recommended equipment back
+        res.status(200).json({ equipment: recommendedEquipment });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error', error: error.message });
     }
 });
 

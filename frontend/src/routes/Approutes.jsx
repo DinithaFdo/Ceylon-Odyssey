@@ -9,10 +9,6 @@ import About from "../pages/common/About";
 import Contact from "../pages/common/Contact";
 import Login from "../pages/login/Login"
 import Signup from "../pages/signup/Signup"
-import UpdateEquipment from "../pages/sakindu/UpdateEquipment"
-import EquipmentUserView from "../pages/sakindu/EquipmentList"
-import IndividualEquipment from "../pages/sakindu/IndividualEquipment"; 
-import AdminUpdateEquipment from "../pages/dashboard/Sakindu Dashbaord/UpdateEquipment";
 import Onboarding from "../pages/Dinitha/Onboarding"
 import Profile from "../pages/Dinitha/Profile"
 import ProtectedRoute from "../components/ProtectedRoute"
@@ -20,11 +16,19 @@ import GuestRoute from "../components/GuestRoute"
 import NotFound from "../components/spinner/404"
 import Test from  "../components/test"
 import PaymentForm from "../components/PaymentForm";
+
+import UpdateEquipment from "../pages/sakindu/UpdateEquipment"
+import EquipmentUserView from "../pages/sakindu/EquipmentList"
+import IndividualEquipment from "../pages/sakindu/IndividualEquipment"; 
+import AdminUpdateEquipment from "../pages/dashboard/Sakindu Dashbaord/UpdateEquipment";
+
 import TourismBlog from "../pages/Ishanka/UserBlog"
 import IndividualBlog from "../pages/Ishanka/InduvidualBlog";
 import UpdateBlogDashboard from "../pages/dashboard/Ishanka dahsbaord/UpdateBlogDashbaord";
+
 import BookingForm from "../pages/Jihan/BookingForm";
-import Confirmation from "../pages/Jihan/Confirmation";
+//import Confirmation from "../pages/Jihan/Confirmation";
+//import EditBooking from "../pages/Jihan/Confirmation";
 import BookingList from "../pages/Jihan/BookingList"
 
 import AddTicket from "../pages/ticket/AddTicket"; // Import AddTicket component
@@ -40,7 +44,6 @@ import EditDestinationPage from "../pages/destination/EditDestinationPage";
 import DestinationList from "../pages/destination/DestinationList";
 import DestinationDetail from "../pages/destination/DestinationDetail";
 import DestinationAnalytics from "../pages/destination/DestinationAnalytics";
-
 
 
 function AppRoutes() {
@@ -84,9 +87,10 @@ function AppRoutes() {
                 <Route path="/user-blog" element={<TourismBlog />} />
                 <Route path ="/blog/:id" element = {<IndividualBlog />} />
 
-                <Route path="/booking" element={<BookingForm />} />
-                <Route path="/confirmation" element={<Confirmation />} />
+                <Route path="/book/:id" element={<BookingForm />} />
+               {/*<Route path="/confirmation" element={<Confirmation /> } /> */}
                 <Route path="/bookings" element={<BookingList />} />
+                {/*<Route path="/book/:id" element={<EditBooking />} /> */}
 
                 <Route path="/tickets" element={<AllTickets />} /> {/* Route for All Tickets */}
                 <Route path="/tickets/add" element={<AddTicket />} /> {/* Route for Adding a Ticket */}

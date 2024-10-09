@@ -10,6 +10,9 @@ const BookingForm = () => {
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
 
+  //get id from the url
+  const _id = location.pathname.split('/').pop();
+
   const bookingData = location.state?.data;
   const [formData, setFormData] = useState({
     fullName: '',
@@ -36,7 +39,7 @@ const BookingForm = () => {
         address: bookingData.address || '',
         numberOfPeople: 1, 
         selectedEquipment: bookingData.selectedEquipment || '',
-        date: Date.now(),
+        date: '',
       });
       calculateTotalPrice(1, bookingData.packagePrice);
     }
@@ -57,12 +60,11 @@ const BookingForm = () => {
     setTotalPrice(total);
   };
 
-
-  
-
-
   const validateForm = () => {
     const newErrors = {};
+    const currentDate = new Date();
+    const selectedDate = new Date(formData.date);
+
     if (!formData.fullName) newErrors.fullName = 'Full Name is required';
     if (!formData.email) newErrors.email = 'Email is required';
     if (!formData.phone) newErrors.phone = 'Phone number is required';
@@ -71,7 +73,13 @@ const BookingForm = () => {
     if (!formData.address) newErrors.address = 'Address is required';
     if (formData.numberOfPeople < 1) newErrors.numberOfPeople = 'At least one person is required';
     if (!formData.selectedEquipment) newErrors.selectedEquipment = 'Please select equipment';
-    if (!formData.date) newErrors.date = 'Please select a date';
+
+    // Validate date is in the future
+    if (!formData.date) {
+      newErrors.date = 'Please select a date';
+    } else if (selectedDate <= currentDate.setHours(0, 0, 0, 0)) {
+      newErrors.date = 'Please select a future date';
+    }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -90,8 +98,8 @@ const BookingForm = () => {
     };
 
     const apiCall = bookingData?._id
-      ? axios.put(`http://localhost:5000/api/bookings`, updatedBookingData)
-      : axios.post('http://localhost:5000/api/bookings', updatedBookingData);
+      ? axios.put(`http://localhost:5000/api/bookings/${_id}`, updatedBookingData)
+      : axios.post(`http://localhost:5000/api/bookings/${_id}`, updatedBookingData);
       console.log(formData);
       
 
@@ -106,72 +114,72 @@ const BookingForm = () => {
 
   return (
     <div>
-            <Navbar />
-    <div className="mt-6 md:mt-10 md:mx-10 pt-20">
-    <form
-      onSubmit={handleSubmit}
-      className="max-w-md mx-auto p-6 border rounded-lg shadow-md bg-white"
-    >
-      <h2 className="text-2xl font-semibold mb-4 text-gray-800">
-        Booking Form for {bookingData?.packageName || 'Your Tour Package'}
-      </h2>
-
-      {['fullName', 'email', 'phone', 'address'].map((field) => (
-        <div className="mb-4" key={field}>
-          <label className="block text-sm font-medium mb-1 text-gray-700 capitalize">
-            {field.replace(/([A-Z])/g, ' $1')}
-          </label>
-          <input
-            type={field === 'email' ? 'email' : 'text'}
-            className="w-full p-2 border rounded text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
-            value={formData[field]}
-            onChange={(e) => setFormData({ ...formData, [field]: e.target.value })}
-          />
-          {errors[field] && <p className="text-red-500 text-sm">{errors[field]}</p>}
-        </div>
-      ))}
-
-      <div className="mb-4">
-        <label className="block text-sm font-medium mb-1 text-gray-700">Number of People</label>
-        <input
-          type="number"
-          min="1"
-          className="w-full p-2 border rounded text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
-          value={formData.numberOfPeople}
-          onChange={(e) => {
-            const value = Math.max(1, parseInt(e.target.value, 10)); // Ensure at least 1 person
-            setFormData({ ...formData, numberOfPeople: value });
-            calculateTotalPrice(value, bookingData?.packagePrice);
-          }}
-        />
-        {errors.numberOfPeople && <p className="text-red-500 text-sm">{errors.numberOfPeople}</p>}
-      </div>
-
-      <div className="mb-4">
-        <label className="block text-sm font-medium mb-1 text-gray-700">Select Equipment</label>
-        <select
-          className="w-full p-2 border rounded text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
-          onChange={(e) => {
-            const selectedEquipmentId = e.target.value;
-            const selectedEquipment = equipmentList.find(equipment => equipment._id === selectedEquipmentId);
-            const equipmentPrice = selectedEquipment ? selectedEquipment.equipmentPrice : 0;
-
-            setFormData({ ...formData, selectedEquipment: selectedEquipmentId });
-            setSelectedEquipmentPrice(equipmentPrice);
-            calculateTotalPrice(formData.numberOfPeople, bookingData?.packagePrice, equipmentPrice);
-          }}
+      <Navbar />
+      <div className="mt-6 md:mt-10 md:mx-10 pt-20">
+        <form
+          onSubmit={handleSubmit}
+          className="max-w-md mx-auto p-6 border rounded-lg shadow-md bg-white"
         >
-          <option value="">Select equipment</option>
-          {equipmentList.map((equipment) => (
-            <option key={equipment._id} value={equipment._id}>
-              {equipment.equipmentName}
-            </option>
-          ))}
-        </select>
-        {errors.selectedEquipment && <p className="text-red-500 text-sm">{errors.selectedEquipment}</p>}
-      </div>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-800">
+            Booking Form for {bookingData?.packageName || 'Your Tour Package'}
+          </h2>
 
-      <div className="mb-4">
+          {['fullName', 'email', 'phone', 'address'].map((field) => (
+            <div className="mb-4" key={field}>
+              <label className="block text-sm font-medium mb-1 text-gray-700 capitalize">
+                {field.replace(/([A-Z])/g, ' $1')}
+              </label>
+              <input
+                type={field === 'email' ? 'email' : 'text'}
+                className="w-full p-2 border rounded text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
+                value={formData[field]}
+                onChange={(e) => setFormData({ ...formData, [field]: e.target.value })}
+              />
+              {errors[field] && <p className="text-red-500 text-sm">{errors[field]}</p>}
+            </div>
+          ))}
+
+          <div className="mb-4">
+            <label className="block text-sm font-medium mb-1 text-gray-700">Number of People</label>
+            <input
+              type="number"
+              min="1"
+              className="w-full p-2 border rounded text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
+              value={formData.numberOfPeople}
+              onChange={(e) => {
+                const value = Math.max(1, parseInt(e.target.value, 10)); // Ensure at least 1 person
+                setFormData({ ...formData, numberOfPeople: value });
+                calculateTotalPrice(value, bookingData?.packagePrice);
+              }}
+            />
+            {errors.numberOfPeople && <p className="text-red-500 text-sm">{errors.numberOfPeople}</p>}
+          </div>
+
+          <div className="mb-4">
+            <label className="block text-sm font-medium mb-1 text-gray-700">Select Equipment</label>
+            <select
+              className="w-full p-2 border rounded text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
+              onChange={(e) => {
+                const selectedEquipmentId = e.target.value;
+                const selectedEquipment = equipmentList.find(equipment => equipment._id === selectedEquipmentId);
+                const equipmentPrice = selectedEquipment ? selectedEquipment.equipmentPrice : 0;
+
+                setFormData({ ...formData, selectedEquipment: selectedEquipmentId });
+                setSelectedEquipmentPrice(equipmentPrice);
+                calculateTotalPrice(formData.numberOfPeople, bookingData?.packagePrice, equipmentPrice);
+              }}
+            >
+              <option value="">Select equipment</option>
+              {equipmentList.map((equipment) => (
+                <option key={equipment._id} value={equipment._id}>
+                  {equipment.equipmentName}
+                </option>
+              ))}
+            </select>
+            {errors.selectedEquipment && <p className="text-red-500 text-sm">{errors.selectedEquipment}</p>}
+          </div>
+
+          <div className="mb-4">
         <label className="block text-sm font-medium mb-1 text-gray-700">Selected Equipment Price</label>
         <input
           type="text"
@@ -180,6 +188,25 @@ const BookingForm = () => {
           readOnly
         />
       </div>
+      <div className="mb-4">
+        <label className="block text-sm font-medium mb-1 text-gray-700">Bank</label>
+        <input
+          type="text"
+          className="w-full p-2 border rounded text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
+          
+        />
+      </div>
+
+      <div className="mb-4">
+        <label className="block text-sm font-medium mb-1 text-gray-700">bank</label>
+        <input
+          type="text"
+          className="w-full p-2 border rounded text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
+        
+        
+        />
+      </div>
+
 
       <div className="mb-4">
         <label className="block text-sm font-medium mb-1 text-gray-700">Select Date</label>
@@ -206,7 +233,11 @@ const BookingForm = () => {
     </div>
     <Footer />
     </div>
+
+      
   );
 };
+
+
 
 export default BookingForm;
