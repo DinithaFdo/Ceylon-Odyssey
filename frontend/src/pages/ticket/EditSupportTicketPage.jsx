@@ -55,7 +55,7 @@ export default function EditSupportTicketPage() {
             const response = await axios.put(`http://localhost:5000/tickets/update/${ticketID}`, ticket);
             console.log('Ticket updated successfully:', response.data);
             alert('Ticket updated successfully');
-            navigate('/dashboard/support-agent-tickets'); // Redirect back to tickets list
+            navigate('/dashboard'); // Redirect back to tickets list
         } catch (error) {
             console.error('Error updating ticket:', error);
             alert('Error updating ticket');

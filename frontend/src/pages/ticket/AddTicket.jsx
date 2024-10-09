@@ -20,7 +20,6 @@ export default function AddTicket() {
             return;
         }
         
-      
         const emailPattern = /.+\@.+\..+/;
         if (!emailPattern.test(email)) {
             alert('Please enter a valid email address.');
@@ -43,56 +42,59 @@ export default function AddTicket() {
             <Navbar />
 
             <main className="flex-grow pt-24 px-4 md:px-8 lg:px-16">
-            <center><h1 className="text-2xl font-bold mb-4">Create Ticket</h1></center>
-                <form onSubmit={handleSubmit} className="space-y-4">
-                    <div>
-                        <label className="block text-gray-700">Subject</label>
-                        <input
-                            type="text"
-                            value={subject}
-                            onChange={(e) => setSubject(e.target.value)}
-                            required
-                            className="w-full p-2 border border-gray-300 rounded-lg"
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-gray-700">Description</label>
-                        <textarea
-                            value={description}
-                            onChange={(e) => setDescription(e.target.value)}
-                            required
-                            className="w-full p-2 border border-gray-300 rounded-lg"
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-gray-700">Priority</label>
-                        <select
-                            value={priority}
-                            onChange={(e) => setPriority(e.target.value)}
-                            className="w-full p-2 border border-gray-300 rounded-lg"
+                <div className="max-w-sm mx-auto bg-white shadow-lg rounded-lg p-6">
+                    <h1 className="text-2xl font-bold text-center mb-4">Create Ticket</h1>
+                    <form onSubmit={handleSubmit} className="space-y-4">
+                        <div>
+                            <label className="block text-gray-700 font-medium">Subject</label>
+                            <input
+                                type="text"
+                                value={subject}
+                                onChange={(e) => setSubject(e.target.value)}
+                                required
+                                className="w-full p-2 border border-gray-300 rounded-lg transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-gray-700 font-medium">Description</label>
+                            <textarea
+                                value={description}
+                                onChange={(e) => setDescription(e.target.value)}
+                                required
+                                className="w-full p-2 border border-gray-300 rounded-lg transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                rows={3} // Adjust the height if needed
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-gray-700 font-medium">Priority</label>
+                            <select
+                                value={priority}
+                                onChange={(e) => setPriority(e.target.value)}
+                                className="w-full p-2 border border-gray-300 rounded-lg transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            >
+                                <option value="Low">Low</option>
+                                <option value="Medium">Medium</option>
+                                <option value="High">High</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label className="block text-gray-700 font-medium">Customer Email</label>
+                            <input
+                                type="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                required
+                                className="w-full p-2 border border-gray-300 rounded-lg transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            />
+                        </div>
+                        <button
+                            type="submit"
+                            className="w-full bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 transition duration-200 ease-in-out"
                         >
-                            <option value="Low">Low</option>
-                            <option value="Medium">Medium</option>
-                            <option value="High">High</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label className="block text-gray-700">Customer Email</label>
-                        <input
-                            type="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            required
-                            className="w-full p-2 border border-gray-300 rounded-lg"
-                        />
-                    </div>
-                    <button
-                        type="submit"
-                        className="bg-blue-500 text-white p-2 rounded-lg"
-                    >
-                        Add Ticket
-                    </button>
-                </form>
+                            Add Ticket
+                        </button>
+                    </form>
+                </div>
             </main>
 
             <Footer />
