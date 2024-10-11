@@ -19,6 +19,7 @@ const TourBot = () => (
                 --df-messenger-message-bot-background: #fff;
                 bottom: 16px;
                 right: 16px;
+                --df-messenger-chat-bubble-background: #a8c7fa;
             }
         `}</style>
     </>
