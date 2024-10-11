@@ -141,65 +141,98 @@ router.route("/get/:id").get(async(req, res) => {
 
 
 
+
 router.get('/report', async (req, res) => {
     try {
         const lowStockEquipment = await Equipment.find({ equipmentQuantity: { $lt: 5 } });
-        const pdfDoc = new PDFDocument();
+        const pdfDoc = new PDFDocument({
+            size: 'A4',
+            margins: { top: 50, bottom: 50, left: 50, right: 50 }
+        });
         let filename = 'low_stock_equipment_report.pdf';
         res.setHeader('Content-Disposition', 'attachment; filename="' + filename + '"');
         res.setHeader('Content-Type', 'application/pdf');
 
-        
         pdfDoc.pipe(res);
 
         
         const logoPath = path.join(__dirname, '/logo.png');
-        pdfDoc.image(logoPath, { fit: [100, 100], align: 'center' });
+        const newImageWidth = 200;
+        pdfDoc.image(logoPath, pdfDoc.page.width / 2 - newImageWidth / 2, 50, { fit: [200, 200], align: 'center' });
 
         
-        pdfDoc.moveDown(2);
-        pdfDoc.fontSize(20).text('Low Stock Equipment Report', { align: 'center' });
-        pdfDoc.moveDown(2);
+        pdfDoc.moveDown(6);
+        pdfDoc.font('Helvetica-Bold').fontSize(20).text('Low Stock Equipment Report', { align: 'center' });
+        pdfDoc.moveDown(1);
 
         
-        pdfDoc.moveTo(50, pdfDoc.y).lineTo(550, pdfDoc.y).stroke();
-        pdfDoc.moveDown(0.2);
-        
+        pdfDoc.fontSize(12).text(`Date: ${new Date().toLocaleDateString()}`, { align: 'right' });
+        pdfDoc.moveDown(1);
 
         
-        pdfDoc.fontSize(12);
+        const tableTop = 220;
+        const idX = 50;
+        const descriptionX = 200;
+        const quantityX = 450;
+        const rowHeight = 25;
 
         
-        pdfDoc.text('Name', 80, pdfDoc.y + 5); 
+        const addTableHeader = (y) => {
+            pdfDoc.font('Helvetica-Bold').fontSize(14);
+            pdfDoc.text('Equipment ID', idX, y);
+            pdfDoc.text('Equipment Name', descriptionX, y);
+            pdfDoc.text('Quantity', quantityX, y);
+            pdfDoc.moveTo(50, y + 20).lineTo(pdfDoc.page.width - 50, y + 20).stroke();
+            return y + 30;
+        };
 
-        
-        pdfDoc.text('Quantity', 350, pdfDoc.y - 6);
-        pdfDoc.moveDown();
+        let yPosition = addTableHeader(tableTop);
+        let currentPage = 1;
 
-        
-        pdfDoc.moveTo(50, pdfDoc.y).lineTo(550, pdfDoc.y).stroke();
-        pdfDoc.moveDown(0.2);
+        // Add table content
+        pdfDoc.font('Helvetica').fontSize(12);
 
-        
-        lowStockEquipment.forEach(item => {
-            
-            pdfDoc.text(item.equipmentName, 50, pdfDoc.y + 5); 
+        for (let i = 0; i < lowStockEquipment.length; i++) {
+            const item = lowStockEquipment[i];
 
-            
-            pdfDoc.text(item.equipmentQuantity.toString(), 370, pdfDoc.y - 10);
-            pdfDoc.moveDown();
-        });
+            // Check if we need a new page or if we've reached the footer area
+            if (yPosition > pdfDoc.page.height - 100) {
+                if (currentPage === 1) {
+                    // Add footer to the first page before adding a new page
+                    addFooter(pdfDoc, currentPage);
+                    pdfDoc.addPage();
+                    yPosition = 50;
+                    yPosition = addTableHeader(yPosition);
+                    currentPage++;
+                } else {
+                    // If we're already on the second page, stop adding items
+                    break;
+                }
+            }
 
-        
-        pdfDoc.moveTo(50, pdfDoc.y).lineTo(550, pdfDoc.y).stroke();
+            // Add light gray background for even rows
+            if (i % 2 === 0) {
+                pdfDoc.rect(50, yPosition - 5, pdfDoc.page.width - 100, rowHeight).fill('#f2f2f2');
+            }
 
-        
+            pdfDoc.fillColor('black');
+            pdfDoc.text(item.equipmentId.toString(), idX, yPosition, { width: 140, ellipsis: true });
+            pdfDoc.text(item.equipmentName, descriptionX, yPosition, { width: 240, ellipsis: true });
+            pdfDoc.text(item.equipmentQuantity.toString(), quantityX, yPosition);
+
+            yPosition += rowHeight;
+        }
+
+    
+
         pdfDoc.end();
     } catch (error) {
         console.error(error);
         res.status(500).send('Internal Server Error');
     }
 });
+
+
 
 router.get('/recommend/:destinationID', async (req, res) => {
     try {
