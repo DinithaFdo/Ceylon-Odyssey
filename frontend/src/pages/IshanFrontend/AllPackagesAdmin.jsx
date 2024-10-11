@@ -11,6 +11,13 @@ const AllTourPackages = () => {
     const [searchQuery, setSearchQuery] = useState("");
     const [filteredPackages, setFilteredPackages] = useState([]);
 
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 6;
+
+    const totalPages = Math.ceil(filteredPackages.length / itemsPerPage);
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const currentPackages = filteredPackages.slice(startIndex, startIndex + itemsPerPage);
+
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -70,6 +77,7 @@ const AllTourPackages = () => {
         );
 
         setFilteredPackages(filtered);
+        setCurrentPage(1);
     }, [searchQuery, tourPackages]);
     
 
@@ -81,7 +89,6 @@ const AllTourPackages = () => {
             ) : (
                 <div>
                     <Toaster />
-
                     <div className="relative bg-gray-100 min-h-screen pt-1">
                         <div className="flex justify-center relative">
                             <div className="flex items-center w-1/2">
@@ -92,7 +99,6 @@ const AllTourPackages = () => {
                                 style={{ height: '3.5rem' }}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                                 />
-                                
                             </div>
                         </div>
 
@@ -100,13 +106,11 @@ const AllTourPackages = () => {
 
                         {/* tour package list */}
                         <div className="mt-8 grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 gap-x-10 gap-y-14">
-                            {filteredPackages.length > 0 ? (
-                            filteredPackages.map((tPackage, index) => (
+                            {currentPackages.length > 0 ? (
+                            currentPackages.map((tPackage, index) => (
                                 <div key={index} className="bg-white shadow-lg rounded-2xl p-4 flex flex-col items-center">
-                                    
                                     <h2 className="text-lg font-semibold mb-4">{tPackage.packageId}</h2>
                                     <h2 className="text-lg font-semibold mb-4">{tPackage.package_Title}</h2>
-
                                     <div className="relative w-full h-40 mb-4 overflow-hidden rounded-2xl">
                                         <img 
                                             className="w-full h-full object-cover" 
@@ -147,7 +151,6 @@ const AllTourPackages = () => {
                                         </button>
                                     </div>
                                 </div>
-                                
                             ))):(
                                 <div className="lg:col-span-3 flex justify-center">
                                     <img
@@ -156,9 +159,26 @@ const AllTourPackages = () => {
                                         className="w-40 h-40"
                                     />
                                 </div>
-                                )
-                            }
+                            )}
+                        </div>
 
+                        {/* Pagination Controls */}
+                        <div className="flex justify-center items-center mt-8">
+                            <button 
+                                className={`px-4 py-2 bg-gray-700 text-white rounded-md ${currentPage === 1 ? 'opacity-50 cursor-not-allowed' : ''}`} 
+                                onClick={() => setCurrentPage(currentPage - 1)} 
+                                disabled={currentPage === 1}
+                            >
+                                Previous
+                            </button>
+                            <span className="mx-2">Page {currentPage} of {totalPages}</span>
+                            <button 
+                                className={`px-4 py-2 bg-gray-700 text-white rounded-md ${currentPage === totalPages ? 'opacity-50 cursor-not-allowed' : ''}`} 
+                                onClick={() => setCurrentPage(currentPage + 1)} 
+                                disabled={currentPage === totalPages}
+                            >
+                                Next
+                            </button>
                         </div>
 
                     </div>
