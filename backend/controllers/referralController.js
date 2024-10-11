@@ -2,7 +2,7 @@ const Referral = require('../models/Referral');
 const User = require('../models/User'); 
 const Wallet = require('../models/Wallet');
 
-exports.getReferralDetails = async (req, res) => {
+exports.getReferralDetails = async (req, res) => { // Get the referral details of the current user - Dinitha
     try {
         const userId = req.user.id;
 
@@ -20,7 +20,7 @@ exports.getReferralDetails = async (req, res) => {
 };
 
 
-exports.submitReferralCode = async (req, res) => {
+exports.submitReferralCode = async (req, res) => { // Submit the referral code and apply the referral bonus - Dinitha
     try {
         const { referralCode } = req.body;
         const userId = req.user.id;

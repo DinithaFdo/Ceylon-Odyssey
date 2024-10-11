@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const JWT_SECRET = process.env.JWT_SECRET;
 
+// Middleware to check if the user is authenticated - Dinitha
 const authMiddleware = (req, res, next) => {
     const token = req.cookies.token; 
 

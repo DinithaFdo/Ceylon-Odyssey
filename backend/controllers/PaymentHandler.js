@@ -16,7 +16,7 @@ function generateHash(data) {
     return hash;
 }
 
-
+// Create a payment
 router.post('/create-payment', (req, res) => {
     const {
         amount,
@@ -60,6 +60,7 @@ router.post('/create-payment', (req, res) => {
     console.log(`Payment Creation Data is ${JSON.stringify(paymentData)}`);
 });
 
+// Get the payment data
 router.get('/', (req, res) => {
     if (!paymentData) {
         return res.status(404).json({ message: 'No payment data found. Please create a payment first.' });

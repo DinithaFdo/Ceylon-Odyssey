@@ -3,7 +3,7 @@ const router = express.Router();
 const User = require('../models/User');
 
 
-router.get('/', async (req, res) => {
+router.get('/', async (req, res) => { // Get all users - Dinitha
   try {
     const users = await User.find({});
     res.status(200).json(users);
@@ -13,7 +13,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.put('/:userId/suspend', async (req, res) => {
+router.put('/:userId/suspend', async (req, res) => { // Suspend or activate a user - Dinitha
   try {
     const userId = req.params.userId;
     const user = await User.findById(userId);
@@ -32,7 +32,7 @@ router.put('/:userId/suspend', async (req, res) => {
   }
 });
 
-router.put('/:userId/update', async (req, res) => {
+router.put('/:userId/update', async (req, res) => { // Update user details - Dinitha
     try {
       const userId = req.params.userId;
       const { email, firstName, lastName } = req.body;
@@ -59,7 +59,7 @@ router.put('/:userId/update', async (req, res) => {
   });
 
 
-router.put('/:userId/role', async (req, res) => {
+router.put('/:userId/role', async (req, res) => { // Update user role - Dinitha
   try {
     const userId = req.params.userId;
     const { role } = req.body;
@@ -77,7 +77,7 @@ router.put('/:userId/role', async (req, res) => {
 });
 
 
-router.delete('/:userId/delete', async (req, res) => {
+router.delete('/:userId/delete', async (req, res) => { // Delete a user - Dinitha
     try {
       const userId = req.params.userId;
   

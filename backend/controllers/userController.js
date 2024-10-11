@@ -3,7 +3,7 @@ const Referral = require('../models/Referral');
 require('dotenv').config();
 
 
-exports.getUserProfile = async (req, res) => {
+exports.getUserProfile = async (req, res) => { // Get the profile of the current user - Dinitha
     try {
         const userId = req.user.id;
 

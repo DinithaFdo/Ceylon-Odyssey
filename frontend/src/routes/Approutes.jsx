@@ -16,6 +16,7 @@ import GuestRoute from "../components/GuestRoute"
 import NotFound from "../components/spinner/404"
 import Test from  "../components/test"
 import PaymentForm from "../components/PaymentForm";
+import AI from "../components/TripPlanner"
 
 import UpdateEquipment from "../pages/sakindu/UpdateEquipment"
 import EquipmentUserView from "../pages/sakindu/EquipmentList"
@@ -27,8 +28,8 @@ import IndividualBlog from "../pages/Ishanka/InduvidualBlog";
 import UpdateBlogDashboard from "../pages/dashboard/Ishanka dahsbaord/UpdateBlogDashbaord";
 
 import BookingForm from "../pages/Jihan/BookingForm";
-//import Confirmation from "../pages/Jihan/Confirmation";
-//import EditBooking from "../pages/Jihan/Confirmation";
+import Confirmation from "../pages/Jihan/Confirmation";
+import EditBooking from "../pages/Jihan/Confirmation";
 import BookingList from "../pages/Jihan/BookingList"
 
 import AddTicket from "../pages/ticket/AddTicket"; // Import AddTicket component
@@ -77,6 +78,7 @@ function AppRoutes() {
                     <Route path="*" element={<NotFound />} />
                     <Route path="/test" element={<Test />} />
                     <Route path="/payment" element={<PaymentForm />} />
+                    <Route path="/ai" element={<AI />} />
 
                     <Route path="/dashboard/manageTourPackages/:id" element={<AdminUpdateTour />} />
                     <Route path="/tour-packages" element={<TourPackageUser />} />
@@ -88,9 +90,9 @@ function AppRoutes() {
                 <Route path ="/blog/:id" element = {<IndividualBlog />} />
 
                 <Route path="/book/:id" element={<BookingForm />} />
-               {/*<Route path="/confirmation" element={<Confirmation /> } /> */}
+                <Route path="/confirmation" element={<Confirmation /> } />
                 <Route path="/bookings" element={<BookingList />} />
-                {/*<Route path="/book/:id" element={<EditBooking />} /> */}
+                <Route path="/book/:id" element={<EditBooking />} /> 
 
                 <Route path="/tickets" element={<AllTickets />} /> {/* Route for All Tickets */}
                 <Route path="/tickets/add" element={<AddTicket />} /> {/* Route for Adding a Ticket */}

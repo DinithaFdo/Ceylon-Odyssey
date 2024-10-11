@@ -105,7 +105,7 @@ const PaymentForm = () => {
                                     placeholder="First Name"
                                     value={formData.firstName}
                                     onChange={handleChange}
-                                    className="p-3 border border-gray-300 rounded-md w-full"
+                                    className="p-3 border border-gray-300 rounded-md w-full cursor-text"
                                 />
                                 {errors.firstName && <p className="text-red-600 text-sm">{errors.firstName}</p>}
                             </div>
@@ -115,7 +115,7 @@ const PaymentForm = () => {
                                     placeholder="Last Name"
                                     value={formData.lastName}
                                     onChange={handleChange}
-                                    className="p-3 border border-gray-300 rounded-md w-full"
+                                    className="p-3 border border-gray-300 rounded-md w-full cursor-text"
                                 />
                                 {errors.lastName && <p className="text-red-600 text-sm">{errors.lastName}</p>}
                             </div>
@@ -128,7 +128,7 @@ const PaymentForm = () => {
                                 type="email"
                                 value={formData.email}
                                 onChange={handleChange}
-                                className="p-3 border border-gray-300 rounded-md w-full"
+                                className="p-3 border border-gray-300 rounded-md w-full cursor-text"
                             />
                             {errors.email && <p className="text-red-600 text-sm">{errors.email}</p>}
                         </div>
@@ -140,7 +140,7 @@ const PaymentForm = () => {
                                 placeholder="07XXXXXXXX"
                                 value={formData.phone}
                                 onChange={handleChange}
-                                className="p-3 border border-gray-300 rounded-md w-full"
+                                className="p-3 border border-gray-300 rounded-md w-full cursor-text"
                             />
                             {errors.phone && <p className="text-red-600 text-sm">{errors.phone}</p>}
                         </div>
@@ -151,7 +151,7 @@ const PaymentForm = () => {
                                 placeholder="Address"
                                 value={formData.address}
                                 onChange={handleChange}
-                                className="p-3 border border-gray-300 rounded-md w-full"
+                                className="p-3 border border-gray-300 rounded-md w-full cursor-text"
                             />
                             {errors.address && <p className="text-red-600 text-sm">{errors.address}</p>}
                         </div>
@@ -162,7 +162,7 @@ const PaymentForm = () => {
                                 placeholder="City"
                                 value={formData.city}
                                 onChange={handleChange}
-                                className="p-3 border border-gray-300 rounded-md w-full"
+                                className="p-3 border border-gray-300 rounded-md w-full cursor-text"
                             />
                             {errors.city && <p className="text-red-600 text-sm">{errors.city}</p>}
                         </div>
@@ -174,7 +174,7 @@ const PaymentForm = () => {
                                 type="number"
                                 value={formData.amount}
                                 onChange={handleChange}
-                                className="p-3 border border-gray-300 rounded-md w-full"
+                                className="p-3 border border-gray-300 rounded-md w-full cursor-text"
                             />
                             {errors.amount && <p className="text-red-600 text-sm">{errors.amount}</p>}
                         </div>
@@ -184,7 +184,7 @@ const PaymentForm = () => {
                                 type="checkbox"
                                 checked={isAgreed}
                                 onChange={handleCheckboxChange}
-                                className="mr-2"
+                                className="mr-2 cursor-pointer"
                             />
                             <label className="text-sm">I agree to the Terms and Conditions</label>
                         </div>
@@ -192,7 +192,7 @@ const PaymentForm = () => {
 
                         <button
                             type="submit"
-                            className={`w-full py-3 mt-4 bg-blue-500 text-white rounded-md hover:bg-blue-600 ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
+                            className={`w-full py-3 mt-4 bg-blue-500 text-white rounded-md hover:bg-blue-600 cursor-pointer ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
                             disabled={loading}
 
                         >
