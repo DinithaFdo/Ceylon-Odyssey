@@ -1,61 +1,70 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import axios from 'axios';
-import Navbar from "../../components/Navbar/Navbar"; 
+import axios from "axios";
+import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
 
 export default function IndividualEquipment() {
-    const { id } = useParams();
-    const [equipment, setEquipment] = useState({});
+  const { id } = useParams();
+  const [equipment, setEquipment] = useState({});
 
-    useEffect(() => {
-        if (!id) {
-            return;
-        }
-        axios.get(`http://localhost:5000/equipment/get/${id}`).then((res) => {
-            setEquipment(res.data.equipment);
-        }).catch((err) => {
-            console.log(err);
-        });
-    }, [id]);
+  useEffect(() => {
+    if (!id) return;
+    axios
+      .get(`http://localhost:5000/equipment/get/${id}`)
+      .then((res) => setEquipment(res.data.equipment))
+      .catch((err) => console.log(err));
+  }, [id]);
 
-    return (
-        <div>
-            <Navbar />
-            <div className="mt-6 md:mt-10 md:mx-10 pt-20"> 
-                <h1 className="text-4xl font-bold text-left mb-8">{equipment.equipmentName}</h1>
-                
-                <div className="flex flex-col md:flex-row items-center justify-between mb-8">
-                <img 
-                    src={`http://localhost:5000/equipmentImages/${equipment.equipmentImage}`} 
-                    alt={equipment.equipmentName} 
-                    className="w-full h-60 object-contain rounded-lg mb-10"
-                />
-
-                <div className="mt-6 md:mt-0 md:ml-1 w-full">
-                    
-                    <div className="p-6 bg-gray-200 rounded-lg shadow-lg">
-                       
-                        <p className="text-lg mb-2"><strong>Type:</strong> {equipment.equipmentType}</p>
-
-                        
-                        <p className="text-s mb-2 break-words whitespace-normal">
-                            <strong>Description:</strong> {equipment.equipmentDescription}
-                        </p>
-                        <br></br>
-                        
-                        <p className="text-lg mb-2"><strong>Price:</strong> LKR {equipment.equipmentPrice && equipment.equipmentPrice.toFixed(2)}</p>
-
-                        <p className="text-lg mb-2"><strong>Available Quantity:</strong> {equipment.equipmentQuantity}</p>
-                    </div>
-
-                    
-                    </div>
-                </div>
-
-
+  return (
+    <div className="min-h-screen flex flex-col bg-gray-50">
+      <Navbar />
+      <main className="flex-grow container mx-auto px-4 py-8 mt-20">
+        <div className="bg-white shadow-xl rounded-lg overflow-hidden">
+          <div className="md:flex">
+            <div className="md:w-1/2 p-8">
+              <img
+                src={`http://localhost:5000/equipmentImages/${equipment.equipmentImage}`}
+                alt={equipment.equipmentName}
+                className="w-full h-96 object-contain rounded-lg"
+              />
             </div>
-            <Footer />
+            <div className="md:w-1/2 p-8">
+              <h1 className="text-3xl font-bold text-gray-800 mb-4">
+                {equipment.equipmentName}
+              </h1>
+              <p className="text-2xl font-semibold text-gray-700 mb-4">
+                LKR{" "}
+                {equipment.equipmentPrice &&
+                  equipment.equipmentPrice.toFixed(2)}
+              </p>
+              <div className="mb-6">
+                <p className="text-green-600 font-semibold mb-2">
+                  In Stock: {equipment.equipmentQuantity} available
+                </p>
+              </div>
+              <div className="mb-6">
+                <h2 className="text-xl font-semibold text-gray-800 mb-2">
+                  Product Details
+                </h2>
+                <p className="text-gray-600 mb-2">
+                  <span className="font-medium">Type:</span>{" "}
+                  {equipment.equipmentType}
+                </p>
+              </div>
+              <div>
+                <h2 className="text-xl font-semibold text-gray-800 mb-2">
+                  Description
+                </h2>
+                <p className="text-gray-600 break-words whitespace-normal">
+                  {equipment.equipmentDescription}
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
-    );
+      </main>
+      <Footer />
+    </div>
+  );
 }
