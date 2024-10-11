@@ -32,7 +32,7 @@ const IndivudualPackage = () => {
     }, [id]);
 
     const handleBookNow = () => {
-        navigate('/booking', {
+        navigate('/book/${id}', {
             state: {
                 data: {
                     packageId: tourPackage.packageId,
