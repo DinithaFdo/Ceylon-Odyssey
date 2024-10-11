@@ -97,7 +97,7 @@ const TourPackageUser = () => {
                                         alt="quotation icon"
                                         className="w-16 h-16 cursor-pointer"
                                     />
-                                    <h3 className="ml-2 text-xl text-black hover:text-blue-600 transition duration-300">Get Your Quotation</h3>
+                                    <h3 className="ml-2 font-bold text-xl text-black hover:text-blue-600 transition duration-300">Get Your Quotation</h3>
                                     </Link>
                                 </div>
                                 
@@ -116,9 +116,9 @@ const TourPackageUser = () => {
 
                                         <h1 className="text-xl font-semibold mb-4">{advenPackage.package_Title}</h1>
 
-                                        <div className="relative w-full h-50 mb-4 overflow-hidden rounded-2xl">
+                                        <div className="mb-4 overflow-hidden rounded-2xl">
                                             <img 
-                                                className="w-full h-full object-cover" 
+                                                className="w-full h-64 object-cover" 
                                                 src={`http://localhost:5000/TourPackageImages/${advenPackage.pImage}`} 
                                                 alt="Tour package image"
                                             />
@@ -161,9 +161,9 @@ const TourPackageUser = () => {
 
                                         <h1 className="text-xl font-semibold mb-4">{culturalPackage.package_Title}</h1>
                                         
-                                        <div className="relative w-full h-50 mb-4 overflow-hidden rounded-2xl">
+                                        <div className="mb-4 overflow-hidden rounded-2xl">
                                             <img 
-                                                className="w-full h-full object-cover" 
+                                                className="w-full h-64 object-cover" 
                                                 src={`http://localhost:5000/TourPackageImages/${culturalPackage.pImage}`} 
                                                 alt="Tour package image"
                                             />
@@ -205,9 +205,9 @@ const TourPackageUser = () => {
 
                                         <h1 className="text-xl font-semibold mb-4">{wildLifePackage.package_Title}</h1>
                                         
-                                        <div className="relative w-full h-50 mb-4 overflow-hidden rounded-2xl">
+                                        <div className="mb-4 overflow-hidden rounded-2xl">
                                             <img 
-                                                className="w-full h-full object-cover" 
+                                                className="w-full h-64 object-cover" 
                                                 src={`http://localhost:5000/TourPackageImages/${wildLifePackage.pImage}`} 
                                                 alt="Tour package image"
                                             />

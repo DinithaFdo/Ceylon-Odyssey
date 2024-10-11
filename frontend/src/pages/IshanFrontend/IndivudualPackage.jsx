@@ -4,6 +4,7 @@ import axios from 'axios';
 import Navbar from "../../components/Navbar/Navbar";
 import Spinner from "../../components/spinner/spinner";
 import Footer from "../../components/Footer/Footer";
+import TourBot from "./TourBot";
 
 const IndivudualPackage = () => {
     const { id } = useParams();
@@ -81,6 +82,7 @@ const IndivudualPackage = () => {
                                         </button>
                                     </div>
                                 </div>
+                                <TourBot />
                             </>
                         )}
                     </div>
