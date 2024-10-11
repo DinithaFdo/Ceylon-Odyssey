@@ -209,7 +209,7 @@ export default function DestinationDetail() {
                               </h3>
                               <div className="flex justify-between items-center mt-auto">
                                 <span className="text-sm font-bold text-indigo-600 dark:text-indigo-400">
-                                  LKR. {pkg.packagePrice}
+                                  LKR. {pkg.packagePrice} <br/> per person
                                 </span>
                                 <Link
                                   to={`/tour-packages/${pkg._id}`}
