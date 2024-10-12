@@ -128,16 +128,17 @@ export default function AllTickets() {
                         className="mb-4 px-4 py-2 border rounded-full w-full md:w-1/2"
                     />
 
-                    {/* Add new ticket and generate report buttons */}
                     <div className="flex space-x-4 mb-4">
                     
-                        {/* Generate Excel Report button */}
+                        {/* Generate Excel Report button 
                         <button 
                             onClick={generateExcelReport}
                             className="bg-green-600 text-white px-4 py-2 rounded-full hover:bg-green-700 transition duration-300"
                         >
                             Generate Excel Report
                         </button>
+
+                        */}
 
                         {/* Generate PDF Report button */}
                         <button 
@@ -165,7 +166,7 @@ export default function AllTickets() {
                             {filteredTickets.map(ticket => (
                                 <tr key={ticket._id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                                     <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
-                                        TIC{ticket.ticketID.toString().padStart(4, '0')}
+                                        {ticket.ticketID.toString().padStart(4, '0')}
                                     </td>
                                     <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
                                         {ticket.subject}

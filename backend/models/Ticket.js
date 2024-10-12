@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 // Create the Ticket schema
 const TicketSchema = new mongoose.Schema({
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   subject: { type: String, required: true },
   description: { type: String, required: true },
   priority: { type: String, required: true },
