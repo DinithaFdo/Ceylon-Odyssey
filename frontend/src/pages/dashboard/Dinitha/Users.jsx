@@ -42,7 +42,7 @@ const Users = () => {
   const fetchUsers = async () => {
     setLoading(true);
     try {
-      const response = await axios.get('http://localhost:5000/api/user/');
+      const response = await axios.get('http://localhost:5000/api/user/'); // API for fetching users
       setUsers(response.data);
     } catch (error) {
       console.error("Error fetching users:", error);
@@ -56,9 +56,8 @@ const Users = () => {
     const user = users.find(u => u._id === userId);
     const newStatus = user.status === 'suspended' ? 'active' : 'suspended';
     try {
-      await axios.put(`http://localhost:5000/api/user/${userId}/suspend`);
+      await axios.put(`http://localhost:5000/api/user/${userId}/suspend`); // API for toggling user status
       
-      // Optimistically update local state
       setUsers(prev => 
         prev.map(u => 
           u._id === userId ? { ...u, status: newStatus } : u
@@ -75,9 +74,9 @@ const Users = () => {
 
   const handleUpdateRole = async (userId, newRole) => {
     try {
-      await axios.put(`http://localhost:5000/api/user/${userId}/role`, { role: newRole });
+      await axios.put(`http://localhost:5000/api/user/${userId}/role`, { role: newRole }); // API for updating user role
 
-      // Optimistically update local state
+      
       setUsers(prev => 
         prev.map(u => 
           u._id === userId ? { ...u, role: newRole } : u
@@ -100,7 +99,7 @@ const Users = () => {
   const handleUpdateUser = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`http://localhost:5000/api/user/${editingUser._id}/update`, updatedUserData);
+      await axios.put(`http://localhost:5000/api/user/${editingUser._id}/update`, updatedUserData); // API for updating user
       
       // Optimistically update local state
       setUsers(prev => 
@@ -126,7 +125,7 @@ const Users = () => {
   const confirmDelete = async () => {
     if (userIdToDelete) {
       try {
-        await axios.delete(`http://localhost:5000/api/user/${userIdToDelete}/delete`);
+        await axios.delete(`http://localhost:5000/api/user/${userIdToDelete}/delete`); // API for deleting user
         
         // Optimistically update local state
         setUsers(prev => prev.filter(user => user._id !== userIdToDelete));

@@ -115,7 +115,7 @@ export default function AllTickets() {
     );
 
     return (
-        <div className="flex flex-col min-h-screen">
+        <div className="flex flex-col" style={{width:'1200px'}}>
             <main className="flex-grow pt-16 px-4 md:px-8 lg:px-16">
                 <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
                     <center><h1 className="text-2xl font-bold mb-4">All Tickets</h1></center>

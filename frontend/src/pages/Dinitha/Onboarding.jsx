@@ -58,7 +58,7 @@ const Onboarding = () => {
       <div className="flex justify-end mb-4">
         <button 
             onClick={handleSkip} 
-            className="bg-gray-200 text-black hover:bg-gray-100 w-28 rounded-xl text-center"
+            className="bg-gray-200 text-black w-28 rounded-xl text-center hover:bg-gray-300 transition duration-300"
         >
           I’ll do it later
         </button>
@@ -191,14 +191,14 @@ const Onboarding = () => {
           {step > 1 && (
             <button 
               onClick={handleBack} 
-              className="bg-gray-300 text-gray-800 px-6 py-3 rounded-lg"
+              className="bg-gray-300 text-gray-800 px-6 py-3 rounded-lg hover:bg-gray-400 transition duration-300"
             >
               Back
             </button>
           )}
           <button 
             onClick={handleNext} 
-            className="bg-blue-600 text-white px-6 py-3 rounded-lg"
+            className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition duration-300"
           >
             {step === 3 ? 'Finish' : 'Next'}
           </button>

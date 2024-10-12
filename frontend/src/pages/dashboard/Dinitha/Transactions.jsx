@@ -102,7 +102,7 @@ const Transactions = () => {
   const currentTransactions = filteredTransactions.slice(indexOfFirstTransaction, indexOfLastTransaction);
 
   const totalBalance = transactions.reduce((total, transaction) => {
-    return transaction.type === 'Credit' ? total + transaction.amount : total - transaction.amount;
+    return transaction.type === 'Credit' ? total - transaction.amount : total + transaction.amount;
   }, 0);
 
   if (loading) {

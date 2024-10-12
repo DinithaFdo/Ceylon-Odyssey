@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import toast, { Toaster } from 'react-hot-toast';
+import toast, { Toaster } from 'react-hot-toast'; 
 import Lottie from 'lottie-react'; 
 import registerAnimation from '../../assets/dinitha/register.json';
 
@@ -14,14 +14,14 @@ function SignUp() {
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [errors, setErrors] = useState({}); // State for error messages
+  const [errors, setErrors] = useState({});
+  const [passwordStrength, setPasswordStrength] = useState('');
   const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const refid = params.get('refid');
-
     if (refid) {
       setFormData(prevData => ({
         ...prevData,
@@ -35,36 +35,55 @@ function SignUp() {
       ...formData,
       [e.target.name]: e.target.value
     });
-    setErrors({ ...errors, [e.target.name]: "" }); // Clear error on input change
+    setErrors({ ...errors, [e.target.name]: "" });
+
+    // Update password strength when password changes
+    if (e.target.name === 'password') {
+      checkPasswordStrength(e.target.value);
+    }
+  };
+
+  const checkPasswordStrength = (password) => {
+    let strength = '';
+    const lengthRequirement = password.length >= 8;
+    const lowercase = /[a-z]/.test(password);
+    const uppercase = /[A-Z]/.test(password);
+    const number = /[0-9]/.test(password);
+    const specialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+
+    if (lengthRequirement && lowercase && uppercase && number && specialChar) {
+      strength = 'Strong';
+    } else if (lengthRequirement && ((lowercase && uppercase) || (lowercase && number) || (uppercase && number))) {
+      strength = 'Medium';
+    } else if (lengthRequirement) {
+      strength = 'Weak';
+    } else {
+      strength = 'Too short';
+    }
+
+    setPasswordStrength(strength);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Clear previous errors
     const newErrors = {};
 
     // Validate form fields
-    if (!formData.firstName) {
-      newErrors.firstName = "First Name is required.";
-    }
-    if (!formData.lastName) {
-      newErrors.lastName = "Last Name is required.";
-    }
-    if (!formData.email) {
-      newErrors.email = "Email is required.";
-    }
+    if (!formData.firstName) newErrors.firstName = "First Name is required.";
+    if (!formData.lastName) newErrors.lastName = "Last Name is required.";
+    if (!formData.email) newErrors.email = "Email is required.";
     if (!formData.password) {
       newErrors.password = "Password is required.";
+    } else if (passwordStrength === 'Weak' || passwordStrength === 'Too short') {
+      newErrors.password = "Password is too weak.";
     }
 
     if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors); // Set error messages
+      setErrors(newErrors);
       return;
     }
 
     setIsSubmitting(true);
-
     const toastId = toast.loading('Creating your account...');
 
     try {
@@ -77,7 +96,6 @@ function SignUp() {
       });
 
       const data = await response.json();
-
       if (response.ok) {
         toast.success('Registration successful!', { id: toastId });
         setTimeout(() => {
@@ -98,11 +116,9 @@ function SignUp() {
     <div className="flex min-h-screen">
       <Toaster />
       <div className="flex flex-1">
-        {/* Left side with Lottie animation */}
         <div className="w-1/2 flex items-center justify bg-gray-50">
           <Lottie animationData={registerAnimation} loop={true} className="w-3/4" />
         </div>
-        {/* Right side with the signup form */}
         <div className="flex-1 flex justify-center items-center bg-white p-6 lg:py-12 lg:px-16">
           <div className="w-full max-w-md space-y-6">
             <h2 className="text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
@@ -111,9 +127,7 @@ function SignUp() {
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label htmlFor="firstName" className="block text-sm font-medium leading-6 text-gray-900">
-                    First Name
-                  </label>
+                  <label htmlFor="firstName" className="block text-sm font-medium leading-6 text-gray-900">First Name</label>
                   <div className="mt-2">
                     <input
                       id="firstName"
@@ -123,14 +137,11 @@ function SignUp() {
                       onChange={handleChange}
                       className="cursor-text block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6 p-5"
                     />
-                    {errors.firstName && <p className="text-red-600 text-sm mt-1">{errors.firstName}</p>} {/* Error message */}
+                    {errors.firstName && <p className="text-red-600 text-sm mt-1">{errors.firstName}</p>}
                   </div>
                 </div>
-
                 <div>
-                  <label htmlFor="lastName" className="block text-sm font-medium leading-6 text-gray-900">
-                    Last Name
-                  </label>
+                  <label htmlFor="lastName" className="block text-sm font-medium leading-6 text-gray-900">Last Name</label>
                   <div className="mt-2">
                     <input
                       id="lastName"
@@ -140,15 +151,13 @@ function SignUp() {
                       onChange={handleChange}
                       className="cursor-text block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6 p-5"
                     />
-                    {errors.lastName && <p className="text-red-600 text-sm mt-1">{errors.lastName}</p>} {/* Error message */}
+                    {errors.lastName && <p className="text-red-600 text-sm mt-1">{errors.lastName}</p>}
                   </div>
                 </div>
               </div>
 
               <div>
-                <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
-                  Email address
-                </label>
+                <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">Email address</label>
                 <div className="mt-2">
                   <input
                     id="email"
@@ -163,9 +172,7 @@ function SignUp() {
               </div>
 
               <div>
-                <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
-                  Password
-                </label>
+                <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">Password</label>
                 <div className="mt-2">
                   <input
                     id="password"
@@ -175,14 +182,15 @@ function SignUp() {
                     onChange={handleChange}
                     className="cursor-text block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6 p-5"
                   />
-                  {errors.password && <p className="text-red-600 text-sm mt-1">{errors.password}</p>} {/* Error message */}
+                  {errors.password && <p className="text-red-600 text-sm mt-1">{errors.password}</p>}
+                  {passwordStrength && <p className={`mt-1 text-sm ${passwordStrength === 'Strong' ? 'text-green-600' : passwordStrength === 'Medium' ? 'text-yellow-600' : 'text-red-600'}`}>
+                    Password strength: {passwordStrength}
+                  </p>}
                 </div>
               </div>
 
               <div>
-                <label htmlFor="referralCode" className="block text-sm font-medium leading-6 text-gray-900">
-                  Referral Code (Optional)
-                </label>
+                <label htmlFor="referralCode" className="block text-sm font-medium leading-6 text-gray-900">Referral Code (Optional)</label>
                 <div className="mt-2">
                   <input
                     id="referralCode"
@@ -199,9 +207,7 @@ function SignUp() {
               <div>
                 <button
                   type="submit"
-                  className={`cursor-pointer flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm ${
-                    isSubmitting ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-500'
-                  }`}
+                  className={`cursor-pointer flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm ${isSubmitting ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-500'}`}
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? 'Creating...' : 'Sign up'}

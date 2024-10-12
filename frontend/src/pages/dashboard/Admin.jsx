@@ -17,7 +17,6 @@ import AllDestinations from "../destination/allDestination";
 import AddDestination from "../destination/addDestination";
 import BookingList from "../Jihan/BookingList";
 import SupportAgentTickets from "../ticket/SupportAgentTickets";
-import EditTicketPage from "../ticket/EditTicketPage";
 
 
 const Admin = () => {
