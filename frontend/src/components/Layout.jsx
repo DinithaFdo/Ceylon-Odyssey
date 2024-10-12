@@ -26,7 +26,7 @@ const Layout = () => {
   <div className="relative z-10 text-center text-white">
     <h2 className="text-6xl md:text-8xl font-bold mb-4 animate-fade-in-down">Discover Paradise</h2>
     <p className="text-xl md:text-2xl mb-8 animate-fade-in-up">Immerse yourself in the magic of Sri Lanka</p>
-    <a href="#experiences" className="bg-orange-500 text-white px-8 py-3 rounded-full hover:bg-orange-600 transition duration-300 text-lg font-semibold animate-pulse">
+    <a href="/destinations" className="bg-orange-500 text-white px-8 py-3 rounded-full hover:bg-orange-600 transition duration-300 text-lg font-semibold animate-pulse">
       Start Your Journey
     </a>
   </div>

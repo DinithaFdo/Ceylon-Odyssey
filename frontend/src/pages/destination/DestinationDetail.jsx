@@ -14,6 +14,7 @@ export default function DestinationDetail() {
   const [mapCoords, setMapCoords] = useState([0, 0]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [packages, setPackages] = useState([]);
 
   // Fetch destination details and equipment recommendations
   const fetchDestination = async (id) => {
@@ -47,6 +48,13 @@ export default function DestinationDetail() {
       );
       setEquipment(equipmentResponse.data.equipment);
 
+      // Fetch relevant tour packages for this destination
+      const packagesResponse = await axios.get(
+        `http://localhost:5000/destination/byDestination/${destinationID}`
+      );
+      setPackages(packagesResponse.data.packages);
+
+
       // Set map coordinates
       setMapCoords([lat, lon]);
 
@@ -77,7 +85,7 @@ export default function DestinationDetail() {
   return (
     <div className="flex flex-col min-h-screen bg-gray-100 dark:bg-gray-900">
       <Navbar />
-        <br></br><br></br>
+      <br></br><br></br>
       <main className="flex-grow p-12">
         {destination ? (
           <div className="w-full max-w-6xl mx-auto bg-white dark:bg-gray-800 shadow-lg rounded-lg overflow-hidden">
@@ -158,70 +166,136 @@ export default function DestinationDetail() {
                   )}
                 </div>
               </div>
+
+              <div>
+                <h2 className="text-2xl font-semibold mb-4 text-gray-900 dark:text-white">
+                  Related Tour Packages
+                </h2>
+                <div className="max-w-full mx-auto mb-8">
+                  <div
+                    className="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg shadow-md"
+                    style={{
+                      overflowX: packages.length > 4 ? "auto" : "hidden", 
+                      whiteSpace: "nowrap", 
+                    }}
+                  >
+                    {packages.length > 0 ? (
+                      <ul
+                        className="inline-flex gap-4"
+                        style={{
+                          paddingBottom: "10px",
+                        }}
+                      >
+                        {packages.map((pkg) => (
+                          <li
+                            key={pkg._id}
+                            className="bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-md transition-transform duration-300 hover:scale-105 flex-shrink-0"
+                            style={{
+                              width: "250px",
+                            }}
+                          >
+                            {pkg.pImage && (
+                              <div className="h-40 w-full overflow-hidden relative">
+                                <img
+                                  src={`http://localhost:5000/TourPackageImages/${pkg.pImage}`}
+                                  alt={pkg.title}
+                                  className="w-full h-full object-contain"
+                                />
+                              </div>
+                            )}
+                            <div className="p-3 flex flex-col">
+                              <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-1 truncate">
+                                {pkg.package_Title}
+                              </h3>
+                              <div className="flex justify-between items-center mt-auto">
+                                <span className="text-sm font-bold text-indigo-600 dark:text-indigo-400">
+                                  LKR. {pkg.packagePrice} <br/> per person
+                                </span>
+                                <Link
+                                  to={`/tour-packages/${pkg._id}`}
+                                  className="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-1 px-2 rounded-full transition duration-300"
+                                >
+                                  View Details
+                                </Link>
+                              </div>
+                            </div>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p className="text-gray-700 dark:text-gray-300 text-center">
+                        No tour packages available for this destination.
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+              </div>
+
               <h2 className="text-2xl font-semibold mb-4 text-gray-900 dark:text-white">
                 Recommended Equipment
               </h2>
               <div className="max-w-full mx-auto mb-8">
-  <div
-    className="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg shadow-md"
-    style={{
-      overflowX: equipment.length > 4 ? "auto" : "hidden", 
-      whiteSpace: "nowrap", 
-    }}
-  >
-    {equipment.length > 0 ? (
-      <ul
-        className="inline-flex gap-4"
-        style={{
-          paddingBottom: "10px", // Adds some space to prevent content from touching the edge
-        }}
-      >
-        {equipment.map((item) => (
-          <li
-            key={item._id}
-            className="bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-md transition-transform duration-300 hover:scale-105 flex-shrink-0"
-            style={{
-              width: "250px", // Fixed width for each item to control the size in the slider
-            }}
-          >
-            {item.equipmentImage && (
-              <div className="h-40 w-full overflow-hidden relative">
-                <img
-                  src={`http://localhost:5000/EquipmentImages/${item.equipmentImage}`}
-                  alt={item.equipmentName}
-                  className="w-full h-full object-contain"
-                />
-              </div>
-            )}
-            <div className="p-3 flex flex-col">
-              <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-1 truncate">
-                {item.equipmentName}
-              </h3>
-              <p className="text-xs text-gray-600 dark:text-gray-400 mb-2">
-                Essential for your adventure
-              </p>
-              <div className="flex justify-between items-center mt-auto">
-                <span className="text-sm font-bold text-indigo-600 dark:text-indigo-400">
-                  Rs. {item.equipmentPrice}
-                </span>
-                <Link
-                  to={`/equipment/${item._id ? item._id : ""}`}
-                  className="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-1 px-2 rounded-full transition duration-300"
+                <div
+                  className="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg shadow-md"
+                  style={{
+                    overflowX: equipment.length > 4 ? "auto" : "hidden",
+                    whiteSpace: "nowrap",
+                  }}
                 >
-                  View Details
-                </Link>
+                  {equipment.length > 0 ? (
+                    <ul
+                      className="inline-flex gap-4"
+                      style={{
+                        paddingBottom: "10px", // Adds some space to prevent content from touching the edge
+                      }}
+                    >
+                      {equipment.map((item) => (
+                        <li
+                          key={item._id}
+                          className="bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-md transition-transform duration-300 hover:scale-105 flex-shrink-0"
+                          style={{
+                            width: "250px", // Fixed width for each item to control the size in the slider
+                          }}
+                        >
+                          {item.equipmentImage && (
+                            <div className="h-40 w-full overflow-hidden relative">
+                              <img
+                                src={`http://localhost:5000/EquipmentImages/${item.equipmentImage}`}
+                                alt={item.equipmentName}
+                                className="w-full h-full object-contain"
+                              />
+                            </div>
+                          )}
+                          <div className="p-3 flex flex-col">
+                            <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-1 truncate">
+                              {item.equipmentName}
+                            </h3>
+                            <p className="text-xs text-gray-600 dark:text-gray-400 mb-2">
+                              Essential for your adventure
+                            </p>
+                            <div className="flex justify-between items-center mt-auto">
+                              <span className="text-sm font-bold text-indigo-600 dark:text-indigo-400">
+                                Rs. {item.equipmentPrice}
+                              </span>
+                              <Link
+                                to={`/equipment/${item._id ? item._id : ""}`}
+                                className="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-1 px-2 rounded-full transition duration-300"
+                              >
+                                View Details
+                              </Link>
+                            </div>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="text-gray-700 dark:text-gray-300 text-center">
+                      No equipment recommendations available for this district.
+                    </p>
+                  )}
+                </div>
               </div>
-            </div>
-          </li>
-        ))}
-      </ul>
-    ) : (
-      <p className="text-gray-700 dark:text-gray-300 text-center">
-        No equipment recommendations available for this district.
-      </p>
-    )}
-  </div>
-</div>
 
 
               {/* Map Section */}

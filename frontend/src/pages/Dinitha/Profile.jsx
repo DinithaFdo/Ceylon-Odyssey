@@ -51,17 +51,17 @@ const ProfilePage = () => {
     const fetchWalletTransactions = async () => {
       try {
           const response = await axios.get('http://localhost:5000/api/user/wallet', { withCredentials: true });
-          const { transactionHistory, successfulTransactionsTotal } = response.data; // Use the new property
+          const { transactionHistory, successfulTransactionsTotal } = response.data; 
           setWalletTransactions(transactionHistory || []);
           setUserData(prevState => ({
               ...prevState,
-              walletBalance: successfulTransactionsTotal || 0, // Set walletBalance to successful transactions total
+              walletBalance: successfulTransactionsTotal || 0,
           }));
       } catch (error) {
           setWalletTransactions([]);
           setUserData(prevState => ({
               ...prevState,
-              walletBalance: 0, // Reset on error
+              walletBalance: 0, 
           }));
       }
   };

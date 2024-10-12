@@ -1,6 +1,6 @@
 const Wallet = require('../models/Wallet');
 
-exports.getWalletDetails = async (req, res) => {
+exports.getWalletDetails = async (req, res) => { // Get the wallet details of the current user - Dinitha
     try {
         const userId = req.user.id;
 
@@ -17,8 +17,8 @@ exports.getWalletDetails = async (req, res) => {
 
         // Send wallet details including the total of successful transactions
         res.status(200).json({
-            ...wallet._doc,  // Spread the existing wallet document properties
-            successfulTransactionsTotal,  // Add the new calculated field
+            ...wallet._doc,  
+            successfulTransactionsTotal,
         });
     } catch (err) {
         console.error(err);

@@ -1,19 +1,28 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { useNavigate } from "react-router-dom"; 
 import Lottie from "lottie-react";
 import Gift from "../../../assets/Dinitha/gift.json";
 import Wallet from "../../../assets/Dinitha/wallet.json";
 import axios from "axios";
 import toast from "react-hot-toast";
+import TripPlanner from "../../../components/TripPlanner";
 
 const ProfileDetails = ({ userData }) => {
   const [referralCode, setReferralCode] = useState("");
   const [showGiftAnimation, setShowGiftAnimation] = useState(false);
-  const navigate = useNavigate(); // Initialize useNavigate
+  const [errorMessage, setErrorMessage] = useState(""); // State for error message
+  const navigate = useNavigate();
 
   const handleReferralSubmit = async (event) => {
     event.preventDefault();
+    
+    if (!referralCode.trim()) {
+      setErrorMessage("Please enter a referral code."); // Set error message
+      return; // Prevent further execution if the input is invalid
+    }
+
+    setErrorMessage(""); // Clear error message if input is valid
 
     try {
       const response = await axios.post(
@@ -31,7 +40,6 @@ const ProfileDetails = ({ userData }) => {
   };
 
   const handleTopUp = () => {
-    // Navigate to the payment page
     navigate('/payment');
   };
 
@@ -49,8 +57,8 @@ const ProfileDetails = ({ userData }) => {
             <p className="text-lg font-semibold">Wallet Balance</p>
             <p className="text-2xl">LKR {userData.walletBalance}</p>
             <button
-              onClick={handleTopUp} // Trigger the handleTopUp function
-              className="mt-4 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
+              onClick={handleTopUp}
+              className="mt-4 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 cursor-pointer"
             >
               Top Up Wallet
             </button>
@@ -94,18 +102,24 @@ const ProfileDetails = ({ userData }) => {
                 placeholder="Enter referral code"
                 value={referralCode}
                 onChange={(e) => setReferralCode(e.target.value)}
-                className="p-2 border border-gray-300 rounded-md mb-2"
-                required
+                className="p-2 border border-gray-300 rounded-md mb-2 cursor-text"
               />
-              <button
+
+<button
                 type="submit"
-                className="ml-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                className="ml-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 cursor-pointer"
               >
                 Submit
               </button>
+              {errorMessage && (
+                <div className="text-red-500 mb-2">{errorMessage}</div>
+              )}
+              
             </form>
           </div>
         )}
+
+        <TripPlanner />
       </div>
 
       {showGiftAnimation && (
@@ -136,3 +150,4 @@ const ProfileDetails = ({ userData }) => {
 };
 
 export default ProfileDetails;
+

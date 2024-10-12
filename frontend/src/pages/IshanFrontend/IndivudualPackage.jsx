@@ -4,6 +4,7 @@ import axios from 'axios';
 import Navbar from "../../components/Navbar/Navbar";
 import Spinner from "../../components/spinner/spinner";
 import Footer from "../../components/Footer/Footer";
+import TourBot from "./TourBot";
 
 const IndivudualPackage = () => {
     const { id } = useParams();
@@ -31,7 +32,7 @@ const IndivudualPackage = () => {
     }, [id]);
 
     const handleBookNow = () => {
-        navigate('/booking', {
+        navigate('/book/${id}', {
             state: {
                 data: {
                     packageId: tourPackage.packageId,
@@ -81,6 +82,7 @@ const IndivudualPackage = () => {
                                         </button>
                                     </div>
                                 </div>
+                                <TourBot />
                             </>
                         )}
                     </div>

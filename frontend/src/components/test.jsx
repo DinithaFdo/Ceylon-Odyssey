@@ -1,12 +1,13 @@
-import Payment from '../PaymentGateWay/PaymentGateWay'
-const PaymentGateway = () => {
 
+import TripPlanner from './TripPlanner';
 
-    return (
-        <button onClick={Payment} className="btn btn-primary">
-            Top Up Wallet
-        </button>
-    );
+const App = () => {
+  return (
+    <div className="App">
+      <h1 className="text-center text-2xl font-bold mt-8">Welcome to Ceylon Odyssey</h1>
+      <TripPlanner />
+    </div>
+  );
 };
 
-export default PaymentGateway;
+export default App;

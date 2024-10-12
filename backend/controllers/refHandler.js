@@ -4,7 +4,7 @@ const Referral = require('../models/Referral');
 const User = require('../models/User');
 const Wallet = require('../models/Wallet'); 
 
-router.get('/', async (req, res) => {
+router.get('/', async (req, res) => { // Get all referrals - Dinitha
     try {
         const referrals = await Referral.find().populate('referredUserId referringUserId');
         res.status(200).json(referrals);
@@ -14,7 +14,7 @@ router.get('/', async (req, res) => {
 });
 
 
-router.put('/toggle-status', async (req, res) => {
+router.put('/toggle-status', async (req, res) => {  // Toggle the status of a referral - Dinitha
     const { referralId, newStatus } = req.body;
 
     try {
@@ -55,7 +55,7 @@ router.put('/toggle-status', async (req, res) => {
 });
 
 
-router.delete('/:referralId', async (req, res) => {
+router.delete('/:referralId', async (req, res) => { // Delete a referral - Dinitha
     const { referralId } = req.params;
 
     try {

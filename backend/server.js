@@ -10,6 +10,7 @@ const referrals = require('./controllers/refHandler.js');
 const bodyParser = require('body-parser');
 const path = require('path'); 
 const Payment = require('./controllers/PaymentHandler.js');
+const chatRoutes = require('./routes/chat');
 const bookingRoutes = require('./routes/bookingRoutes');
 const ticketRouter = require('./routes/ticket');
 const supportAgentRouter = require('./routes/supportAgent');
@@ -41,6 +42,7 @@ app.use('/api/user', adminRoutes);
 app.use('/api/transaction', transaction);
 app.use('/api/referral', referrals);
 app.use('/api/payment', Payment);
+app.use('/api/chat', chatRoutes);
 
 app.use('/DestinationImages', express.static(imagePath.join(__dirname, 'DestinationImages')));
 

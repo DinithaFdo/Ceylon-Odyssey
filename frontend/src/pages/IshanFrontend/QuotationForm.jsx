@@ -4,6 +4,7 @@ import Navbar from '../../components/Navbar/Navbar';
 import AddIcon from '../../assets/Ishan/add-button.png';
 import removeIcon from '../../assets/Ishan/removeBtnImg.png';
 import {GeneratePdf} from './GeneratePdf';
+import Footer from "../../components/Footer/Footer";
 
 
 const QuotationForm = () => {
@@ -138,176 +139,180 @@ const QuotationForm = () => {
     }
 
     return (
-        <div className="container mx-auto pl-10 pr-10 bg-gray-100 min-h-screen">
+        <div>
+            <div className="container mx-auto pl-10 pr-10 bg-gray-100 min-h-screen">
 
-            <div className="pb-5">
-                <Navbar />
-            </div>
+                <div className="pb-5">
+                    <Navbar />
+                </div>
 
-            <div className="container mx-auto p-24 pb-20">
-                <form className="bg-white shadow-md rounded-lg p-8" onSubmit= {handleGeneratePdf} >
+                <div className="container mx-auto p-24 pb-20">
+                    <form className="bg-white shadow-md rounded-lg p-8" onSubmit= {handleGeneratePdf} >
 
-                    <h2 className="text-3xl font-semibold mb-6 text-center pb-10">Get a Quotation</h2>
-                    
-                    {/*Package Section*/}
-                    <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+                        <h2 className="text-3xl font-semibold mb-6 text-center pb-10">Get a Quotation</h2>
+                        
+                        {/*Package Section*/}
+                        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
 
-                        {/*Package Name*/}
-                        <div>
-                            <label htmlFor="packageId" className="block text-gray-700 font-medium mb-2 text-center ">Package Name</label>
-                            <select
-                                id="packageId"
-                                value={selectedPackage}
-                                onChange={handePackageChange}
-                                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" required >
-                                <option value="">Select a Package</option>
-                                {tourPackages.map((pkg) => (
-                                    <option key={pkg._id} value={pkg._id}>
-                                        {pkg.package_Title}
+                            {/*Package Name*/}
+                            <div>
+                                <label htmlFor="packageId" className="block text-gray-700 font-medium mb-2 text-center ">Package Name</label>
+                                <select
+                                    id="packageId"
+                                    value={selectedPackage}
+                                    onChange={handePackageChange}
+                                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" required >
+                                    <option value="">Select a Package</option>
+                                    {tourPackages.map((pkg) => (
+                                        <option key={pkg._id} value={pkg._id}>
+                                            {pkg.package_Title}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                            
+                            {/*Number of people*/}
+                            <div>
+                                <label htmlFor="numPeople" className="block text-gray-700 font-medium mb-2 text-center">Number of People</label>
+                                <input
+                                type="number"
+                                id="numPeople"
+                                min="1"
+                                value={numPeople}
+                                onChange={handleNumPeopleChange}
+                                placeholder="Enter Number of People"
+                                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                required/>
+                            </div>
+                                
+                            {/*Package Price*/}
+                            <div>
+                                <label htmlFor="price" className="block text-gray-700 font-medium mb-2 text-center">Price (LKR)</label>
+                                <input
+                                type="number"
+                                id="pckPrice"
+                                value={pPrice.toFixed(2)}
+                                className="w-full p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white border-none text-right" disabled/>
+                            </div>
+                        
+                        </div>
+
+                        {/*Equipmenet Section*/}
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-2 mt-8">
+                            <div className='flex items-center justify-between mt-4'>
+                                
+                                {/* Add more Equipment button */}
+                                <button 
+                                    type="button" 
+                                    onClick={() => addEquipmentRow()} 
+                                    className="ml-2">
+                                    <img src={AddIcon} alt="add" className="h-10 w-10" />
+                                </button>
+                                <label className="flex-grow text-gray-700 font-medium text-center">Equipment</label>
+                            </div>
+
+                            {/* Number of items */}
+                            <div className='flex items-center justify-center mt-4'>
+                                <label className="block text-gray-700 font-medium">Number of items</label>
+                            </div>
+
+                            {/* Equipment Price */}
+                            <div className='flex items-center justify-center mt-4'>
+                                <label className="block text-gray-700 font-medium">Price (LKR)</label>
+                            </div>
+                        </div>
+
+
+                        {equipmentList.map((equipmentItem, index) => (
+                        <div key={index} className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-2">
+                            {/*Equipment Name*/}
+                            <div className='mt-4'>
+                                <select
+                                    id={`eq-${index}`}
+                                    value={equipmentItem.selectedEquipment}
+                                    onChange={(e) => handleEquipmentChange(index, e)}
+                                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" >
+                                    <option value="">Select an Equipment</option>
+                                    {equipment.map((eqp) => (
+                                    <option key={eqp._id} value={eqp._id}>
+                                        {eqp.equipmentName}
                                     </option>
-                                ))}
-                            </select>
-                        </div>
-                        
-                        {/*Number of people*/}
-                        <div>
-                            <label htmlFor="numPeople" className="block text-gray-700 font-medium mb-2 text-center">Number of People</label>
-                            <input
-                            type="number"
-                            id="numPeople"
-                            min="1"
-                            value={numPeople}
-                            onChange={handleNumPeopleChange}
-                            placeholder="Enter Number of People"
-                            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                            required/>
-                        </div>
+                                    ))}
+                                </select>
+                            </div>
                             
-                        {/*Package Price*/}
-                        <div>
-                            <label htmlFor="price" className="block text-gray-700 font-medium mb-2 text-center">Price (LKR)</label>
-                            <input
-                            type="number"
-                            id="pckPrice"
-                            value={pPrice.toFixed(2)}
-                            className="w-full p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white border-none text-right" disabled/>
-                        </div>
-                    
-                    </div>
+                            {/*Number of Equipment items*/}
+                            <div className='mt-4'>
+                                <input
+                                    type="number"
+                                    id={`eqItems-${index}`}
+                                    value={equipmentItem.numItems}
+                                    onChange={(e) => handleNumItemsChange(index, e)}
+                                    min="0"
+                                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"/>
+                            </div>
+                                
+                            {/*Equipment Price*/}
+                            <div className='mt-4 flex justify-between items-center'>
+                                <input
+                                    type="number"
+                                    id={`eqPrice-${index}`}
+                                    value={equipmentItem.eqPrice.toFixed(2)}
+                                    className="w-full p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white border-none text-right" disabled />
+                                
+                                {/*Remove more Equipmenet button*/}
+                                <button 
+                                    type="button" 
+                                    onClick={() => removeEquipmentRow(index)} 
+                                    className="ml-2">
+                                    <img src={removeIcon} alt="remove" className="h-10 w-11" />
+                                </button>
+                            </div>
 
-                    {/*Equipmenet Section*/}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-2 mt-8">
-                        <div className='flex items-center justify-between mt-4'>
-                            
-                            {/* Add more Equipment button */}
-                            <button 
-                                type="button" 
-                                onClick={() => addEquipmentRow()} 
-                                className="ml-2">
-                                <img src={AddIcon} alt="add" className="h-10 w-10" />
-                            </button>
-                            <label className="flex-grow text-gray-700 font-medium text-center">Equipment</label>
                         </div>
+                        ))}
 
-                        {/* Number of items */}
-                        <div className='flex items-center justify-center mt-4'>
-                            <label className="block text-gray-700 font-medium">Number of items</label>
-                        </div>
-
-                        {/* Equipment Price */}
-                        <div className='flex items-center justify-center mt-4'>
-                            <label className="block text-gray-700 font-medium">Price (LKR)</label>
-                        </div>
-                    </div>
-
-
-                    {equipmentList.map((equipmentItem, index) => (
-                    <div key={index} className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-2">
-                        {/*Equipment Name*/}
-                        <div className='mt-4'>
-                            <select
-                                id={`eq-${index}`}
-                                value={equipmentItem.selectedEquipment}
-                                onChange={(e) => handleEquipmentChange(index, e)}
-                                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" >
-                                <option value="">Select an Equipment</option>
-                                {equipment.map((eqp) => (
-                                <option key={eqp._id} value={eqp._id}>
-                                    {eqp.equipmentName}
-                                </option>
-                                ))}
-                            </select>
-                        </div>
-                        
-                        {/*Number of Equipment items*/}
-                        <div className='mt-4'>
+                        <div className='mt-10 flex justify-end items-center x-2 text-lg'>
+                            <label className="font-medium">Handling Fee (LKR)</label>
                             <input
                                 type="number"
-                                id={`eqItems-${index}`}
-                                value={equipmentItem.numItems}
-                                onChange={(e) => handleNumItemsChange(index, e)}
-                                min="0"
-                                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"/>
+                                id="handleFee"
+                                value={formatedHandleFee}
+                                className="w-auto p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white border-none text-right" disabled />
                         </div>
-                            
-                        {/*Equipment Price*/}
-                        <div className='mt-4 flex justify-between items-center'>
+
+                        <div className='pt-3 flex justify-end items-center x-2 text-lg'>
+                            <label className="font-medium">5% vat (LKR)</label>
                             <input
                                 type="number"
-                                id={`eqPrice-${index}`}
-                                value={equipmentItem.eqPrice.toFixed(2)}
-                                className="w-full p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white border-none text-right" disabled />
-                            
-                            {/*Remove more Equipmenet button*/}
-                            <button 
-                                type="button" 
-                                onClick={() => removeEquipmentRow(index)} 
-                                className="ml-2">
-                                <img src={removeIcon} alt="remove" className="h-10 w-11" />
-                            </button>
+                                id="vat"
+                                value={formatedVat}
+                                className="w-auto p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white border-none text-right" disabled />
                         </div>
 
-                    </div>
-                    ))}
+                        <div className='pt-3 flex justify-end items-center x-2 text-xl pb-8'>
+                            <label className="font-medium">Total price (LKR)</label>
+                            <input
+                                type="number"
+                                id="totalPrice"
+                                value={formatedTotalPrice}
+                                className="w-auto rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white border-none text-right pr-2" disabled />
+                        </div>
 
-                    <div className='mt-10 flex justify-end items-center x-2 text-lg'>
-                        <label className="font-medium">Handling Fee (LKR)</label>
-                        <input
-                            type="number"
-                            id="handleFee"
-                            value={formatedHandleFee}
-                            className="w-auto p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white border-none text-right" disabled />
-                    </div>
-
-                    <div className='pt-3 flex justify-end items-center x-2 text-lg'>
-                        <label className="font-medium">5% vat (LKR)</label>
-                        <input
-                            type="number"
-                            id="vat"
-                            value={formatedVat}
-                            className="w-auto p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white border-none text-right" disabled />
-                    </div>
-
-                    <div className='pt-3 flex justify-end items-center x-2 text-xl pb-8'>
-                        <label className="font-medium">Total price (LKR)</label>
-                        <input
-                            type="number"
-                            id="totalPrice"
-                            value={formatedTotalPrice}
-                            className="w-auto rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white border-none text-right pr-2" disabled />
-                    </div>
-
-                    {/*Download button*/}
-                    <div className="mt-10 flex justify-end pb-5">
-                        <button
-                            type="submit"
-                            className="w-full md:w-auto px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            Download Quotation
-                        </button>
-                    </div>
-                </form>
+                        {/*Download button*/}
+                        <div className="mt-10 flex justify-end pb-5">
+                            <button
+                                type="submit"
+                                className="w-full md:w-auto px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                Download Quotation
+                            </button>
+                        </div>
+                    </form>
+                </div>
+        
             </div>
-
+            
+            <Footer />
         </div>
 
 

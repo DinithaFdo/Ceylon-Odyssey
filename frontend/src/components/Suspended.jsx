@@ -16,7 +16,7 @@ const AccountSuspendedPopup = ({ onClose }) => {
                 <h2 className="text-2xl font-bold mt-4">Your Account is Suspended</h2>
                 <p className="mt-2 text-gray-600">Contact support for assistance.</p>
                 <Link 
-                    to="/ticket"
+                    to="/tickets"
                     className="mt-4 text-blue-600 underline hover:text-blue-700 block"
                 >
                     Go to Support Page

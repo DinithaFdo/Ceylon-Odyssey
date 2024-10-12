@@ -7,6 +7,7 @@ const path = require('path');
 const express = require('express');
 const cors = require('cors');
 const app = express();
+const Package = require('../models/tourPackage');
 
 // Set up multer for file uploads
 const storage = multer.diskStorage({
@@ -225,6 +226,34 @@ router.put('/:id/click', async (req, res) => {
     res.json({ message: 'Click count updated', clickCount: destination.clickCount });
   } catch (error) {
     res.status(500).json({ message: 'Error updating click count', error });
+  }
+});
+
+router.get('/byDestination/:destinationId', async (req, res) => {
+  const { destinationId } = req.params;
+
+  try {
+    // Find the destination by ID
+    const destination = await Destination.findById(destinationId);
+    
+    if (!destination) {
+      return res.status(404).json({ error: "Destination not found" });
+    }
+
+    const destinationDistrict = destination.dDistrict;
+    const destinationProvince = destination.dProvince;
+
+    // Query to find packages where the pDestination contains the district or province
+    const packages = await Package.find({
+      pDestination: {
+        $regex: destinationDistrict, // Match packages that have the district
+        $options: 'i' // Case-insensitive matching
+      }
+    });
+
+    res.json({ packages });
+  } catch (err) {
+    res.status(500).json({ error: "Error fetching packages" });
   }
 });
 

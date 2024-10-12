@@ -121,7 +121,7 @@ function SignUp() {
                       type="text"
                       value={formData.firstName}
                       onChange={handleChange}
-                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6 p-5"
+                      className="cursor-text block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6 p-5"
                     />
                     {errors.firstName && <p className="text-red-600 text-sm mt-1">{errors.firstName}</p>} {/* Error message */}
                   </div>
@@ -138,7 +138,7 @@ function SignUp() {
                       type="text"
                       value={formData.lastName}
                       onChange={handleChange}
-                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6 p-5"
+                      className="cursor-text block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6 p-5"
                     />
                     {errors.lastName && <p className="text-red-600 text-sm mt-1">{errors.lastName}</p>} {/* Error message */}
                   </div>
@@ -156,7 +156,7 @@ function SignUp() {
                     type="email"
                     value={formData.email}
                     onChange={handleChange}
-                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6 p-5"
+                    className="cursor-text block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6 p-5"
                   />
                   {errors.email && <p className="text-red-600 text-sm mt-1">{errors.email}</p>}
                 </div>
@@ -173,7 +173,7 @@ function SignUp() {
                     type="password"
                     value={formData.password}
                     onChange={handleChange}
-                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6 p-5"
+                    className="cursor-text block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6 p-5"
                   />
                   {errors.password && <p className="text-red-600 text-sm mt-1">{errors.password}</p>} {/* Error message */}
                 </div>
@@ -191,7 +191,7 @@ function SignUp() {
                     autoComplete="referral-code"
                     value={formData.referralCode}
                     onChange={handleChange}
-                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6 p-5"
+                    className="cursor-text block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6 p-5"
                   />
                 </div>
               </div>
@@ -199,7 +199,7 @@ function SignUp() {
               <div>
                 <button
                   type="submit"
-                  className={`flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm ${
+                  className={`cursor-pointer flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm ${
                     isSubmitting ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-500'
                   }`}
                   disabled={isSubmitting}
@@ -211,7 +211,7 @@ function SignUp() {
 
             <p className="text-center text-sm text-gray-500">
               Already a member?{' '}
-              <Link to="/login" className="font-semibold leading-6 text-blue-600 hover:text-blue-500">
+              <Link to="/login" className="font-semibold leading-6 text-blue-600 hover:text-blue-500 cursor-pointer">
                 Sign in to your account
               </Link>
             </p>

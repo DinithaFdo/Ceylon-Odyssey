@@ -1,16 +1,17 @@
+/* eslint-disable no-unused-vars */
 import { useState, useEffect, useContext } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { UserContext } from '../../components/userContext'; 
 import Footer from '../../components/Footer/Footer';
 import Navbar from '../../components/Navbar/Navbar';
-
+import toast from 'react-hot-toast'
 const BookingForm = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
 
-  //get id from the url
+  // Get id from the URL
   const _id = location.pathname.split('/').pop();
 
   const bookingData = location.state?.data;
@@ -26,7 +27,7 @@ const BookingForm = () => {
 
   const [errors, setErrors] = useState({});
   const [totalPrice, setTotalPrice] = useState(0);
-  const [equipmentList, setEquipmentList] = useState([]); // Store the equipment list
+  const [equipmentList, setEquipmentList] = useState([]);
   const [selectedEquipmentPrice, setSelectedEquipmentPrice] = useState(0); 
   const handlingFee = 1000; 
 
@@ -68,8 +69,9 @@ const BookingForm = () => {
     if (!formData.fullName) newErrors.fullName = 'Full Name is required';
     if (!formData.email) newErrors.email = 'Email is required';
     if (!formData.phone) newErrors.phone = 'Phone number is required';
-    if (formData.phone && formData.phone.length !== 10)
+    if (formData.phone && formData.phone.length !== 10) {
       newErrors.phone = 'Phone number must be 10 digits';
+    }
     if (!formData.address) newErrors.address = 'Address is required';
     if (formData.numberOfPeople < 1) newErrors.numberOfPeople = 'At least one person is required';
     if (!formData.selectedEquipment) newErrors.selectedEquipment = 'Please select equipment';
@@ -98,10 +100,18 @@ const BookingForm = () => {
     };
 
     const apiCall = bookingData?._id
-      ? axios.put(`http://localhost:5000/api/bookings/${_id}`, updatedBookingData)
-      : axios.post(`http://localhost:5000/api/bookings/${_id}`, updatedBookingData);
-      console.log(formData);
-      
+  ? axios.put(`http://localhost:5000/api/bookings/${bookingData._id}`, updatedBookingData)
+  : axios.post(`http://localhost:5000/api/bookings`, updatedBookingData);
+
+apiCall
+  .then(() => {
+    const message = bookingData?._id ? "Booking Updated Successfully" : "Booking Placed Successfully";
+    toast.success(message);
+  })
+  .catch((error) => {
+    toast.error("An error occurred: " + error.message);
+  });
+
 
     apiCall
       .then((response) => {
@@ -149,7 +159,7 @@ const BookingForm = () => {
               onChange={(e) => {
                 const value = Math.max(1, parseInt(e.target.value, 10)); // Ensure at least 1 person
                 setFormData({ ...formData, numberOfPeople: value });
-                calculateTotalPrice(value, bookingData?.packagePrice);
+                calculateTotalPrice(value, bookingData?.packagePrice, selectedEquipmentPrice);
               }}
             />
             {errors.numberOfPeople && <p className="text-red-500 text-sm">{errors.numberOfPeople}</p>}
@@ -180,64 +190,41 @@ const BookingForm = () => {
           </div>
 
           <div className="mb-4">
-        <label className="block text-sm font-medium mb-1 text-gray-700">Selected Equipment Price</label>
-        <input
-          type="text"
-          className="w-full p-2 border rounded text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
-          value={selectedEquipmentPrice}
-          readOnly
-        />
+            <label className="block text-sm font-medium mb-1 text-gray-700">Selected Equipment Price</label>
+            <input
+              type="text"
+              className="w-full p-2 border rounded text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
+              value={selectedEquipmentPrice}
+              readOnly
+            />
+          </div>
+
+          <div className="mb-4">
+            <label className="block text-sm font-medium mb-1 text-gray-700">Select Date</label>
+            <input
+              type="date"
+              className="w-full p-2 border rounded text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
+              value={formData.date}
+              onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+            />
+            {errors.date && <p className="text-red-500 text-sm">{errors.date}</p>}
+          </div>
+
+          <p className="text-lg font-semibold text-gray-900">
+            Total Price (including handling fee & VAT): Rs. {totalPrice.toFixed(2)}
+          </p>
+
+          <button
+            type="submit"
+            className="w-full p-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition duration-200"
+          >
+            Submit Booking
+          </button>
+        </form>
       </div>
-      <div className="mb-4">
-        <label className="block text-sm font-medium mb-1 text-gray-700">Bank</label>
-        <input
-          type="text"
-          className="w-full p-2 border rounded text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
-          
-        />
-      </div>
-
-      <div className="mb-4">
-        <label className="block text-sm font-medium mb-1 text-gray-700">bank</label>
-        <input
-          type="text"
-          className="w-full p-2 border rounded text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
-        
-        
-        />
-      </div>
-
-
-      <div className="mb-4">
-        <label className="block text-sm font-medium mb-1 text-gray-700">Select Date</label>
-        <input
-          type="date"
-          className="w-full p-2 border rounded text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
-          value={formData.date}
-          onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-        />
-        {errors.date && <p className="text-red-500 text-sm">{errors.date}</p>}
-      </div>
-
-      <p className="text-lg font-semibold text-gray-900">
-        Total Price (including handling fee & VAT): Rs. {totalPrice.toFixed(2)}
-      </p>
-
-      <button
-        type="submit"
-        className="w-full p-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition duration-200"
-      >
-        Submit Booking
-      </button>
-    </form>
+      <Footer />
     </div>
-    <Footer />
-    </div>
-
-      
   );
 };
-
-
 
 export default BookingForm;

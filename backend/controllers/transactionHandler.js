@@ -4,7 +4,7 @@ const Wallet = require('../models/Wallet');
 const User = require('../models/User');
 
 
-router.get('/', async (req, res) => {
+router.get('/', async (req, res) => { // Get all Transactions - Dinitha
     try {
         const wallets = await Wallet.find({}).populate('userId', 'firstName lastName'); 
         
@@ -47,7 +47,7 @@ router.post('/add-transaction', async (req, res) => {
 });
 
 
-router.patch('/:walletId/transaction/:transactionId', async (req, res) => {
+router.patch('/:walletId/transaction/:transactionId', async (req, res) => { // Update the status of a transaction - Dinitha
     const { walletId, transactionId } = req.params;
     const { status } = req.body;
 
@@ -84,7 +84,7 @@ router.patch('/:walletId/transaction/:transactionId', async (req, res) => {
     }
 });
 
-router.delete('/:walletId/transaction/:transactionId', async (req, res) => {
+router.delete('/:walletId/transaction/:transactionId', async (req, res) => { // Delete a transaction - Dinitha
     const { walletId, transactionId } = req.params;
     try {
         const wallet = await Wallet.findById(walletId);
@@ -110,7 +110,7 @@ router.delete('/:walletId/transaction/:transactionId', async (req, res) => {
 });
 
 router.post('/update', async (req, res) => {
-    const { amount, status, userId } = req.body; // Get userId from the request body
+    const { amount, status, userId } = req.body; 
 
     console.log('Request body:', req.body);
     console.log('User ID:', userId);
