@@ -80,12 +80,12 @@ const TripPlanner = () => {
   return (
     <div className="relative">
       <button
-  onClick={toggleChat}
-  className="fixed bottom-6 right-4 p-3 bg-blue-500 text-white rounded-full shadow-lg hover:shadow-xl transition-transform transform hover:scale-105 flex items-center space-x-2"
->
-  <Lottie animationData={Smile} loop={true} className='w-8' />
-  <span className="text-lg font-semibold">Chat with me</span>
-</button>
+        onClick={toggleChat}
+        className="fixed bottom-12 right-4 p-3 bg-blue-500 text-white rounded-full shadow-lg hover:shadow-xl transition-transform transform hover:scale-105 flex items-center space-x-2"
+      >
+        <Lottie animationData={Smile} loop={true} className='w-8' />
+        <span className="text-lg font-semibold">Chat with me</span>
+      </button>
 
 
       {isOpen && (
